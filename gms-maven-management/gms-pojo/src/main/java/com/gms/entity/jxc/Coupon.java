@@ -34,10 +34,10 @@ public class Coupon {
     private Integer batchNum;
 
     /**
-     * 是否打开
+     * 优惠劵状态 初始化 0 进行中 1 已失效 2
      */
     @Column(length=1)
-    private String isOpen;
+    private String status;
 
     /**
      * 领取次数（每人限领）
@@ -89,25 +89,17 @@ public class Coupon {
         this.batchNum = batchNum;
     }
 
-    /**
-     * 获取是否打开
-     *
-     * @return is_open - 是否打开
-     */
-    public String getIsOpen() {
-        return isOpen;
-    }
+  
 
-    /**
-     * 设置是否打开
-     *
-     * @param isOpen 是否打开
-     */
-    public void setIsOpen(String isOpen) {
-        this.isOpen = isOpen;
-    }
+    public String getStatus() {
+		return status;
+	}
 
-    /**
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+	/**
      * 获取领取次数（每人限领）
      *
      * @return coupon_count - 领取次数（每人限领）

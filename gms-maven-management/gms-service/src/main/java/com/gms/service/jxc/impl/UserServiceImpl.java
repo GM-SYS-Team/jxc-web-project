@@ -91,5 +91,15 @@ public class UserServiceImpl implements UserService{
 		userRepository.delete(id);
 	}
 
+	@Override
+	public User findByUuid(String uuid) {
+		return userRepository.findByUuid(uuid);
+	}
+
+	@Override
+	public User findUserByTelephone(String telephone) {
+		return userRepository.findUserByTelephone(telephone);
+	}
+
 
 }

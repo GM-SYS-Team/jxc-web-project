@@ -68,8 +68,22 @@ public class Shop {
      */
     @Column(length=45)
     private String shopAddress;
-
+    
     /**
+     * 门店地址
+     */
+    @Column(length=100)
+    private String shopName;
+
+    public String getShopName() {
+		return shopName;
+	}
+
+	public void setShopName(String shopName) {
+		this.shopName = shopName;
+	}
+
+	/**
      * 获取门店自增ID
      *
      * @return id - 门店自增ID
