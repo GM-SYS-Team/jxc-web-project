@@ -56,4 +56,19 @@ public interface UserService {
 	 * @param id
 	 */
 	public void delete(Integer id);
+	
+	
+	/**
+	 * 根据uid查询用户
+	 * @param accessToken
+	 * @return
+	 */
+	public User findByUuid(String uuid);
+
+	/**
+	 * 根据手机号查询用户
+	 * @param telephone
+	 * @return
+	 */
+	public User findUserByTelephone(String telephone);
 }
