@@ -16,16 +16,9 @@ public class Coupon {
     @GeneratedValue
     private Integer id;
 
-    @Column(length=11)
-    private Integer shopId; // 商户
-
-    public Integer getShopId() {
-		return shopId;
-	}
-
-	public void setShopId(Integer shopId) {
-		this.shopId = shopId;
-	}
+    @ManyToOne
+	@JoinColumn(name="shopId")
+	private Shop shop; // 商品类别
 
 	/**
      * 优惠券批次号
@@ -33,7 +26,15 @@ public class Coupon {
     @Column(length=11)
     private Integer batchNum;
 
-    /**
+    public Shop getShop() {
+		return shop;
+	}
+
+	public void setShop(Shop shop) {
+		this.shop = shop;
+	}
+
+	/**
      * 优惠劵状态 初始化 0 进行中 1 已失效 2
      */
     @Column(length=1)

@@ -33,19 +33,6 @@ canvas{z-index:-1;position:absolute;}
 								window.location.href="/bgManager/shops_index.html";	
 							}
 						});									
-					}else{
-						$("#roleList").empty();
-						var roles=result.roleList;
-						for(var i=0;i<roles.length;i++){
-							if(i==0){
-								$("#roleList").append("<input type='radio' checked=true  name='role' value='"+roles[i].id+"'/>"+roles[i].name+"&nbsp;&nbsp;")
-								
-							}else{
-								$("#roleList").append("<input type='radio' name='role' value='"+roles[i].id+"'/>"+roles[i].name+"&nbsp;&nbsp;")
-							}
-						}
-						document.getElementById('light').style.display='block';
-						document.getElementById('fade').style.display='block';
 					}
 				}else{
 					alert(result.errorInfo);
@@ -53,16 +40,6 @@ canvas{z-index:-1;position:absolute;}
 		});
 	  });
 	});
-	
-	
-	function saveRole(){
-		var roleId=$("input[name='role']:checked").val();
-		$.post("/user/saveRole",{roleId:roleId},function(result){
-			if(result.success){
-				window.location.href="/main.html";	
-			}
-		});
-	}
 	
 	
 </script>

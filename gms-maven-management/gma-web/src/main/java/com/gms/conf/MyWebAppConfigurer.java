@@ -12,7 +12,7 @@ public class MyWebAppConfigurer extends WebMvcConfigurerAdapter {
 
 	@Override
     public void configureHandlerExceptionResolvers(List<HandlerExceptionResolver> exceptionResolvers) {
-		exceptionResolvers.add(new MyExceptionHandler());
+		//exceptionResolvers.add(new MyExceptionHandler());
 	}
 
 }
