@@ -11,6 +11,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -45,9 +46,9 @@ public class CouponController extends BaseController {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
 		Map<String, Object> resultMap = new HashMap<>();
 		Coupon coupon = new Coupon();
-		coupon.setCoupon_title(request.getParameter("coupon_title"));
-		coupon.setBatchNum(Integer.parseInt(request.getParameter("batchNum")));
-		coupon.setCoupon_intro(request.getParameter("coupon_intro"));
+		coupon.setCouponName(request.getParameter("coupon_title"));
+		coupon.setTotalCount(Integer.parseInt(request.getParameter("batchNum")));
+		coupon.setCouponInfo(request.getParameter("coupon_intro"));
 		coupon.setExpiryDateStart(sdf.parse(request
 				.getParameter("expiryDateStart")));
 		coupon.setExpiryDateStop(sdf.parse(request
@@ -58,7 +59,7 @@ public class CouponController extends BaseController {
 		return resultMap;
 	}
 
-	@RequestMapping("/list")
+	@PostMapping("/list")
 	public Map<String, Object> list(
 			@RequestParam(value = "num", required = true) Integer num,
 			HttpServletRequest request) throws Exception {

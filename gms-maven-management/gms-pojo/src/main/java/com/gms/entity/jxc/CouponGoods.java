@@ -12,8 +12,8 @@ import javax.persistence.Table;
  *
  */
 @Entity
-@Table(name="t_goods_coupon")
-public class GoodsCoupon {
+@Table(name="t_coupon_goods")
+public class CouponGoods {
 
 	@Id
 	@GeneratedValue

@@ -97,7 +97,11 @@ public class UserAdminController {
 	@ResponseBody
 	@RequestMapping("/list")
 	@RequiresPermissions(value = { "用户管理" })
-	public Map<String,Object> list(User user,@RequestParam(value="page",required=false)Integer page,@RequestParam(value="rows",required=false)Integer rows)throws Exception{
+	public Map<String,Object> list(User user,@RequestParam(value="page",required=false)Integer page,@RequestParam(value="rows",required=false)Integer rows,@RequestParam(value="shopid",required=false)Integer shopid)throws Exception{
+		if(shopid!=null){
+			if(user==null){user=new User();}
+			user.setShopId(shopid);
+		}
 		List<User> userList=userService.list(user, page, rows, Direction.ASC, "id");
 		for(User u:userList){
 			List<Role> roleList=roleService.findByUserId(u.getId());
@@ -170,6 +174,9 @@ public class UserAdminController {
 		user.setCreateTime(new Date());
 		user.setUpdateTime(new Date());
 		user.setUuid(UUIDUtil.getUUIDKey());
+		if(user.getShopId()!=null){
+			user.setUserType("1");
+		}else{user.setUserType("0");}
 		userService.save(user);			
 		resultMap.put("success", true);
 		return resultMap;
