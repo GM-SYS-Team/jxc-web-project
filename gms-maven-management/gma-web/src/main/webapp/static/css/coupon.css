@@ -529,9 +529,6 @@ input[type=file], select {
 }
 
 
-
-
-
 .page-tradeincard .ump-coupon-detail-wrap .promote-card-name {
     font-size: 18px;
     line-height: 60px;
@@ -695,4 +692,9 @@ table {
 
 .widget-list-filter{
 	padding-left: 5px;
+}
+
+.ui-nav li.active a, .ui-nav li a.active {
+    border-bottom-color: rgb(255, 255, 255);
+    background: rgb(255, 255, 255);
 }
