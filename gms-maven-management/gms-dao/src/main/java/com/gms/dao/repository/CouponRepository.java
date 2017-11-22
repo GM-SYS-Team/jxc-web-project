@@ -8,7 +8,6 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 
 import com.gms.entity.jxc.Coupon;
-import com.gms.entity.jxc.Customer;
 
 
 /** 
@@ -17,8 +16,9 @@ import com.gms.entity.jxc.Customer;
 * @author shenlinli
 * @date 2017年11月21日 下午3:07:17  
 */
-public interface CouponsManageDao extends JpaRepository<Customer, Integer>,JpaSpecificationExecutor<Customer>{
+public interface CouponRepository extends JpaRepository<Coupon, Integer>,JpaSpecificationExecutor<Coupon>{
 
-	@Query(value="select * from t_coupon ",nativeQuery=true)
-	public List<Coupon> findCouponList();
+	@Query(value="select * from t_coupon where status=?1",nativeQuery=true)
+	public List<Coupon> findCouponByStatus(Integer status);
+	
 }

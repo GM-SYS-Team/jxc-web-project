@@ -3,8 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <title>优惠券管理</title>
+<link rel="stylesheet" href="../static/css/daterangepicker.min.css" />
+<link rel="stylesheet" href="../static/bootstrap3/css/bootstrap.css" />
 <link rel="stylesheet" href="../static/css/coupon.css" />
 <script type="text/javascript" src="../static/js/jquery.js"></script>
+<script type="text/javascript" src="../static/bootstrap3/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../static/js/moment.js"></script>
+<script type="text/javascript" src="../static/js/daterangepicker.js"></script>
 <script type="text/javascript" src="../static/js/coupon.js"></script>
 </head>
 <body>
@@ -13,17 +18,17 @@
 			<div class="app-init-container">
 				<nav class="ui-nav clearfix">
 					<ul class="pull-left">
-						<li id="js-list-all" class="active">
-							<a href="#"><span>所有优惠券</span></a>
+						<li id="js-list-all" class="active"  data_num ="0">
+							<a href="javascript:void(0);" onclick="getCouponList(this)"><span>所有优惠券</span></a>
 						</li>
-						<li id="js-list-future">
-							<a  href="#"><span>未开始</span></a>
+						<li id="js-list-future" data_num ="1">
+							<a href="javascript:void(0);"  onclick="getCouponList(this)"><span>未开始</span></a>
 						</li>
-						<li id="js-list-on">
-							<a href="#"><span>进行中</span></a>
+						<li id="js-list-on"  data_num ="2">
+							<a href="javascript:void(0);" onclick="getCouponList(this)"><span>进行中</span></a>
 						</li>
-						<li id="js-list-end">
-							<a href="#"><span>已结束</span></a>
+						<li id="js-list-end"  data_num ="3">
+							<a href="javascript:void(0);" onclick="getCouponList(this)"><span>已失效</span></a>
 						</li>
 					</ul>
 					<div class="pull-right common-helps-entry">
@@ -77,7 +82,6 @@
 													<div class="promote-card">
 														<div class="clearfix" style="height: 60px;">
 															<h2 class="pull-left font-size-16 promote-card-name" id="coupon_title_eg">优惠券标题</h2>
-															<!-- <p class="pull-right font-size-14 center promote-share transparent-color js-share">分享</p> -->
 														</div>
 														<p class="center promote-value">
 															<span class="promote-value-sign"> 
@@ -85,8 +89,6 @@
 																<i>0.00 </i>
 															</span>
 														</p>
-														<p class="center font-size-14 promote-limit">订单满 <span id="order_money_eg">100</span> 元
-															(不含运费)</p>
 														<p class="center font-size-14 transparent-color">
 															有效日期： <span id="coupon-date-section">20xx : 00 : 00 - 20xx : 00 : 00</span></p>
 														<div class="dot"></div>
@@ -117,7 +119,7 @@
 								<div class="arrow"></div>
 								<div class="app-sidebar-inner js-sidebar-region">
 									<div>
-										<form class="form-horizontal" novalidate>
+										<form class="form-horizontal" id="coupon_form">
 											<h1 class="config-title">优惠券基础信息</h1>
 											<div class="control-group">
 												<label class="control-label"><em class="required">*</em>优惠券名称：</label>
@@ -130,7 +132,7 @@
 												<label class="control-label"><em class="required">*</em>发放总量：</label>
 												<div class="controls">
 													<div class="input-append">
-														<input type="text" name="total" id="batch_num" value="" class="input-small"> <span class="add-on">张</span>
+														<input type="text" name="total" id="batchNum" value="" class="input-small"> <span class="add-on">张</span>
 													</div>
 												</div>
 											</div>
@@ -143,38 +145,17 @@
 													</label>
 												</div>
 											</div>
-											<!-- <div class="control-group">
-												<label class="control-label"></label>
-												<div class="controls">
-													<label class="radio inline"> 
-														<input name="preferential_type" type="radio" value="2">折扣
-													</label> 
-													<span class="js-preferential_type" data-value="2"
-														style="display: none"> ：<input type="number"
-														min="1.0" max="9.9" step="0.1" name="discount"
-														class="input-small" value=""><span>折</span>
-													</span>
-													<p class="help-desc red">优惠券不能抵扣运费</p>
-												</div>
-											</div> -->
 
 											<div class="control-group">
-												<label class="control-label"><em class="required">*</em>使用门槛：</label>
-												<!-- <div class="controls">
-													<label class="radio inline"> 
-														<input name="is_at_least" type="radio" id="order_money" value="0"/> 不限制
-													</label>
-												</div> -->
+												<label class="control-label"><em class="required">*</em>可使用商品：</label>
 											</div>
 											<div class="control-group">
 												<label class="control-label"></label>
 												<div class="controls">
 													<label class="radio inline"> 
-														<!-- <input style="margin-top: 6px;" name="is_at_least" type="radio" value="1" checked="checked"/> -->满
-														<input type="text" name="at_least" value=""  id="order_money" class="input-small js-price"data-value-type="Number"/>元可使用
+														
 													</label>
-													<p class="help-desc red">使用门槛计算不包含运费</p>
-
+													<p class="help-desc red"><a href="javascript:void(0);">选择商品</a></p>
 												</div>
 											</div>
 
@@ -182,7 +163,7 @@
 											<div class="control-group">
 												<label class="control-label"><em class="required">*</em>每人限领：</label>
 												<div class="controls">
-													<select name="quota" data-value-type="Number" id="coupon_count">
+													<select name="quota" data-value-type="Number" id="couponCount">
 														<option value="0" selected>不限张</option>
 														<option value="1">1张</option>
 														<option value="2">2张</option>
@@ -195,23 +176,14 @@
 											</div>
 
 											<div class="control-group">
-												<label class="control-label"><em class="required">*</em>生效时间：</label>
+												<label class="control-label"><em class="required">*</em>有效日期：</label>
 												<div class="controls">
-													<input type="text" readonly name="start_at"
-														value="" class="js-start-time hasDatepicker"
-														id="expiryDateStart">
+													<input type="text" readonly name="start_at"  class="form-control time"
+														value="" class="js-start-time hasDatepicker" style="height: 30px; width: 200px;"
+														id="expiryDate">
 												</div>
 											</div>
 											
-											<div class="control-group">
-												<label class="control-label"><em class="required">*</em>过期时间：</label>
-												<div class="controls">
-													<input type="text" readonly name="start_at"
-														value="" class="js-start-time hasDatepicker"
-														id="expiryDateStop">
-												</div>
-											</div>
-
 											<div class="control-group" style="margin-top: 8px;">
 												<label class="control-label">使用说明：</label>
 												<div class="controls">
@@ -219,7 +191,6 @@
 														cols="30" rows="2" placeholder="填写活动的详细说明，支持换行;"></textarea>
 												</div>
 											</div>
-
 										</form>
 									</div>
 								</div>
@@ -228,8 +199,8 @@
 							<!-- 保存 -->
 							<div class="app-actions" style="bottom: 0px;">
 								<div class="form-actions text-center">
-									<input class="btn js-btn-quit" type="button" onclick="btnQuit();" value="取 消">
-									<input class="btn btn-primary js-btn-save" type="submit"
+									<input class="btn js-btn-quit" type="button" id="quit_btn" onclick="btnQuit();" value="取 消">
+									<input class="btn btn-primary js-btn-save" id="save_btn" type="button"  onclick="saveCoupon();"
 										value="保 存" data-loading-text="保 存...">
 								</div>
 							</div>
