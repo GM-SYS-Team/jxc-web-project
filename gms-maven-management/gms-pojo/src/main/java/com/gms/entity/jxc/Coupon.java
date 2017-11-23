@@ -61,18 +61,6 @@ public class Coupon {
 	private Double minAmount;
 	
 	private Double maxAmount;
-	/**
-	 * 优惠券优惠金额
-	 */
-	private Double couponAmount;
-
-	public Double getCouponAmount() {
-		return couponAmount;
-	}
-
-	public void setCouponAmount(Double couponAmount) {
-		this.couponAmount = couponAmount;
-	}
 
 	public Integer getId() {
 		return id;
