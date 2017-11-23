@@ -106,6 +106,11 @@ public class UserController {
 			map.put("roleList", roleList);
 			map.put("roleSize", roleList.size());
 			map.put("success", true);
+			if(currentUser.getUserType().equals(Constant.ROOTTYPE)){
+				map.put("userType", "root");
+			}else{
+				map.put("userType", "shop");
+			}
 			logService.save(new Log(Log.LOGIN_ACTION,"用户登录")); // 写入日志
 			return map;
 		}catch(Exception e){
