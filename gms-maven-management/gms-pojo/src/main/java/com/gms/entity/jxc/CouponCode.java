@@ -1,4 +1,6 @@
 package com.gms.entity.jxc;
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -6,6 +8,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 /**
  * @author zhoutianqi
  * @className CouponCode.java
@@ -25,11 +29,6 @@ public class CouponCode {
     @ManyToOne
 	@JoinColumn(name="couponId")
 	private Coupon coupon; // 优惠券
-    /**
-     * 优惠券编码
-     */
-    @Column(length=45)
-    private String couponCode;
 
     /**
      * 用户ID
@@ -42,6 +41,11 @@ public class CouponCode {
      */
     @Column(length=1)
     private String isUsed;
+    
+    /**
+     * 优惠卷金额
+     */
+    private Float amount;
 
     /**
      * @return id
@@ -64,25 +68,16 @@ public class CouponCode {
 		this.coupon = coupon;
 	}
 
+
+    public Float getAmount() {
+		return amount;
+	}
+
+	public void setAmount(Float amount) {
+		this.amount = amount;
+	}
+
 	/**
-     * 获取优惠券编码
-     *
-     * @return coupon_code - 优惠券编码
-     */
-    public String getCouponCode() {
-        return couponCode;
-    }
-
-    /**
-     * 设置优惠券编码
-     *
-     * @param couponCode 优惠券编码
-     */
-    public void setCouponCode(String couponCode) {
-        this.couponCode = couponCode;
-    }
-
-    /**
      * 获取用户ID
      *
      * @return user_id - 用户ID
