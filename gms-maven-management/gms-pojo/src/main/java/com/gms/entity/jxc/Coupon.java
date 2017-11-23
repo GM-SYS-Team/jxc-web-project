@@ -1,5 +1,7 @@
 package com.gms.entity.jxc;
 
+import java.util.Date;
+
 import javax.persistence.*;
 /**
  * @author zhoutianqi
@@ -10,59 +12,77 @@ import javax.persistence.*;
 @Entity
 @Table(name = "t_coupon")
 public class Coupon {
-    @Id
-    @GeneratedValue
-    private Integer id;
 
-    @ManyToOne
-	@JoinColumn(name="shopId")
-	private Shop shop; // 商户
+	@Id
+	@GeneratedValue
+	private Integer id;
 
-    /**
-     * 优惠券批次号
-     */
-    @Column(length=11)
-    private Integer batchNum;
+	@ManyToOne
+	@JoinColumn(name = "shopId")
+	private Shop shop; // 商品类别
 
-    /**
-     * 是否打开
-     */
-    @Column(length=1)
-    private String isOpen;
+	/**
+	 * 优惠券批次号
+	 */
+	@Column(length = 11)
+	private Integer totalCount;
+	/**
+	 * 优惠券剩余库存
+	 */
+	@Column(length = 11)
+	private Integer remainCount;
+	
+	/*优惠券title*/
+	@Column(length = 50)
+	private String couponName;
+	
+	/*优惠券说明*/
+	@Column(length = 500)
+	private String couponInfo;
 
-    /**
-     * 领取次数（每人限领）
-     */
-    @Column(length=45)
-    private String couponCount;
+	/**
+	 * 领取次数（每人限领）
+	 */
+	@Column(length = 45)
+	private String couponCount;
 
-    /**
-     * 有效开始时间
-     */
-    @Temporal(TemporalType.TIMESTAMP)
-    private String expiryDateStart;
+	/**
+	 * 有效开始时间
+	 */
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date expiryDateStart;
 
-    /**
-     * 有效结束时间
-     */
-    @Temporal(TemporalType.TIMESTAMP)
-    private String expiryDateStop;
+	/**
+	 * 有效结束时间
+	 */
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date expiryDateStop;
 
-    /**
-     * @return id
-     */
-    public Integer getId() {
-        return id;
-    }
+	private Double minAmount;
+	
+	private Double maxAmount;
+	/**
+	 * 优惠券优惠金额
+	 */
+	private Double couponAmount;
 
-    /**
-     * @param id
-     */
-    public void setId(Integer id) {
-        this.id = id;
-    }
+	public Double getCouponAmount() {
+		return couponAmount;
+	}
 
-    public Shop getShop() {
+	public void setCouponAmount(Double couponAmount) {
+		this.couponAmount = couponAmount;
+	}
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	public Shop getShop() {
 		return shop;
 	}
 
@@ -70,93 +90,76 @@ public class Coupon {
 		this.shop = shop;
 	}
 
-	/**
-     * 获取优惠券批次号
-     *
-     * @return batch_num - 优惠券批次号
-     */
-    public Integer getBatchNum() {
-        return batchNum;
-    }
 
-    /**
-     * 设置优惠券批次号
-     *
-     * @param batchNum 优惠券批次号
-     */
-    public void setBatchNum(Integer batchNum) {
-        this.batchNum = batchNum;
-    }
+	public Integer getTotalCount() {
+		return totalCount;
+	}
 
-    /**
-     * 获取是否打开
-     *
-     * @return is_open - 是否打开
-     */
-    public String getIsOpen() {
-        return isOpen;
-    }
+	public void setTotalCount(Integer totalCount) {
+		this.totalCount = totalCount;
+	}
 
-    /**
-     * 设置是否打开
-     *
-     * @param isOpen 是否打开
-     */
-    public void setIsOpen(String isOpen) {
-        this.isOpen = isOpen;
-    }
+	public Integer getRemainCount() {
+		return remainCount;
+	}
 
-    /**
-     * 获取领取次数（每人限领）
-     *
-     * @return coupon_count - 领取次数（每人限领）
-     */
-    public String getCouponCount() {
-        return couponCount;
-    }
+	public void setRemainCount(Integer remainCount) {
+		this.remainCount = remainCount;
+	}
 
-    /**
-     * 设置领取次数（每人限领）
-     *
-     * @param couponCount 领取次数（每人限领）
-     */
-    public void setCouponCount(String couponCount) {
-        this.couponCount = couponCount;
-    }
+	public String getCouponName() {
+		return couponName;
+	}
 
-    /**
-     * 获取有效开始时间
-     *
-     * @return expiry_date_start - 有效开始时间
-     */
-    public String getExpiryDateStart() {
-        return expiryDateStart;
-    }
+	public void setCouponName(String couponName) {
+		this.couponName = couponName;
+	}
 
-    /**
-     * 设置有效开始时间
-     *
-     * @param expiryDateStart 有效开始时间
-     */
-    public void setExpiryDateStart(String expiryDateStart) {
-        this.expiryDateStart = expiryDateStart;
-    }
+	public String getCouponInfo() {
+		return couponInfo;
+	}
 
-    /**
-     * 获取有效结束时间
-     *
-     * @return expiry_date_stop - 有效结束时间
-     */
-    public String getExpiryDateStop() {
-        return expiryDateStop;
-    }
+	public void setCouponInfo(String couponInfo) {
+		this.couponInfo = couponInfo;
+	}
 
-    /**
-     * 设置有效结束时间
-     *
-     * @param expiryDateStop 有效结束时间
-     */
-    public void setExpiryDateStop(String expiryDateStop) {
-        this.expiryDateStop = expiryDateStop;
-    }
+	public String getCouponCount() {
+		return couponCount;
+	}
+
+	public void setCouponCount(String couponCount) {
+		this.couponCount = couponCount;
+	}
+
+	public Date getExpiryDateStart() {
+		return expiryDateStart;
+	}
+
+	public void setExpiryDateStart(Date expiryDateStart) {
+		this.expiryDateStart = expiryDateStart;
+	}
+
+	public Date getExpiryDateStop() {
+		return expiryDateStop;
+	}
+
+	public void setExpiryDateStop(Date expiryDateStop) {
+		this.expiryDateStop = expiryDateStop;
+	}
+
+	public Double getMinAmount() {
+		return minAmount;
+	}
+
+	public void setMinAmount(Double minAmount) {
+		this.minAmount = minAmount;
+	}
+
+	public Double getMaxAmount() {
+		return maxAmount;
+	}
+
+	public void setMaxAmount(Double maxAmount) {
+		this.maxAmount = maxAmount;
+	}
 }

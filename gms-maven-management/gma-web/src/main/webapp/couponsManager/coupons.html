@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>优惠券管理</title>
+<link rel="stylesheet" href="../static/css/daterangepicker.min.css" />
+<link rel="stylesheet" href="../static/bootstrap3/css/bootstrap.css" />
+<link rel="stylesheet" href="../static/css/coupon.css" />
+<script type="text/javascript" src="../static/js/jquery.js"></script>
+<script type="text/javascript" src="../static/bootstrap3/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../static/js/moment.js"></script>
+<script type="text/javascript" src="../static/js/daterangepicker.js"></script>
+<script type="text/javascript" src="../static/js/coupon.js"></script>
+</head>
+<body>
+	<div class="app">
+		<div class="app-inner clearfix">
+			<div class="app-init-container">
+				<nav class="ui-nav clearfix">
+					<ul class="pull-left">
+						<li id="js-list-all" class="active"  data_num ="0">
+							<a href="javascript:void(0);" onclick="getCouponList(this)"><span>所有优惠券</span></a>
+						</li>
+						<li id="js-list-future" data_num ="1">
+							<a href="javascript:void(0);"  onclick="getCouponList(this)"><span>未开始</span></a>
+						</li>
+						<li id="js-list-on"  data_num ="2">
+							<a href="javascript:void(0);" onclick="getCouponList(this)"><span>进行中</span></a>
+						</li>
+						<li id="js-list-end"  data_num ="3">
+							<a href="javascript:void(0);" onclick="getCouponList(this)"><span>已失效</span></a>
+						</li>
+					</ul>
+					<div class="pull-right common-helps-entry">
+						<a href="#" target="_blank"> 查看【优惠券】设置及应用教程 </a>
+					</div>
+				</nav>
+				
+	<!------------------------------- 优惠券列表开始 ----------------------------------------------->
+				<div class="app__content js-app-main" id="list_coupon">
+					<div class="widget-list">
+						<div class="js-list-filter-region clearfix ui-box" style="position: relative;">
+							<div class="widget-list-filter"><a href="javascript:void(0);" onclick="addCoupon();" class="ui-btn ui-btn-success">新建优惠券</a>
+								<div class="js-list-search ui-search-box">
+								    <input class="txt" type="text" placeholder="搜索" value="">
+								</div>
+							</div>
+						</div>
+						<div class="ui-box">
+						    <table class="ui-table ui-table-list">
+						        <thead class="js-list-header-region"></thead>
+						        <tbody class="js-list-body-region">
+						        	<!-- 优惠券列表 -->
+						        </tbody>
+						    </table>
+						    <div class="js-list-empty-region">
+							    <div>
+							    	<div class="no-result widget-list-empty">还没有相关数据</div>
+								</div>
+							</div>
+						</div>
+						<div class="js-list-footer-region ui-box"></div>
+					</div>
+				</div>
+				
+<!---------------------------- 添加优惠券开始 ------------------------------------------>
+				<div class="app__content js-app-main" id="add_coupon" style="display: none;">
+					<div class="app-design clearfix">
+						<div class="page-tradeincard">
+							<h2 class="ump-title">设置店铺优惠券</h2>
+							<div class="app-preview">
+								<div class="app-header"></div>
+								<div class="app-entry">
+									<div class="app-config js-config-region">
+										<div class="app-field clearfix editing">
+											<h1>
+												<span>优惠券</span>
+											</h1>
+											<div class="app-field-wrap editing">
+												<!-- <p class="about-card-desc">(微商城优惠券)</p> -->
+												<div class="ump-coupon-detail-wrap">
+													<div class="promote-card">
+														<div class="clearfix" style="height: 60px;">
+															<h2 class="pull-left font-size-16 promote-card-name" id="coupon_title_eg">优惠券标题</h2>
+														</div>
+														<p class="center promote-value">
+															<span class="promote-value-sign"> 
+																<span>￥</span> 
+																<i>0.00 </i>
+															</span>
+														</p>
+														<p class="center font-size-14 transparent-color">
+															有效日期： <span id="coupon-date-section">20xx : 00 : 00 - 20xx : 00 : 00</span></p>
+														<div class="dot"></div>
+													</div>
+													<div class="promote-desc">
+														<h2 class="font-size-14 c-gray-dark promote-desc-title">使用说明</h2>
+														<div class="block border-top-0" style="padding-top: 10px;">
+															<div class="block-item clearfix">
+																<span class="js-desc-detail"> 暂无使用说明…… </span> <a
+																	class="c-blue more-desc pull-right js-more-desc"
+																	href="javascript:void(0)">更多</a>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="app-fields js-fields-region">
+										<div class="app-fields ui-sortable"></div>
+									</div>
+								</div>
+								<div class="js-add-region">
+									<div></div>
+								</div>
+							</div>
+							<div class="app-sidebar" style="margin-top: 0px;">
+								<div class="arrow"></div>
+								<div class="app-sidebar-inner js-sidebar-region">
+									<div>
+										<form class="form-horizontal" id="coupon_form">
+											<h1 class="config-title">优惠券基础信息</h1>
+											<div class="control-group">
+												<label class="control-label"><em class="required">*</em>优惠券名称：</label>
+												<div class="controls">
+													<input type="text" name="title" maxlength="10" value="" id="coupon_title" placeholder="最多支持10个字" onkeyup="keyup()">
+												</div>
+											</div>
+
+											<div class="control-group">
+												<label class="control-label"><em class="required">*</em>发放总量：</label>
+												<div class="controls">
+													<div class="input-append">
+														<input type="text" name="total" id="batchNum" value="" class="input-small"> <span class="add-on">张</span>
+													</div>
+												</div>
+											</div>
+
+											<div class="control-group">
+												<label class="control-label"><em class="required">*</em>面值：</label>
+												<div class="controls">
+													<label class="radio inline">
+														<input type="number" name="value" id="discount_money" class="input-small" value=""> 元
+													</label>
+												</div>
+											</div>
+
+											<div class="control-group">
+												<label class="control-label"><em class="required">*</em>可使用商品：</label>
+											</div>
+											<div class="control-group">
+												<label class="control-label"></label>
+												<div class="controls">
+													<label class="radio inline"> 
+														
+													</label>
+													<p class="help-desc red"><a href="javascript:void(0);">选择商品</a></p>
+												</div>
+											</div>
+
+											<h1 class="config-title">基本规则</h1>
+											<div class="control-group">
+												<label class="control-label"><em class="required">*</em>每人限领：</label>
+												<div class="controls">
+													<select name="quota" data-value-type="Number" id="couponCount">
+														<option value="0" selected>不限张</option>
+														<option value="1">1张</option>
+														<option value="2">2张</option>
+														<option value="3">3张</option>
+														<option value="4">4张</option>
+														<option value="5">5张</option>
+														<option value="10">10张</option>
+													</select>
+												</div>
+											</div>
+
+											<div class="control-group">
+												<label class="control-label"><em class="required">*</em>有效日期：</label>
+												<div class="controls">
+													<input type="text" readonly name="start_at"  class="form-control time"
+														value="" class="js-start-time hasDatepicker" style="height: 30px; width: 200px;"
+														id="expiryDate">
+												</div>
+											</div>
+											
+											<div class="control-group" style="margin-top: 8px;">
+												<label class="control-label">使用说明：</label>
+												<div class="controls">
+													<textarea name="description" id="coupon_intro" style="width: 210px;height: 60px;"
+														cols="30" rows="2" placeholder="填写活动的详细说明，支持换行;"></textarea>
+												</div>
+											</div>
+										</form>
+									</div>
+								</div>
+							</div>
+	<!--------------------------------- 添加优惠券结束------------------------- -->
+							<!-- 保存 -->
+							<div class="app-actions" style="bottom: 0px;">
+								<div class="form-actions text-center">
+									<input class="btn js-btn-quit" type="button" id="quit_btn" onclick="btnQuit();" value="取 消">
+									<input class="btn btn-primary js-btn-save" id="save_btn" type="button"  onclick="saveCoupon();"
+										value="保 存" data-loading-text="保 存...">
+								</div>
+							</div>
+							
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="notify-bar js-notify animated hinge hide">
+			</div>
+		</div>
+	</div>
+</body>
+</html>

@@ -11,6 +11,7 @@
     <module>gms-dao</module>
     <module>gms-service</module>
     <module>gma-web</module>
+    <module>gms-app</module>
   </modules>
   <parent>
 		<groupId>org.springframework.boot</groupId>
@@ -24,17 +25,13 @@
         <!--  依赖版本  -->
         <pagehelper.version>4.1.1</pagehelper.version>
         <httpclient.version>4.3.1</httpclient.version>
-        <start-class>com.gms.dao.Application</start-class>
+        <start-class>com.gms.JxcApplication</start-class>
     </properties>
     <dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
-		<dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-thymeleaf</artifactId>
-        </dependency>
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
@@ -75,6 +72,12 @@
             <artifactId>druid</artifactId>
             <version>1.0.11</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/com.google.guava/guava -->
+		<dependency>
+		    <groupId>com.google.guava</groupId>
+		    <artifactId>guava</artifactId>
+		    <version>20.0</version>
+		</dependency>
 	</dependencies>
 	<build>
         <plugins>

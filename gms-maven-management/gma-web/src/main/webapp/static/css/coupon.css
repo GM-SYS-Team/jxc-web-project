@@ -1,0 +1,700 @@
+article, aside, details, figcaption, figure, footer, header, hgroup,
+	menu, nav, section, summary {
+	display: block;
+}
+html{
+    background: #f2f2f2;
+}
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p,
+	blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn,
+	em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var,
+	b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend,
+	table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas,
+	details, embed, figure, figcaption, footer, header, hgroup, menu, nav,
+	output, ruby, section, summary, time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font: inherit;
+	font-size: 100%;
+	vertical-align: baseline;
+}
+
+.app {
+	width: 100%;
+	float: left;
+}
+
+#app-container .app-inner {
+	margin: 10px;
+	padding: 15px;
+	min-width: 750px;
+	min-height: 500px;
+	-webkit-box-shadow: 0 0 1px 0 rgba(0, 0, 0, 0.2);
+	box-shadow: 0 0 1px 0 rgba(0, 0, 0, 0.2);
+}
+
+.app-inner {
+	min-height: 800px;
+	margin: 0 0 0 10px;
+	padding-bottom: 60px;
+	background-color: #fff;
+}
+
+#app-container .page-content, #app-container .app__content {
+	width: auto;
+}
+
+.page-content, .app__content {
+	width: 850px;
+	min-height: 420px;
+	zoom: 1;
+}
+
+.app-design {
+	min-width: 750px;
+	width: 750px;
+	margin: 0 auto;
+}
+
+.page-tradeincard .ump-title {
+	line-height: 40px;
+	padding: 0 20px;
+	margin: 10px auto;
+	font-size: 14px;
+	background: #f2f2f2;
+}
+
+.app-design .app-preview {
+	position: relative;
+	float: left;
+	width: 320px;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+	background: #fff;
+	margin-bottom: 24px;
+}
+
+.app-design .app-preview .app-header {
+	display: none;
+	height: 70px;
+	background: url(../images/iphone_head.png) no-repeat center center;
+}
+
+.app-design .app-preview .app-entry {
+	width: 320px;
+	margin: 0 auto;
+	padding-bottom: 11px;
+	min-height: 200px;
+	background: #f9f9f9;
+	-webkit-box-shadow: 0 0 0 1px #c5c5c5;
+	box-shadow: 0 0 0 1px #c5c5c5;
+}
+
+.app-design .app-preview .app-config .app-field.editing {
+	background-color: transparent;
+}
+
+.app-design .app-preview .app-config .app-field {
+	cursor: pointer;
+	background-color: transparent;
+}
+
+.app-design .app-preview .app-field {
+	position: relative;
+	cursor: move;
+	-webkit-user-select: none;
+}
+
+.clearfix:after, .clearfix:before {
+	display: table;
+	line-height: 0;
+	content: "";
+}
+
+.app-design .app-preview .app-config .app-field h1 {
+	padding: 18px 60px 0 60px;
+	height: 46px;
+	line-height: 46px;
+	font-size: 16px;
+	color: #fff;
+	font-weight: bold;
+	text-align: center;
+	background: url(../images/titlebar.png) no-repeat;
+}
+
+.app-design .app-preview .app-config .app-field h1 span {
+	display: inline-block;
+	height: 46px;
+	width: 200px;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	overflow: hidden;
+}
+
+.page-tradeincard .about-card-desc {
+	font-size: 12px;
+	text-align: center;
+	line-height: 40px;
+	color: #ccc;
+}
+
+.app-design .app-sidebar {
+	position: relative;
+	float: left;
+	width: 420px;
+	margin: 0 0 50px 10px;
+	font-size: 14px;
+}
+
+.app-design .app-sidebar .arrow, .app-design .app-sidebar .arrow:after {
+	width: 0;
+	height: 0;
+	border-style: solid;
+	border-width: 6px 7px 6px 0;
+	border-color: transparent #d1d1d1 transparent transparent;
+	position: absolute;
+	left: -6px;
+	top: 19px;
+}
+
+.app-design .app-sidebar .app-sidebar-inner {
+	padding: 12px 10px;
+	min-height: 28px;
+	background: #f8f8f8;
+	border-radius: 5px;
+	border: 1px solid #d1d1d1;
+}
+
+.app-design .app-sidebar .app-sidebar-inner .form-horizontal {
+	margin-bottom: 0;
+}
+
+.form-horizontal {
+	margin-bottom: 30px;
+	width: auto;
+}
+
+.page-tradeincard .config-title {
+	font-size: 14px;
+	font-weight: bold;
+	line-height: 30px;
+	margin-bottom: 10px;
+	border-bottom: 1px solid #e8e8e8;
+}
+
+.page-tradeincard .config-title {
+	font-size: 14px;
+	font-weight: bold;
+	line-height: 30px;
+	margin-bottom: 10px;
+	border-bottom: 1px solid #e8e8e8;
+}
+
+body.theme-new-ui .app-design .app-actions {
+	right: 10px;
+	left: 210px;
+	width: auto;
+	min-width: 780px;
+	-webkit-transition: right 0.5s;
+	-moz-transition: right 0.5s;
+	transition: right 0.5s;
+}
+
+.app-design .app-actions {
+	position: fixed;
+	bottom: 0;
+	width: 850px;
+	padding-top: 20px;
+	clear: both;
+	text-align: center;
+	z-index: 2;
+}
+
+body.theme-new-ui .app-design .app-actions .form-actions {
+	padding-bottom: 42px;
+}
+
+.app-design .app-actions .form-actions {
+	padding: 10px;
+	background-color: #ffc;
+	border-top: none;
+	margin: 0;
+}
+
+.center, .text-center {
+	text-align: center;
+}
+
+.page-tradeincard .ump-coupon-detail-wrap .promote-card {
+	text-align: center;
+}
+
+.app-preview .promote-card {
+	-webkit-tap-highlight-color: transparent;
+	position: relative;
+	min-height: 180px;
+	background: -webkit-gradient(linear, 0 0, 0 100%, from(#fe314e),
+		to(#fe6263));
+	background: -moz-linear-gradient(to bottom, #fe314e, #fe6263);
+	color: #fff;
+}
+
+.ui-nav {
+	position: relative;
+	margin-bottom: 15px;
+	height: 34px;
+	padding-top: 10px;
+    padding-left: 5px;
+    font-size: 14px;
+}
+
+.ui-nav ul {
+	zoom: 1;
+	margin-bottom: -1px;
+	margin-left: 1px;
+}
+
+.pull-left {
+	float: left;
+}
+
+.ui-nav li {
+	float: left;
+	margin-left: -1px;
+}
+
+ol, ul {
+	list-style: none;
+}
+
+.pull-right {
+	float: right;
+}
+
+.common-helps-entry {
+	line-height: 30px;
+	font-size: 12px;
+	padding-left: 10px;
+}
+
+.ui-nav li a {
+	display: inline-block;
+	padding: 0 12px;
+	line-height: 32px;
+	color: #333;
+	border: 1px solid #e5e5e5;
+	background: #f8f8f8;
+	min-width: 80px;
+	text-align: center;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
+a {
+	color: #38f;
+	text-decoration: none;
+}
+
+.ui-nav ul:after {
+	content: "";
+	display: table;
+	clear: both;
+}
+
+input[type="text"] {
+	font-size: 12px;
+}
+
+.input-append .uneditable-input, .input-append input, .input-append select,
+	.input-prepend .add-on:first-child, .input-prepend .btn:first-child {
+	-webkit-border-radius: 4px 0 0 4px;
+	-moz-border-radius: 4px 0 0 4px;
+	border-radius: 4px 0 0 4px;
+}
+
+.input-append .uneditable-input, .input-append input, .input-append select,
+	.input-prepend .uneditable-input, .input-prepend input, .input-prepend select
+	{
+	position: relative;
+	margin-bottom: 0;
+	vertical-align: top;
+	-webkit-border-radius: 0 4px 4px 0;
+	-moz-border-radius: 0 4px 4px 0;
+	border-radius: 0 4px 4px 0;
+}
+
+.page-tradeincard .app-sidebar .controls {
+	margin-left: 160px;
+}
+
+.form-horizontal .controls {
+	margin-left: 130px;
+	word-break: break-all;
+}
+
+.app-design .app-sidebar .required {
+	margin-right: 2px;
+	vertical-align: middle;
+}
+
+.form-horizontal em.required {
+	font-size: 16px;
+	color: #f00;
+	vertical-align: middle;
+}
+
+.page-tradeincard .help-desc {
+	padding-left: 8px;
+}
+
+.form-horizontal .help-block, .form-horizontal .help-desc {
+	opacity: 0.6;
+	line-height: 14px;
+	font-size: 12px;
+	margin-top: 6px;
+	margin-bottom: 0;
+}
+
+.red {
+	color: #f30;
+}
+
+.page-tradeincard .to-helps {
+	margin-left: 10px;
+	font-size: 12px;
+}
+
+.radio, .checkbox {
+	padding-left: 16px;
+}
+
+.checkbox, .radio {
+	min-height: 20px;
+	padding-left: 0px !important;
+}
+
+.page-tradeincard .fixed-term {
+	display: -webkit-box;
+	display: -webkit-flex;
+	display: -moz-box;
+	display: -ms-flexbox;
+	display: flex;
+	-webkit-box-align: center;
+	-webkit-align-items: center;
+	-moz-box-align: center;
+	-ms-flex-align: center;
+	align-items: center;
+	height: 38px;
+}
+
+.page-tradeincard .fixed-term .inline.radio {
+	padding-top: 0;
+}
+
+.checkbox.inline, .radio.inline {
+	display: inline-block;
+	padding-top: 5px;
+	margin-bottom: 0;
+	vertical-align: middle;
+}
+
+.form-horizontal .help-inline, .form-horizontal .input-append,
+	.form-horizontal .input-prepend, .form-horizontal .uneditable-input,
+	.form-horizontal input, .form-horizontal select, .form-horizontal textarea,
+	.form-inline .help-inline, .form-inline .input-append, .form-inline .input-prepend,
+	.form-inline .uneditable-input, .form-inline input, .form-inline select,
+	.form-inline textarea, .form-search .help-inline, .form-search .input-append,
+	.form-search .input-prepend, .form-search .uneditable-input,
+	.form-search input, .form-search select, .form-search textarea {
+	display: inline-block;
+	margin-bottom: 0;
+	vertical-align: middle;
+}
+
+.uneditable-input, input[type=text], input[type=password], input[type=datetime],
+	input[type=datetime-local], input[type=date], input[type=month], input[type=time],
+	input[type=week], input[type=number], input[type=email], input[type=url],
+	input[type=tel], input[type=color], input[type=search], textarea {
+	background-color: #fff;
+	border: 1px solid #ccc;
+	-webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+	-moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+	box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+	-webkit-transition: border linear .2s, box-shadow linear .2s;
+	-moz-transition: border linear .2s, box-shadow linear .2s;
+	-o-transition: border linear .2s, box-shadow linear .2s;
+	transition: border linear .2s, box-shadow linear .2s;
+}
+
+.uneditable-input, input[type=text], input[type=password], input[type=datetime],
+	input[type=datetime-local], input[type=date], input[type=month], input[type=time],
+	input[type=week], input[type=number], input[type=email], input[type=url],
+	input[type=tel], input[type=color], input[type=search], select,
+	textarea {
+	display: inline-block;
+	height: 30px;
+	padding: 4px 6px;
+	margin-bottom: 10px;
+	font-size: 14px;
+	line-height: 20px;
+	color: #555;
+	vertical-align: middle;
+	-webkit-border-radius: 4px;
+	-moz-border-radius: 4px;
+	border-radius: 4px;
+}
+
+input, textarea {
+	font-size: 12px;
+	font-family: Helvetica, STHeiti, "Microsoft YaHei", Verdana, Arial,
+		Tahoma, sans-serif;
+}
+
+label {
+	display: block;
+	margin-bottom: 5px;
+}
+
+.form-horizontal .control-label {
+	width: 120px;
+	font-size: 14px;
+	line-height: 18px;
+}
+
+.form-horizontal .control-label {
+	clear: both;
+	float: left;
+	width: 160px;
+	padding-top: 5px;
+	text-align: right;
+}
+
+select {
+	width: 160px;
+	background-color: #fff;
+	border: 1px solid #ccc;
+	margin-bottom:10px!important;
+}
+
+input[type=file], select {
+	height: 30px;
+	line-height: 30px;
+}
+
+.page-tradeincard .date-range-wrap input {
+	width: 136px;
+}
+
+.hasDatepicker[readonly] {
+	background-color: #fff;
+	cursor: pointer;
+}
+
+.input-append .add-on:last-child, .input-append .btn-group:last-child>.dropdown-toggle,
+	.input-append .btn:last-child {
+	-webkit-border-radius: 0 4px 4px 0;
+	-moz-border-radius: 0 4px 4px 0;
+	border-radius: 0 4px 4px 0;
+}
+
+.input-append .add-on, .input-append .btn, .input-append .btn-group {
+	margin-left: -6px !important;
+}
+
+.input-append .add-on, .input-append .btn, .input-append .btn-group>.dropdown-toggle,
+	.input-prepend .add-on, .input-prepend .btn, .input-prepend .btn-group>.dropdown-toggle
+	{
+	vertical-align: top;
+	-webkit-border-radius: 0;
+	-moz-border-radius: 0;
+	border-radius: 0;
+}
+
+.input-append .add-on, .input-prepend .add-on {
+	display: inline-block;
+	width: auto;
+	height: 30px;
+	min-width: 16px;
+	padding: 4px 5px;
+	font-size: 14px;
+	font-weight: 400;
+	line-height: 20px;
+	text-align: center;
+	text-shadow: 0 1px 0 #fff;
+	background-color: #eee;
+	border: 1px solid #ccc;
+}
+
+
+.page-tradeincard .ump-coupon-detail-wrap .promote-card-name {
+    font-size: 18px;
+    line-height: 60px;
+}
+.app-preview .promote-card .promote-card-name {
+    line-height: 40px;
+    padding-left: 10px;
+}
+.pull-left {
+    float: left;
+}
+.app-preview .promote-card .transparent-color {
+    color: rgba(255,255,255,0.5);
+}
+.app-preview .promote-card .promote-share {
+    position: absolute;
+    right: 10px;
+    top: 15px;
+    width: 50px;
+    height: 30px;
+    line-height: 30px;
+    border: 1px solid #ffbabb;
+    border-color: rgba(255,255,255,0.5);
+    border-radius: 4px;
+    cursor: pointer;
+}
+.pull-right {
+    float: right;
+}
+.app-preview .promote-card .promote-value {
+    font-size: 30px;
+    word-break: break-word;
+}
+.center, .text-center {
+    text-align: center;
+}
+.app-preview .promote-card .promote-limit {
+    line-height: 40px;
+}
+.app-preview .promote-card .transparent-color {
+    color: rgba(255,255,255,0.5);
+}
+.app-preview .promote-card .dot {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 5px;
+    background: url(../images/dot.png) repeat-x left bottom;
+    background-size: auto 5px;
+}
+.app-preview .promote-desc .promote-desc-title {
+    padding: 10px 0 0 20px;
+}
+.app-preview .block-item {
+    position: relative;
+    display: block;
+    padding: 10px;
+    line-height: 1.5;
+    border: 0;
+    border-top: 2px solid #e5e5e5;
+    overflow: hidden;
+}
+.app-preview .promote-desc .more-desc {
+    display: none;
+}
+.app-preview a {
+    text-decoration: none;
+}
+h2{    font-size: 0.8em;}
+
+.app-preview .promote-desc {
+    color: #333;
+    word-break: break-all;
+}
+
+.app-preview .promote-card .promote-value .promote-value-sign {
+    font-size: 30px;
+    line-height: 40px;
+}
+.input-small {
+	width: 40px;
+}
+
+.ui-box {
+    margin-bottom: 15px;
+}
+
+.ui-btn {
+    display: inline-block;
+    border-radius: 2px;
+    height: 26px;
+    line-height: 26px;
+    padding: 0 12px;
+    cursor: pointer;
+    color: #333;
+    background: #f8f8f8;
+    border: 1px solid #ddd;
+    text-align: center;
+    font-size: 12px;
+    -webkit-box-sizing: content-box;
+    -moz-box-sizing: content-box;
+    box-sizing: content-box;
+}
+
+.ui-btn-success {
+    color: #fff;
+    background: #4b0;
+    border-color: #3da900;
+}
+
+.ui-search-box {
+    top: 0px;
+    right: 0px;
+    position: absolute;
+    z-index: 10;
+    vertical-align: middle;
+    margin: 0;
+}
+
+.ui-box {
+    margin-bottom: 15px;
+}
+
+.ui-table.ui-table-list {
+    border: none;
+}
+.ui-table {
+    width: 100%;
+    font-size: 12px;
+    text-align: left;
+    margin-bottom: 0;
+    border: 1px solid #e5e5e5;
+}
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+.no-result {
+    text-align: center;
+    border: 1px solid #eee;
+    padding: 39px 0;
+}
+.ui-search-box .txt {
+    width: 70px;
+    height: 16px;
+    padding: 5px;
+    font-size: 12px;
+    line-height: 16px;
+    border: 1px solid #ddd;
+    margin: 0;
+    padding-left: 20px;
+    background: #fff url(../images/ico-search.png) 4px center no-repeat;
+    background-image: -webkit-image-set( url(../images/ico-search.png) 1x, url(../images/ico-search@2x.png) 2x);
+    border-radius: 2px;
+    -webkit-transition: width linear 0.25s;
+    -moz-transition: width linear 0.25s;
+    transition: width linear 0.25s;
+}
+
+.widget-list-filter{
+	padding-left: 5px;
+}
+
+.ui-nav li.active a, .ui-nav li a.active {
+    border-bottom-color: rgb(255, 255, 255);
+    background: rgb(255, 255, 255);
+}

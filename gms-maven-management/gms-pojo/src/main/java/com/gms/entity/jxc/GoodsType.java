@@ -28,6 +28,17 @@ public class GoodsType {
 	private String icon; // 图标
 	
 	private Integer pId; // 父菜单Id
+	
+	@Column(length=11)
+    private Integer shopId; // 商户
+
+    public Integer getShopId() {
+		return shopId;
+	}
+
+	public void setShopId(Integer shopId) {
+		this.shopId = shopId;
+	}
 
 	public Integer getId() {
 		return id;

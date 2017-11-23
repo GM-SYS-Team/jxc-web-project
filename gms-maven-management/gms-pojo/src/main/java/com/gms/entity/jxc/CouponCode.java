@@ -1,12 +1,18 @@
 package com.gms.entity.jxc;
-
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 /**
  * @author zhoutianqi
  * @className CouponCode.java
  * @date 2017年11月16日 下午5:24:22
  * @description 优惠券
  */
+@Entity
 @Table(name = "t_coupon_code")
 public class CouponCode {
     @Id
@@ -18,7 +24,7 @@ public class CouponCode {
      */
     @ManyToOne
 	@JoinColumn(name="couponId")
-	private Coupon coupon;
+	private Coupon coupon; // 优惠券
     /**
      * 优惠券编码
      */
@@ -50,8 +56,7 @@ public class CouponCode {
     public void setId(Integer id) {
         this.id = id;
     }
-
-    public Coupon getCoupon() {
+	public Coupon getCoupon() {
 		return coupon;
 	}
 

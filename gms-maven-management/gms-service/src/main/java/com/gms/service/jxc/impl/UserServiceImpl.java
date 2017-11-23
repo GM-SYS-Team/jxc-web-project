@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import com.gms.entity.jxc.User;
 import com.gms.dao.repository.UserRepository;
 import com.gms.service.jxc.UserService;
+import com.gms.util.Constant;
 import com.gms.util.StringUtil;
 
 /**
@@ -58,7 +59,10 @@ public class UserServiceImpl implements UserService{
 				if(user!=null){
 					if(StringUtil.isNotEmpty(user.getUserName())){
 						predicate.getExpressions().add(cb.like(root.get("userName"), "%"+user.getUserName().trim()+"%"));
-					}	
+					}
+					if(user.getShopId()!=null){
+						predicate.getExpressions().add(cb.equal(root.get("shopId"), user.getShopId()));
+					}
 					predicate.getExpressions().add(cb.notEqual(root.get("id"), 1)); // 管理员除外
 				}
 				return predicate;
@@ -89,6 +93,16 @@ public class UserServiceImpl implements UserService{
 	@Override
 	public void delete(Integer id) {
 		userRepository.delete(id);
+	}
+
+	@Override
+	public User findByUuid(String uuid) {
+		return userRepository.findByUuid(uuid);
+	}
+
+	@Override
+	public User findUserByTelephone(String telephone) {
+		return userRepository.findUserByTelephone(telephone);
 	}
 
 
