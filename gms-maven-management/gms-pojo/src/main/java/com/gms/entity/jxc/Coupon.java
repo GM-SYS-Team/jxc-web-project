@@ -3,7 +3,6 @@ package com.gms.entity.jxc;
 import java.util.Date;
 
 import javax.persistence.*;
-
 /**
  * @author zhoutianqi
  * @className Coupon.java
@@ -62,18 +61,6 @@ public class Coupon {
 	private Double minAmount;
 	
 	private Double maxAmount;
-	/**
-	 * 优惠券优惠金额
-	 */
-	private Double couponAmount;
-
-	public Double getCouponAmount() {
-		return couponAmount;
-	}
-
-	public void setCouponAmount(Double couponAmount) {
-		this.couponAmount = couponAmount;
-	}
 
 	public Integer getId() {
 		return id;
@@ -90,6 +77,7 @@ public class Coupon {
 	public void setShop(Shop shop) {
 		this.shop = shop;
 	}
+
 
 	public Integer getTotalCount() {
 		return totalCount;
@@ -162,7 +150,4 @@ public class Coupon {
 	public void setMaxAmount(Double maxAmount) {
 		this.maxAmount = maxAmount;
 	}
-
-	
-	
 }
