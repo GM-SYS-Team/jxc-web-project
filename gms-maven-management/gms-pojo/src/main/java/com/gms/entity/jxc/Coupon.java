@@ -61,6 +61,8 @@ public class Coupon {
 	private Double minAmount;
 	
 	private Double maxAmount;
+	
+	private Double couponAmount;
 
 	public Integer getId() {
 		return id;
@@ -149,5 +151,13 @@ public class Coupon {
 
 	public void setMaxAmount(Double maxAmount) {
 		this.maxAmount = maxAmount;
+	}
+
+	public Double getCouponAmount() {
+		return couponAmount;
+	}
+
+	public void setCouponAmount(Double couponAmount) {
+		this.couponAmount = couponAmount;
 	}
 }
