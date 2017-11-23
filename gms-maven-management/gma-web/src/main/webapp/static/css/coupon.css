@@ -698,3 +698,17 @@ table {
     border-bottom-color: rgb(255, 255, 255);
     background: rgb(255, 255, 255);
 }
+
+
+.row {
+    margin-right: 0px;
+    margin-left: 0px;
+}
+div {
+    display: block;
+}
+
+.row:before, .row:after {
+    display: table;
+    content: " ";
+}

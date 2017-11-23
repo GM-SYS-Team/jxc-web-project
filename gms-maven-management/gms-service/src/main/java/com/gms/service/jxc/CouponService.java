@@ -3,6 +3,7 @@ package com.gms.service.jxc;
 import java.util.List;
 
 import com.gms.entity.jxc.Coupon;
+import com.gms.entity.jxc.CouponGoods;
 
 /**
  * @ClassName: CouponService
@@ -28,7 +29,7 @@ public interface CouponService {
 	* @return List<Coupon>    返回类型 
 	* @throws 
 	*/
-	public List<Coupon> findCouponAll();
+	public List<Coupon> findCouponAll(Integer current_page,Integer page_size);
 
 	/** 
 	* @Title: findCouponByStatus 
@@ -37,6 +38,8 @@ public interface CouponService {
 	* @return List<Coupon>    返回类型 
 	* @throws 
 	*/
-	public List<Coupon> findCouponByStatus(Integer status);
+	public List<Coupon> findCouponByStatus(Integer status,Integer current_page,Integer  page_size);
+	
+	public void saveCouponGoods(CouponGoods couponGoods);
 
 }

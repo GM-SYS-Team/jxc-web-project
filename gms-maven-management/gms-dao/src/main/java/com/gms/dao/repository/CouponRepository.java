@@ -1,6 +1,7 @@
 package com.gms.dao.repository;
 
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -18,7 +19,13 @@ import com.gms.entity.jxc.Coupon;
 */
 public interface CouponRepository extends JpaRepository<Coupon, Integer>,JpaSpecificationExecutor<Coupon>{
 
-	@Query(value="select * from t_coupon where status=?1",nativeQuery=true)
-	public List<Coupon> findCouponByStatus(Integer status);
+	@Query(value="select * from t_coupon where expiry_date_start>?1",nativeQuery=true)
+	public List<Coupon> findCouponBygt(Date date);
+	
+	@Query(value="select * from t_coupon where expiry_date_stop<?1",nativeQuery=true)
+	public List<Coupon> findCouponBylt(Date date);
+	
+	@Query(value="select * from t_coupon where expiry_date_stop>=?1 and expiry_date_start<=?1",nativeQuery=true)
+	public List<Coupon> findCouponBybt(Date date);
 	
 }

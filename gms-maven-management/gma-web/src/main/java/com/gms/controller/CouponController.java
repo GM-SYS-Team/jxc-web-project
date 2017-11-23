@@ -17,7 +17,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.gms.entity.jxc.Coupon;
+import com.gms.entity.jxc.CouponGoods;
 import com.gms.entity.jxc.Log;
+import com.gms.entity.jxc.Shop;
 import com.gms.service.jxc.CouponService;
 import com.gms.service.jxc.LogService;
 
@@ -40,21 +42,36 @@ public class CouponController extends BaseController {
 	 * @return Map<String,Object> 返回类型
 	 * @throws
 	 */
-	@RequestMapping("/save")
+	@PostMapping("/save")
 	public Map<String, Object> save(HttpServletRequest request)
 			throws ParseException {
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+		String[] goodsIds = request.getParameter("goodsIds").split(",");
+		/*当前登录的店铺*/
+		Shop shop = getCurrentShop(request);
+		SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
 		Map<String, Object> resultMap = new HashMap<>();
 		Coupon coupon = new Coupon();
-		coupon.setCouponName(request.getParameter("coupon_title"));
-		coupon.setTotalCount(Integer.parseInt(request.getParameter("batchNum")));
-		coupon.setCouponInfo(request.getParameter("coupon_intro"));
-		coupon.setExpiryDateStart(sdf.parse(request
-				.getParameter("expiryDateStart")));
-		coupon.setExpiryDateStop(sdf.parse(request
-				.getParameter("expiryDateStop")));
+		coupon.setCouponName(request.getParameter("couponName"));
+		coupon.setTotalCount(Integer.parseInt(request
+				.getParameter("totalCount")));
+		coupon.setRemainCount(Integer.parseInt(request
+				.getParameter("totalCount")));
+		coupon.setCouponInfo(request.getParameter("couponIntro"));
 		coupon.setCouponCount(request.getParameter("couponCount"));
+		coupon.setCouponAmount(Double.parseDouble(request
+				.getParameter("couponAmount")));
+		String[] expiryDate = request.getParameter("expiryDate").split("-");
+		coupon.setExpiryDateStart(sdf.parse(expiryDate[0].trim()));
+		coupon.setExpiryDateStop(sdf.parse(expiryDate[1].trim()));
+		coupon.setShop(shop);
 		couponService.save(coupon);
+		for(String goodsId : goodsIds){
+			CouponGoods couponGoods = new CouponGoods();
+			couponGoods.setCopponId(coupon.getId());
+			couponGoods.setShopId(shop.getId());
+			couponGoods.setGoodId(Integer.parseInt(goodsId));
+			couponService.saveCouponGoods(couponGoods);
+		}
 		resultMap.put("success", true);
 		return resultMap;
 	}
@@ -62,15 +79,19 @@ public class CouponController extends BaseController {
 	@PostMapping("/list")
 	public Map<String, Object> list(
 			@RequestParam(value = "num", required = true) Integer num,
+			@RequestParam(value = "current_page", required = true) Integer current_page,
+			@RequestParam(value = "page_size", required = true) Integer page_size,
 			HttpServletRequest request) throws Exception {
-		List<Coupon> shopList = new ArrayList<Coupon>();
+		List<Coupon> couponList = new ArrayList<Coupon>();
 		if (num == 0) {
-			shopList = couponService.findCouponAll();
+			couponList = couponService.findCouponAll(current_page, page_size);
 		} else {
-			shopList = couponService.findCouponByStatus(num);
+			couponList = couponService.findCouponByStatus(num, current_page,
+					page_size);
 		}
 		Map<String, Object> resultMap = new HashMap<>();
-		resultMap.put("rows", shopList);
+		resultMap.put("couponList", couponList);
+		resultMap.put("size", couponList == null ? 0 : couponList.size());
 		logService.save(new Log(Log.SEARCH_ACTION, "查询优惠券信息")); // 写入日志
 		return resultMap;
 	}
