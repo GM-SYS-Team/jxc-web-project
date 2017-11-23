@@ -179,7 +179,7 @@ $("#iframe_box").niceScroll({
         trigger: 'axis'
     },
     legend: {
-        data:['所有优惠券','已领取','已使用']
+        data:['未开始','进行中','已失效']
     },
     toolbox: {
         show : true,
@@ -209,7 +209,7 @@ $("#iframe_box").niceScroll({
     ],
     series : [
         {
-            name:'所有优惠券',
+            name:'未开始',
             type:'line',
             data:[110, 110, 150, 130, 125, 133, 106],
             markPoint : {
@@ -225,7 +225,7 @@ $("#iframe_box").niceScroll({
             }
         },
         {
-            name:'已领取',
+            name:'进行中',
             type:'line',
             data:[110, 105, 140, 130, 110, 121, 100],
             markPoint : {
@@ -240,7 +240,7 @@ $("#iframe_box").niceScroll({
             }
         },
 		   {
-            name:'已使用',
+            name:'已失效',
             type:'line',
             data:[0, 5, 10, 0, 15, 12, 6],
             markPoint : {

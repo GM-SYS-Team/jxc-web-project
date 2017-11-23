@@ -79,7 +79,7 @@ function saveCoupon() {
 		alert("优惠券使用起始日期不能为空！");
 		return false;
 	}
-	var goodsIds = $("#goodsIds").val();
+	var goodsIds = $("#goodsIds").html();
 	if(isEmpty(goodsIds)){
 		alert("适用商品不能为空！");
 		return false;
@@ -104,6 +104,11 @@ function saveCoupon() {
 		success : function(data) {
 			if(data.success){
 				alert("插入成功！");
+				$("#add_coupon").hide();
+				$("#list_coupon").show();
+				$(".pull-left li").removeClass("active");
+				$(".pull-left li:first").addClass("active");
+				couponAjax(0);
 			}
 		}
 	});
@@ -118,18 +123,16 @@ function isEmpty(value){
 
 function getCouponList(obj) {
 	var num = $(obj).parent().attr("data_num");
-	$(".pull-left li").removeClass("active")
+	$(".pull-left li").removeClass("active");
 	$(obj).parent().addClass("active");
 	couponAjax(num);
 }
-function couponAjax(num,current_page,page_size){
+function couponAjax(num){
 	$.ajax( {
 		url : "/admin/coupon/list",
 		type : "POST",
 		data : {
-			num : num,
-			current_page:current_page,
-			page_size:page_size
+			num : num
 		},
 		success : function(data) {
 			var html = "";

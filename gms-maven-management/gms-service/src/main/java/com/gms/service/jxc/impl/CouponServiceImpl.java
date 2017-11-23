@@ -4,15 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import javax.annotation.Resource;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import com.gms.dao.repository.CouponGoodsRepository;
@@ -42,8 +34,8 @@ public class CouponServiceImpl implements CouponService {
 	}
 
 	@Override
-	public List<Coupon> findCouponAll(Integer current_page, Integer page_size) {
-		Pageable pageable = new PageRequest(current_page - 1, page_size);
+	public List<Coupon> findCouponAll() {
+		/*Pageable pageable = new PageRequest(current_page - 1, page_size);
 		Page<Coupon> pageCoupon = couponRepository.findAll(
 				new Specification<Coupon>() {
 					@Override
@@ -52,13 +44,12 @@ public class CouponServiceImpl implements CouponService {
 						Predicate predicate = cb.conjunction();
 						return predicate;
 					}
-				}, pageable);
-		return pageCoupon.getContent();
+				}, pageable);*/
+		return couponRepository.findAll();
 	}
 
 	@Override
-	public List<Coupon> findCouponByStatus(Integer status,
-			Integer current_page, Integer page_size) {
+	public List<Coupon> findCouponByStatus(Integer status) {
 		Date today = new Date();
 		if (status == 1) {
 			return couponRepository.findCouponBygt(today);

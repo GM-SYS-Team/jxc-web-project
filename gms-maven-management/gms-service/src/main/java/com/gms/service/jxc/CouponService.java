@@ -29,7 +29,7 @@ public interface CouponService {
 	* @return List<Coupon>    返回类型 
 	* @throws 
 	*/
-	public List<Coupon> findCouponAll(Integer current_page,Integer page_size);
+	public List<Coupon> findCouponAll();
 
 	/** 
 	* @Title: findCouponByStatus 
@@ -38,7 +38,7 @@ public interface CouponService {
 	* @return List<Coupon>    返回类型 
 	* @throws 
 	*/
-	public List<Coupon> findCouponByStatus(Integer status,Integer current_page,Integer  page_size);
+	public List<Coupon> findCouponByStatus(Integer status);
 	
 	public void saveCouponGoods(CouponGoods couponGoods);
 
