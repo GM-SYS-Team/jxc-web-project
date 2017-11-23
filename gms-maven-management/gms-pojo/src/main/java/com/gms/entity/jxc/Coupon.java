@@ -3,7 +3,6 @@ package com.gms.entity.jxc;
 import java.util.Date;
 
 import javax.persistence.*;
-
 /**
  * @author zhoutianqi
  * @className Coupon.java
@@ -91,6 +90,7 @@ public class Coupon {
 		this.shop = shop;
 	}
 
+
 	public Integer getTotalCount() {
 		return totalCount;
 	}
@@ -162,7 +162,4 @@ public class Coupon {
 	public void setMaxAmount(Double maxAmount) {
 		this.maxAmount = maxAmount;
 	}
-
-	
-	
 }

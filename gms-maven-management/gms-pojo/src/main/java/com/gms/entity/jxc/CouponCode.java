@@ -1,5 +1,4 @@
 package com.gms.entity.jxc;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -57,7 +56,6 @@ public class CouponCode {
     public void setId(Integer id) {
         this.id = id;
     }
-
 	public Coupon getCoupon() {
 		return coupon;
 	}
