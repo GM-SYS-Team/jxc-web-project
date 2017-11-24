@@ -67,7 +67,7 @@ public class CouponServiceImpl implements CouponService {
 
 	@Override
 	public void deleteCoupon(Integer id) {
-		couponGoodsRepository.delete(id);
+		couponRepository.delete(id);
 	}
 
 }
