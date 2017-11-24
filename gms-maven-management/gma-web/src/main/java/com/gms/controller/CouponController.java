@@ -79,15 +79,12 @@ public class CouponController extends BaseController {
 	@PostMapping("/list")
 	public Map<String, Object> list(
 			@RequestParam(value = "num", required = true) Integer num,
-			@RequestParam(value = "current_page", required = true) Integer current_page,
-			@RequestParam(value = "page_size", required = true) Integer page_size,
 			HttpServletRequest request) throws Exception {
 		List<Coupon> couponList = new ArrayList<Coupon>();
 		if (num == 0) {
-			couponList = couponService.findCouponAll(current_page, page_size);
+			couponList = couponService.findCouponAll();
 		} else {
-			couponList = couponService.findCouponByStatus(num, current_page,
-					page_size);
+			couponList = couponService.findCouponByStatus(num);
 		}
 		Map<String, Object> resultMap = new HashMap<>();
 		resultMap.put("couponList", couponList);
