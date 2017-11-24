@@ -40,6 +40,22 @@ public interface CouponService {
 	*/
 	public List<Coupon> findCouponByStatus(Integer status);
 	
+	/** 
+	* @Title: saveCouponGoods 
+	* @Description: TODO(这里用一句话描述这个方法的作用) 
+	* @param @param couponGoods    设定文件 
+	* @return void    返回类型 
+	* @throws 
+	*/
 	public void saveCouponGoods(CouponGoods couponGoods);
+	
+	/** 
+	* @Title: deleteCoupon 
+	* @Description: TODO(这里用一句话描述这个方法的作用) 
+	* @param @param id    设定文件 
+	* @return void    返回类型 
+	* @throws 
+	*/
+	public void deleteCoupon(Integer id);
 
 }

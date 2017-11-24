@@ -46,7 +46,7 @@ public class CouponController extends BaseController {
 	public Map<String, Object> save(HttpServletRequest request)
 			throws ParseException {
 		String[] goodsIds = request.getParameter("goodsIds").split(",");
-		/*当前登录的店铺*/
+		/* 当前登录的店铺 */
 		Shop shop = getCurrentShop(request);
 		SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
 		Map<String, Object> resultMap = new HashMap<>();
@@ -65,7 +65,7 @@ public class CouponController extends BaseController {
 		coupon.setExpiryDateStop(sdf.parse(expiryDate[1].trim()));
 		coupon.setShop(shop);
 		couponService.save(coupon);
-		for(String goodsId : goodsIds){
+		for (String goodsId : goodsIds) {
 			CouponGoods couponGoods = new CouponGoods();
 			couponGoods.setCopponId(coupon.getId());
 			couponGoods.setShopId(shop.getId());
@@ -73,6 +73,17 @@ public class CouponController extends BaseController {
 			couponService.saveCouponGoods(couponGoods);
 		}
 		resultMap.put("success", true);
+		return resultMap;
+	}
+
+	@PostMapping("/delete")
+	public Map<String, Object> delete(
+			@RequestParam(value = "id", required = true) Integer id,
+			HttpServletRequest request) throws Exception {
+		couponService.deleteCoupon(id);
+		Map<String, Object> resultMap = new HashMap<>();
+		resultMap.put("success", true);
+		logService.save(new Log(Log.SEARCH_ACTION, "删除优惠券-->id:" + id)); // 写入日志
 		return resultMap;
 	}
 

@@ -40,17 +40,27 @@ Date.prototype.format = function (format) {
 }
 
 function addCoupon() {
-	$("#list_coupon").hide();
-	$("#add_coupon").show();
+	$("#list_coupon").hide(1000);
+	$("#add_coupon").show(1000);
 }
 
 function btnQuit() {
-	$("#list_coupon").show();
-	$("#add_coupon").hide();
+	$("#list_coupon").show(1000);
+	$("#add_coupon").hide(1000);
 }
 
 function keyup() {
-	$("#coupon-title").html($("#title").val());
+	$("#coupon_title_eg").html($("#couponName").val());
+}
+
+function keyupAmount() {
+	$("#coupon-amount").html($("#couponAmount").val());
+}
+function keyupDate() {
+	$("#coupon-date-section").html($("#expiryDate").val());
+}
+function keyupIntro() {
+	$(".js-desc-detail").html($("#couponIntro").val());
 }
 
 function saveCoupon() {
@@ -137,19 +147,30 @@ function couponAjax(num){
 		success : function(data) {
 			var html = "";
 			if(data.size>0){
+				if(num == 1){
+					$(".oper_th").show();
+				}else{
+					$(".oper_th").hide();
+				}
+				$("#list_coupon").show(1000);
+				$("#add_coupon").hide(1000);
 				$(".js-list-empty-region").hide();
 				$("#table_list").show();
 				$.each(data.couponList, function (index, item) {
 					html += "<tr>"
-							     +"<td><label><input type='checkbox' name='couponId' class='ace' value='"+ item.id +"'/><span class='lbl'></span></label></td>"
 							     +"<td>"+ item.couponName +"</td>"
 							     +"<td>"+ item.couponAmount +"</td>"
 							     +"<td>"+ item.totalCount +"</td>"
 							     +"<td>"+ item.remainCount +"</td>"
 							     +"<td>"+ item.couponCount +"</td>"
 							     +"<td>"+ new Date(item.expiryDateStart).format("yyyy-MM-dd") +"</td>"
-							     +"<td>"+ new Date(item.expiryDateStop).format("yyyy-MM-dd") +"</td>"
-							     +"</tr>";
+							     +"<td>"+ new Date(item.expiryDateStop).format("yyyy-MM-dd") +"</td>";
+					if(num == 1){
+						html += "<td>"
+								     +"<a href='javascript:ovid()' onclick='coupon_del(this,"+ item.id +")' class='btn btn-danger operation_btn'>删除</a>"
+							     +"</td>";
+					}
+					html += "</tr>";
 				})
 				$("#coupon_tbody").html(html);
 			}else{
@@ -185,14 +206,23 @@ function showPage(param) {
 	 }
 }
 
-$('#table_list th input:checkbox').on('click',function(){
-	if($('input[name="checkbox"]').prop("checked")){
-		$("[name='couponId']").attr("checked",'true');//全选 
-	}else{
-		$("[name='couponId']").removeAttr("checked");//取消 
-	}	
-});
-
+function coupon_del(obj,id){
+	layer.confirm('确认要删除吗？',{icon:0,},function(index){
+		$(obj).parents("tr").remove();
+		$.ajax( {
+			url : "/admin/coupon/delete",
+			type : "post",
+			data : {
+				id:id
+			},
+			success : function(data) {
+				if(data.success){
+					layer.msg('已删除!',{icon:1,time:1000});
+				}
+			}
+		});
+	});
+}
 
 function chooseGoods(){
 	goodsAjax();

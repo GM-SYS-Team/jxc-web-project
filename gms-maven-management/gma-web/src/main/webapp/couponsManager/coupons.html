@@ -52,9 +52,9 @@
 							href="javascript:void(0);" onclick="getCouponList(this)"><span>已失效</span></a>
 						</li>
 					</ul>
-					<div class="pull-right common-helps-entry">
+					<!-- <div class="pull-right common-helps-entry">
 						<a href="#" target="_blank"> 查看【优惠券】设置及应用教程 </a>
-					</div>
+					</div> -->
 				</nav>
 
 				<!------------------------------- 优惠券列表开始 ----------------------------------------------->
@@ -65,18 +65,16 @@
 							<div class="widget-list-filter">
 								<a href="javascript:void(0);" onclick="addCoupon();"
 									class="ui-btn ui-btn-success">新建优惠券</a>
-								<div class="js-list-search ui-search-box">
+								<!-- <div class="js-list-search ui-search-box">
 									<input class="txt" type="text" placeholder="搜索" value="">
-								</div>
+								</div> -->
 							</div>
 						</div>
-						<div class="bkg_List clearfix">
+						<div class="bkg_List clearfix" style="padding-left: 5px;">
 							<table class="table  table_list table_striped table-bordered"
 								id="table_list" style="display: none;">
 								<thead class="js-list-header-region">
 									<tr>
-										<th width="40"><label><input type="checkbox"
-												name="checkbox" class="ace"><span class="lbl"></span></label></th>
 										<th>名称</th>
 										<th>面值</th>
 										<th>发放总量（张）</th>
@@ -84,6 +82,7 @@
 										<th>每人限领（张/人）</th>
 										<th>使用起始日期</th>
 										<th>使用截止日期</th>
+										<th class="oper_th" style="width:150px;display: none">操作</th>
 									</tr>
 								</thead>
 								<tbody class="js-list-body-region" id="coupon_tbody">
@@ -139,12 +138,12 @@
 												<!-- <p class="about-card-desc">(微商城优惠券)</p> -->
 												<div class="ump-coupon-detail-wrap">
 													<div class="promote-card">
-														<div class="clearfix" style="height: 60px;">
+														<div class="clearfix" style="height: 60px;font-size: 14px;">
 															<h2 class="pull-left font-size-16 promote-card-name"
 																id="coupon_title_eg">优惠券标题</h2>
 														</div>
 														<p class="center promote-value">
-															<span class="promote-value-sign"> <span>￥</span> <i>0.00
+															<span class="promote-value-sign"> <span>￥</span> <i id="coupon-amount">0.00
 															</i>
 															</span>
 														</p>
@@ -156,11 +155,9 @@
 													</div>
 													<div class="promote-desc">
 														<h2 class="font-size-14 c-gray-dark promote-desc-title">使用说明</h2>
-														<div class="block border-top-0" style="padding-top: 10px;">
+														<div class="block border-top-0" style="padding-top: 10px;font-size: 14px;">
 															<div class="block-item clearfix">
-																<span class="js-desc-detail"> 暂无使用说明…… </span> <a
-																	class="c-blue more-desc pull-right js-more-desc"
-																	href="javascript:void(0)">更多</a>
+																<span class="js-desc-detail"> 暂无使用说明…… </span> 
 															</div>
 														</div>
 													</div>
@@ -194,8 +191,8 @@
 												<label class="control-label"><em class="required">*</em>发放总量：</label>
 												<div class="controls">
 													<div class="input-append">
-														<input type="text" name="total" id="totalCount" value=""
-															class="input-small"> <span class="add-on">张</span>
+														<input type="number" name="total" id="totalCount" value=""
+															class="input-small" style="width:50px;"> <span class="add-on">张</span>
 													</div>
 												</div>
 											</div>
@@ -204,8 +201,8 @@
 												<label class="control-label"><em class="required">*</em>面值：</label>
 												<div class="controls">
 													<label class="radio inline"> <input type="number"
-														name="value" id="couponAmount" class="input-small"
-														value=""> 元
+														name="value" id="couponAmount" class="input-small"  style="width:50px;"
+														value="" onchange="keyupAmount();"> 元
 													</label>
 												</div>
 											</div>
@@ -247,7 +244,7 @@
 													<input type="text" readonly name="start_at"
 														class="form-control time" value=""
 														class="js-start-time hasDatepicker"
-														style="height: 30px; width: 200px;" id="expiryDate">
+														style="height: 30px; width: 200px;" id="expiryDate"  onchange="keyupDate();">
 												</div>
 											</div>
 
@@ -255,8 +252,8 @@
 												<label class="control-label">使用说明：</label>
 												<div class="controls">
 													<textarea name="description" id="couponIntro"
-														style="width: 210px; height: 60px;" cols="30" rows="2"
-														placeholder="填写活动的详细说明，支持换行;"></textarea>
+														style="width: 210px; height: 80px;" cols="30" rows="2"
+														placeholder="填写活动的详细说明，支持换行;" onkeyup="keyupIntro();"></textarea>
 												</div>
 											</div>
 										</form>
