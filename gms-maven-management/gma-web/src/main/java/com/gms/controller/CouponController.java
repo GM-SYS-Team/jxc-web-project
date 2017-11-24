@@ -67,7 +67,7 @@ public class CouponController extends BaseController {
 		couponService.save(coupon);
 		for (String goodsId : goodsIds) {
 			CouponGoods couponGoods = new CouponGoods();
-			couponGoods.setCopponId(coupon.getId());
+			couponGoods.setCouponId(coupon.getId());
 			couponGoods.setShopId(shop.getId());
 			couponGoods.setGoodId(Integer.parseInt(goodsId));
 			couponService.saveCouponGoods(couponGoods);
@@ -80,7 +80,9 @@ public class CouponController extends BaseController {
 	public Map<String, Object> delete(
 			@RequestParam(value = "id", required = true) Integer id,
 			HttpServletRequest request) throws Exception {
-		couponService.deleteCoupon(id);
+		/* 当前登录的店铺 */
+		Shop shop = getCurrentShop(request);
+		couponService.deleteCoupon(id, shop.getId());
 		Map<String, Object> resultMap = new HashMap<>();
 		resultMap.put("success", true);
 		logService.save(new Log(Log.SEARCH_ACTION, "删除优惠券-->id:" + id)); // 写入日志
@@ -95,7 +97,9 @@ public class CouponController extends BaseController {
 		if (num == 0) {
 			couponList = couponService.findCouponAll();
 		} else {
-			couponList = couponService.findCouponByStatus(num);
+			/* 当前登录的店铺 */
+			Shop shop = getCurrentShop(request);
+			couponList = couponService.findCouponByStatus(num, shop.getId());
 		}
 		Map<String, Object> resultMap = new HashMap<>();
 		resultMap.put("couponList", couponList);

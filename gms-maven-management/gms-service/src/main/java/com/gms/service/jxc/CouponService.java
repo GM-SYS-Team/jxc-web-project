@@ -38,7 +38,7 @@ public interface CouponService {
 	* @return List<Coupon>    返回类型 
 	* @throws 
 	*/
-	public List<Coupon> findCouponByStatus(Integer status);
+	public List<Coupon> findCouponByStatus(Integer status,Integer shopId);
 	
 	/** 
 	* @Title: saveCouponGoods 
@@ -56,6 +56,6 @@ public interface CouponService {
 	* @return void    返回类型 
 	* @throws 
 	*/
-	public void deleteCoupon(Integer id);
+	public void deleteCoupon(Integer id,Integer shopId);
 
 }

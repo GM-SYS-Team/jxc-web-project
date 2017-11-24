@@ -19,13 +19,13 @@ import com.gms.entity.jxc.Coupon;
 */
 public interface CouponRepository extends JpaRepository<Coupon, Integer>,JpaSpecificationExecutor<Coupon>{
 
-	@Query(value="select * from t_coupon where expiry_date_start>?1",nativeQuery=true)
-	public List<Coupon> findCouponBygt(Date date);
+	@Query(value="select * from t_coupon where expiry_date_start>?1 and shop_id = ?2",nativeQuery=true)
+	public List<Coupon> findCouponBygt(Date date,Integer shopId);
 	
-	@Query(value="select * from t_coupon where expiry_date_stop<?1",nativeQuery=true)
-	public List<Coupon> findCouponBylt(Date date);
+	@Query(value="select * from t_coupon where expiry_date_stop<?1 and shop_id = ?2",nativeQuery=true)
+	public List<Coupon> findCouponBylt(Date date,Integer shopId);
 	
-	@Query(value="select * from t_coupon where expiry_date_stop>=?1 and expiry_date_start<=?1",nativeQuery=true)
-	public List<Coupon> findCouponBybt(Date date);
+	@Query(value="select * from t_coupon where expiry_date_stop>=?1 and expiry_date_start<=?1 and shop_id = ?2",nativeQuery=true)
+	public List<Coupon> findCouponBybt(Date date,Integer shopId);
 	
 }

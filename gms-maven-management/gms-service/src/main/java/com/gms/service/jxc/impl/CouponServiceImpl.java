@@ -49,14 +49,14 @@ public class CouponServiceImpl implements CouponService {
 	}
 
 	@Override
-	public List<Coupon> findCouponByStatus(Integer status) {
+	public List<Coupon> findCouponByStatus(Integer status,Integer shopId) {
 		Date today = new Date();
 		if (status == 1) {
-			return couponRepository.findCouponBygt(today);
+			return couponRepository.findCouponBygt(today,shopId);
 		} else if (status == 2) {
-			return couponRepository.findCouponBybt(today);
+			return couponRepository.findCouponBybt(today,shopId);
 		} else {
-			return couponRepository.findCouponBylt(today);
+			return couponRepository.findCouponBylt(today,shopId);
 		}
 	}
 
@@ -66,7 +66,8 @@ public class CouponServiceImpl implements CouponService {
 	}
 
 	@Override
-	public void deleteCoupon(Integer id) {
+	public void deleteCoupon(Integer id,Integer shopId) {
+		couponGoodsRepository.deleteCouponGoods(id, shopId);
 		couponRepository.delete(id);
 	}
 
