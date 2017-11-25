@@ -159,7 +159,7 @@
     background: url(../images/acrossTab-close.png) no-repeat 0 0;
 }
 .breadcrumb li .close_icon:hover{ background: url(../images/acrossTab-close.png) no-repeat 0 -13px}
-/*****************顶部栏目样式属性*************************/
+/*****************椤堕儴鏍忕洰鏍峰紡灞炴�*************************/
 .Columns_top{ padding:0px 10px; height:100%; color:#FFF; width:265px;}
 .Columns_top .news{    
     position: relative;
@@ -259,7 +259,7 @@
     position: absolute;
     top: -6px;
 }
-/******************搜索样式属性************************/
+/******************鎼滅储鏍峰紡灞炴�************************/
 .search_style{padding: 10px 10px; background-color:#666666;}
 .search_style .sidebar_form{
 	border-radius: 3px;
@@ -300,9 +300,9 @@
 }
 .input-group-btn .btn_flat{ display:block; height:30px;}
 .input-group-btn .btn_flat i{display: block;height: 30px;line-height: 30px; color:#666}
-/***************多选搜索样式******************/
+/***************澶氶�鎼滅储鏍峰紡******************/
 .choice_search .label_name{ height:32px; line-height:32px; float:left; text-align:right; width:75px;}
-/*******************菜单栏样式属性*************************/
+/*******************鑿滃崟鏍忔牱寮忓睘鎬�************************/
 .nav-list>li:first-child { border-top: 0;}
 .nav-list>dd,
 .nav-list>dt {
@@ -432,7 +432,7 @@
 }
 #Sellerber .Sellerber_bottom{ position:fixed; bottom:0px; border-top:1px solid #dddddd; width:100%;}
 #Sellerber .Sellerber_bottom span{ padding:0px 10px;}
-/*************内容************/
+/*************鍐呭************/
 .show_iframe iframe {
 	position:absolute;
     bottom: 0;
@@ -473,7 +473,7 @@
 .Module_info .left_img i{ font-size:36px; margin-top:15px;}
 .Module_info .right_info{position:relative; height:80px; margin-left:100px; vertical-align:middle; top:0px; text-align:center; font-size:24px; line-height:80px;}
 /*********************************************************************************************************************************************************
-*                                                                      卖家界面样式属性                                                                     *
+*                                                                      鍗栧鐣岄潰鏍峰紡灞炴�                                                                     *
 *********************************************************************************************************************************************************/
 .frame{background:url(../images/bg_img.png) repeat;  position:relative;border:1px solid #dddddd; }
 .Shops_info{  margin-right:15px;  height:212px;padding:10px;}
@@ -523,7 +523,7 @@
 .Order_form .list_info li{ margin-left:33px; margin-bottom:5px; margin-top:5px; margin-right:10px}
 .Order_form .list_info li a{ font-weight:bold; color:#2C9CEF; float:right}
 .ranking_style .title_name{ margin-bottom:0px;}
-.dd_echarts{ border-top:1px solid #dddddd;}
+/* .dd_echarts{ border-top:1px solid #dddddd;} */
 .search{ float:right; min-width:410px; height:30px;}
 .operation{ border:1px solid #dddddd; padding:10px;}
 .ranking_list a{ display:block; text-align:left; width:100%}
@@ -541,7 +541,7 @@
     margin-top: 15px;	
 }
 .list_carousel .add_Upload{ position:absolute;right:10px; top:10px; border:0px; height:30px; width:30px; cursor:pointer}
-/*******************静态界面样式属性***********************/
+/*******************闈欐�鐣岄潰鏍峰紡灞炴�***********************/
 .Single_page{}
 .Single_page .Prompt{ border:1px solid #dddddd; padding:10px; line-height:24px;}
 .Single_page .Single_page_list li{ position:relative;  float:left; width:200px; height:200px; border:1px solid #dddddd; margin:10px; background-color:#ededed}
@@ -582,9 +582,9 @@ color:#FFF;
 
 }
 .Single_page .Single_page_list li  .time{ text-align:center; font-size:12px; font-weight:normal; color:#999; border-top:1px dashed #dddddd; line-height:30px; background-color:#FFF; position:absolute; bottom:0px; width:100%;}
-.Single_page .Single_page_list li .page_info{ padding:10px; color:#999999; font-size:12px; font-family:"新宋体"}
+.Single_page .Single_page_list li .page_info{ padding:10px; color:#999999; font-size:12px; font-family:"鏂板畫浣�}
 
-/***************添加广告*****************/
+/***************娣诲姞骞垮憡*****************/
 .Advert_add_style{}
 .Advert_add_style .preview_img{ border:1px solid #dddddd; padding:10px; text-align:center; height:180px; line-height:180px;}
 .fileInput{width:102px;height:34px; background:url(../images/upFileBtn.png);overflow:hidden; position:relative; top:10px}
@@ -597,7 +597,7 @@ color:#FFF;
 .adverts_content .operating li{ height:40px; border-right:1px solid #dddddd; text-align:center; line-height:40px;}
 .adverts_content .operating li a{ display:block; width:100%; height:40px; font-size:14px}
 .adverts_content .operating li a:hover{ background-color:#1D8ECB; color:#FFFFFF}
-/********************权限管理******************/
+/********************鏉冮檺绠＄悊******************/
 .Competence_style .operation{ border-bottom:0px ;}
 .Competence_style .search{ width:350px;}
 .formControls .textarea,
@@ -639,7 +639,7 @@ color:#FFF;
 .admin_recording .searchs{  margin-top:15px; }
 .searchs .label_name{ width:80px; line-height:30px; float:left;}
 .admin_recording .operation{ border-bottom:0px;}
-/********订单管理**********/
+/********璁㈠崟绠＄悊**********/
 .order_style .operation{ border-bottom:0px}
 .sum_style li .Amount{ line-height:60px; font-size:18px;  padding:10px; margin:5px; color:#FFF}
 .sum_style li .Amount span{ font-size:36px;  font-weight:bold}
@@ -654,9 +654,9 @@ color:#FFF;
 .list_order .Logisticsb .content_jb_name tr{border-bottom:1px solid #dddddd; }
 .list_order .Logisticsb .content_jb_name tr td{ border-top:0px;}
 .list_order .Logisticsb .content_jb_name tr:last-child{ border-bottom:0px}
-/******************************广告管理界面样式**********************/
+/******************************骞垮憡绠＄悊鐣岄潰鏍峰紡**********************/
 .advertising .operation{ border-bottom:0px;}
-/**************************************用户登录界面************************************/
+/**************************************鐢ㄦ埛鐧诲綍鐣岄潰************************************/
 .login_style{ 
 	background-color:#1c77ac;
 	background-image: url(../images/light.png);
@@ -792,7 +792,7 @@ h4.bigger {font-size: 19px;}
 .Reg_log_style .frame_style.form_errors label.user_icon{background-position: -39px -30px;}
 .Reg_log_style .frame_style.form_errors label.Codes_icon{background-position: -40px -60px;}
 .button_width{ width:80px; color:#FFF;  padding:20px 0px; line-height:30px; font-size:18px; cursor:pointer; margin:20px 0px;}
-/***********修改密码样式***********/
+/***********淇敼瀵嗙爜鏍峰紡***********/
 .change_Password { margin-top:20px;}
 .change_Password li{ height:40px; line-height:30px; margin:10px 0px;}
 .change_Password li .label_name{ width:80px; text-align:right; color:#666; float:left}

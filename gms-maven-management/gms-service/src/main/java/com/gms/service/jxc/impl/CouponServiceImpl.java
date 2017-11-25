@@ -34,7 +34,7 @@ public class CouponServiceImpl implements CouponService {
 	}
 
 	@Override
-	public List<Coupon> findCouponAll() {
+	public List<Coupon> findCouponAll(Integer shopId) {
 		/*Pageable pageable = new PageRequest(current_page - 1, page_size);
 		Page<Coupon> pageCoupon = couponRepository.findAll(
 				new Specification<Coupon>() {
@@ -45,7 +45,7 @@ public class CouponServiceImpl implements CouponService {
 						return predicate;
 					}
 				}, pageable);*/
-		return couponRepository.findAll();
+		return couponRepository.findCouponAll(shopId);
 	}
 
 	@Override

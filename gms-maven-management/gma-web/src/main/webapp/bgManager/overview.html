@@ -35,7 +35,7 @@
 			    <i class="fa  fa-clock-o "></i>
 			    <h3>发放总量</h3>
 			   </div>
-		  	   <div class="right_info">2222222张</div>
+		  	   <div class="right_info" id="total_count"></div>
 		   </div>
 	   </a>
   </div>
@@ -47,7 +47,7 @@
 			    <i class="fa  fa-comments-o"></i>
 			    <h3>未开始</h3>
 			   </div>
-		  	   <div class="right_info">2222222张</div>
+		  	   <div class="right_info"  id="before_date_count"></div>
 		   </div>
 		   
 	   </a>
@@ -60,7 +60,7 @@
 				    <i class="fa fa-shopping-cart"></i>
 				    <h3>进行中</h3>
 			   </div>
-		  	   <div class="right_info">3333张</div>
+		  	   <div class="right_info"  id="between_date_count"></div>
 		   </div>
 	   </a>
   </div> 
@@ -72,7 +72,7 @@
 				    <i class="fa  fa-volume-up "></i>
 				    <h3>已过期</h3>
 			   </div>
-		  	   <div class="right_info">555张</div>
+		  	   <div class="right_info" id="out_date_count"></div>
 		   </div>
 	   </a>
   </div> 
@@ -88,7 +88,7 @@
 	  	   <a href="#" class="btn bg-deep-blue paddings">进入首页</a>
 	   </div>
 	   <div class="Shops_content">
-		   <p style="height: 40px;font-size:18px;"><label class="name" style="width:100px;">店铺名称：</label><span class="shop_name"></span></p>
+		   <p style="height: 30px;font-size:18px;"><label class="name" style="width:100px;">店铺名称：</label><span class="shop_name"></span></p>
 		   <br/>
 		   <ul class="clearfix">
 			    <li><label class="name">店铺业务：</label><span class="shop_business"></span></li>
@@ -113,42 +113,31 @@
  <div class="Order_form ">
   <div class="col-xs-12 col-lg-12">
   <div class="frame margin-right clearfix">
-  <div class="title_name"><i></i>店铺优惠券状态提示</div>
+  <div class="title_name"><i></i>店铺进销存/优惠券领取提示</div>
   	 <div class="clearfix col-xs-6" >
 		  <div class="col-xs-6 col-lg-6 ">   
-			   <div class="prompt_name"><i class="icon_Order"></i>订单& 商品</div>
+			   <div class="prompt_name"><i class="icon_Order"></i>进货统计</div>
 			   <ul class="padding list_info">   
-				   <li>代发货订单 &nbsp;<a href="">(02)</a></li>
-				   <li>已完成订单 &nbsp;<a href="">(32)</a></li>
-				   <li>未完成订单 &nbsp;<a href="">(02)</a></li>
+				   <li>进货订单 已付&nbsp;<a href="">(02)</a></li>
+				   <li>进货订单未付 &nbsp;<a href="">(32)</a></li>
 			   </ul>
 		  </div>
 		   <div class="col-xs-6 col-lg-6">    
-			   <div class="prompt_name"><i class="icon_Promotions"></i>促销</div>
+			   <div class="prompt_name"><i class="icon_Billing"></i>销售统计</div>
 			   <ul class="padding list_info">   
-				   <li>待审核的促销 &nbsp;<a href="">(02)</a></li>
-				   <li>发布的促销 &nbsp;<a href="">(32)</a></li>
-				   <li>即将结束的促销 &nbsp;<a href="">(02)</a></li>
+				   <li>销售订单已付 &nbsp;<a href="">(02)</a></li>
+				   <li>销售订单未付 &nbsp;<a href="">(32)</a></li>
 			   </ul>
 		  </div>
 		   <div class="col-xs-6 col-lg-6">    
-			   <div class="prompt_name"><i class="icon_Aftermarket"></i>售后</div>
+			   <div class="prompt_name"><i class="icon_Aftermarket"></i>库存统计</div>
 			   <ul class="padding list_info"> 
-				   <li>待处理订单 &nbsp;<a href="">(02)</a></li>
-				   <li>待退款订单 &nbsp;<a href="">(32)</a></li>
-				   <li>待处理售后单 &nbsp;<a href="">(02)</a></li>  
-			   </ul>
-		  </div>
-		   <div class="col-xs-6 col-lg-6 ">  
-			    <div class="prompt_name"><i class="icon_Billing"></i>结算</div>
-			    <ul class="padding list_info">  
-				   <li>待支付 &nbsp;<a href="">(02)</a></li>
-				   <li>待结算确认 &nbsp;<a href="">(32)</a></li>
+				   <li>销售报损 &nbsp;<a href="">(02)</a></li>
 			   </ul>
 		  </div>
  	  </div>
-	  <div class="dd_echarts col-xs-6">
-	  	 <div id="main" style="width:100%; height:270px"></div>
+	  <div class="dd_echarts col-xs-6" style="border-left:1px solid #dddddd!important;">
+	  	 <div id="main" style="width:100%; height:230px"></div>
 	  </div>
   </div>
   </div>
@@ -175,110 +164,6 @@ $("#iframe_box").niceScroll({
 	cursorborderradius:"5px"  
 });
 /*********************/
-   require.config({
-            paths: {
-                echarts: '../static/bgManager/js/dist'
-            }
-        });
-        require(
-            [
-                'echarts',
-				'echarts/theme/macarons',
-                'echarts/chart/line',   // 按需加载所需图表，如需动态类型切换功能，别忘了同时加载相应图表
-                'echarts/chart/bar'
-            ],
-            function (ec,theme) {
-                var myChart = ec.init(document.getElementById('main'),theme);
-               option = {
-    title : {
-        //text: '当周优惠券使用量',
-        //subtext: '每周7天的使用记录'
-    },
-    tooltip : {
-        trigger: 'axis'
-    },
-    legend: {
-        data:['未开始','进行中','已失效']
-    },
-    toolbox: {
-        show : true,
-        feature : {
-            mark : {show: true},
-            dataView : {show: true, readOnly: false},
-            magicType : {show: true, type: ['line', 'bar']},
-            restore : {show: true},
-            saveAsImage : {show: true}
-        }
-    },
-    calculable : true,
-    xAxis : [
-        {
-            type : 'category',
-            boundaryGap : false,
-            data : ['周一','周二','周三','周四','周五','周六','周日']
-        }
-    ],
-    yAxis : [
-        {
-            type : 'value',
-            axisLabel : {
-                formatter: '{value}张'
-            }
-        }
-    ],
-    series : [
-        {
-            name:'未开始',
-            type:'line',
-            data:[110, 110, 150, 130, 125, 133, 106],
-            markPoint : {
-                data : [
-                    {type : 'max', name: '最大值'},
-                    {type : 'min', name: '最小值'}
-                ]
-            },
-            markLine : {
-                data : [
-                    {type : 'average', name: '平均值'}
-                ]
-            }
-        },
-        {
-            name:'进行中',
-            type:'line',
-            data:[110, 105, 140, 130, 110, 121, 100],
-            markPoint : {
-                data : [
-                    {name : '周最低', value : -2, xAxis: 1, yAxis: -1.5}
-                ]
-            },
-            markLine : {
-                data : [
-                    {type : 'average', name : '平均值'}
-                ]
-            }
-        },
-		   {
-            name:'已失效',
-            type:'line',
-            data:[0, 5, 10, 0, 15, 12, 6],
-            markPoint : {
-                data : [
-                    {name : '周最低', value : -2, xAxis: 1, yAxis: -1.5}
-                ]
-            },
-            markLine : {
-                data : [
-                    {type : 'average', name : '平均值'}
-                ]
-            }
-        }
-    ]
-};
-                  
-			myChart.setOption(option);
-			}
-			);
 </script>
 
 </html>

@@ -94,11 +94,11 @@ public class CouponController extends BaseController {
 			@RequestParam(value = "num", required = true) Integer num,
 			HttpServletRequest request) throws Exception {
 		List<Coupon> couponList = new ArrayList<Coupon>();
+		/* 当前登录的店铺 */
+		Shop shop = getCurrentShop(request);
 		if (num == 0) {
-			couponList = couponService.findCouponAll();
+			couponList = couponService.findCouponAll(shop.getId());
 		} else {
-			/* 当前登录的店铺 */
-			Shop shop = getCurrentShop(request);
 			couponList = couponService.findCouponByStatus(num, shop.getId());
 		}
 		Map<String, Object> resultMap = new HashMap<>();

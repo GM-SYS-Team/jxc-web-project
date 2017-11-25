@@ -29,11 +29,11 @@ public interface CouponService {
 	* @return List<Coupon>    返回类型 
 	* @throws 
 	*/
-	public List<Coupon> findCouponAll();
+	public List<Coupon> findCouponAll(Integer shopId);
 
 	/** 
 	* @Title: findCouponByStatus 
-	* @Description: TODO(这里用一句话描述这个方法的作用) 
+	* @Description: TODO(这里用一句话描述这个方法的作用) 1-未开始  2-进行中  3-已过期
 	* @param @param status    设定文件 
 	* @return List<Coupon>    返回类型 
 	* @throws 

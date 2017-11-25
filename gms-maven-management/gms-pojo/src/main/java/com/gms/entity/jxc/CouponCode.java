@@ -8,8 +8,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 /**
  * @author zhoutianqi
  * @className CouponCode.java
@@ -42,10 +40,14 @@ public class CouponCode {
     @Column(length=1)
     private String isUsed;
     
-    /**
-     * 优惠卷金额
-     */
-    private Float amount;
+   /* 领取时间*/
+    private Date receiveTime;
+    
+    /*使用时间*/
+    private Date userTime;
+    
+    private Integer amount;
+    
 
     /**
      * @return id
@@ -66,15 +68,6 @@ public class CouponCode {
 
 	public void setCoupon(Coupon coupon) {
 		this.coupon = coupon;
-	}
-
-
-    public Float getAmount() {
-		return amount;
-	}
-
-	public void setAmount(Float amount) {
-		this.amount = amount;
 	}
 
 	/**
@@ -112,4 +105,28 @@ public class CouponCode {
     public void setIsUsed(String isUsed) {
         this.isUsed = isUsed;
     }
+
+	public Date getUserTime() {
+		return userTime;
+	}
+
+	public void setUserTime(Date userTime) {
+		this.userTime = userTime;
+	}
+
+	public Date getReceiveTime() {
+		return receiveTime;
+	}
+
+	public void setReceiveTime(Date receiveTime) {
+		this.receiveTime = receiveTime;
+	}
+
+	public Integer getAmount() {
+		return amount;
+	}
+
+	public void setAmount(Integer amount) {
+		this.amount = amount;
+	}
 }
