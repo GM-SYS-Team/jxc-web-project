@@ -2,6 +2,7 @@ package com.gms.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Date;
 import java.util.Map;
 
 import javax.annotation.Resource;
@@ -18,8 +19,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.gms.annoation.NeedAuth;
 import com.gms.entity.jxc.User;
 import com.gms.service.jxc.UserService;
+import com.gms.util.MD5Util;
+import com.gms.util.StringUtil;
 
 /**
  * 当前登录用户控制器
@@ -44,26 +48,24 @@ public class UserController extends BaseAppController {
      */
     @ResponseBody
     @PostMapping("/login")
-    public Map<String,Object> login(String smsCode, String telephone){
+    public Map<String,Object> login(String password, String telephone){
     	if (StringUtils.isEmpty(telephone)) {
     		return error("手机号不能为空");
     	}
-    	if (StringUtils.isEmpty(smsCode)) {
-    		return error("验证码不能为空");
-    	}
-    	Object cache = getSmsCodeCache(telephone);
-    	if (cache == null) {
-    		return error("验证码错误");
-    	}
-    	if (!((String)cache) .equals(smsCode)) {
-    		return error("验证码错误");
+    	if (StringUtils.isEmpty(password)) {
+    		return error("密码不能为空");
     	}
     	User user = userService.findUserByTelephone(telephone);
     	if (user == null) {
 			return error("该手机号尚未注册");
     	}
+    	if (!user.getPassword().equals(MD5Util.encode(password))) {
+    		return error("密码错误");
+    	}
     	cacheUser(user);
-    	return success();
+    	Map<String,Object> map = success();
+    	map.put("data", user);
+    	return map;
     }
     
     /**
@@ -95,7 +97,7 @@ public class UserController extends BaseAppController {
     	if (user == null) {
 			return error("该手机号尚未注册");
     	}
-    	user.setPassword(password);
+    	user.setPassword(MD5Util.encode(password));
     	//修改用户密码
     	userService.save(user);
     	cacheUser(user);
@@ -109,8 +111,8 @@ public class UserController extends BaseAppController {
      * @return
      */
     @ResponseBody
-    @PostMapping("/register")
-    public Map<String,Object> register(String smsCode,@Valid User user){
+    @PostMapping("/customer/register")
+    public Map<String,Object> customerRegister(String smsCode,@Valid User user){
     	String telePhone = user.getPhoneNum();
     	if (StringUtils.isEmpty(telePhone)) {
     		return error("手机号不能为空");
@@ -125,10 +127,59 @@ public class UserController extends BaseAppController {
     	if (!((String)cache) .equals(smsCode)) {
     		return error("验证码错误");
     	}
-    	
-    	return success();
+    	if (StringUtil.isEmpty(user.getUserAccount())) {
+    		return error("用户名不能为空");
+    	}
+    	user.setUserType(User.CUSTOMER);
+    	user.generateUUID();
+    	userService.save(user);
+    	return success(user, "注册成功");
     }
      
+    /**
+     * 用户注册
+     * @param smsCode
+     * @param user
+     * @return
+     */
+    @ResponseBody
+    @PostMapping("/shoper/register")
+    public Map<String,Object> shoperRegister(String smsCode,@Valid User user){
+    	String telePhone = user.getPhoneNum();
+    	if (StringUtils.isEmpty(telePhone)) {
+    		return error("手机号不能为空");
+    	}
+    	if (StringUtils.isEmpty(smsCode)) {
+    		return error("验证码不能为空");
+    	}
+    	Object cache = getSmsCodeCache(telePhone);
+    	if (cache == null) {
+    		return error("验证码错误");
+    	}
+    	if (!((String)cache).equals(smsCode)) {
+    		return error("验证码错误");
+    	}
+    	if (StringUtil.isEmpty(user.getUserAccount())) {
+    		return error("用户名不能为空");
+    	}
+    	
+    	if (StringUtil.isEmpty(user.getShopName())) {
+    		return error("商户名不能为空");
+    	}
+    	
+    	if (StringUtil.isEmpty(user.getTrueName())) {
+    		return error("联系人不能为空");
+    	}
+    	
+    	if (StringUtil.isEmpty(user.getAddress())) {
+    		return error("地理信息不能为空");
+    	}
+    	user.setUserType(User.SHOPER);
+    	user.generateUUID();
+    	userService.save(user);
+    	return success(user, "注册成功");
+    }
+    
     /**
      * 获取验证码
      * @param telephone
@@ -137,15 +188,26 @@ public class UserController extends BaseAppController {
      */
     @ResponseBody
     @PostMapping("/sendSmsCode")
-    public Map<String,Object> sendSmsCode(String telephone,@Valid User user){
+    public Map<String,Object> sendSmsCode(String telephone){
     	cacheSmsCode(telephone, "123456");
     	return success("验证码发送成功");
     }
     
+    @ResponseBody
+    @RequestMapping(value = "modifyNickName")
+    @NeedAuth
+    public Map<String,Object> modifyNickName(String nickName){
+    	User user = getUser();
+    	user.setNickName(nickName);
+    	user.setUpdateTime(new Date());
+    	userService.save(user);
+    	return success();
+    }
     
     //文件上传相关代码
     @ResponseBody
     @RequestMapping(value = "picture/upload")
+    @NeedAuth
     public Map<String,Object> upload(@RequestParam("pictureFile") MultipartFile pictureFile) {
         if (pictureFile.isEmpty()) {
             return error("图片不能为空");
@@ -165,6 +227,10 @@ public class UserController extends BaseAppController {
         }
         try {
         	pictureFile.transferTo(dest);
+        	User user = getUser();
+        	user.setImgUrl(picturePath + fileName);
+        	user.setUpdateTime(new Date());
+        	userService.save(user);
             return success("头像上传成功");
         } catch (IllegalStateException e) {
             e.printStackTrace();

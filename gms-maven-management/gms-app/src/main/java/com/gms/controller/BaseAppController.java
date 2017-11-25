@@ -45,7 +45,9 @@ public class BaseAppController {
      * @return
      */
     User getUser() {
-    	return (User) getUserCache(getRequest().getParameter("access_token"));
+    	User user = (User) getUserCache(getRequest().getParameter("access_token"));
+    	return user;
+    	
     }
 
     
@@ -76,6 +78,20 @@ public class BaseAppController {
 		map.put("code", 1);
 		map.put("data", data);
 		map.put("message", message);
+		return map;
+	}
+	
+	/**
+	 * 返回成功的说明
+	 * @param data
+	 * @param message
+	 * @return
+	 */
+	Map<String, Object> success(Object data) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("code", 1);
+		map.put("data", data);
+		map.put("message", "操作成功");
 		return map;
 	}
 

@@ -144,7 +144,7 @@ else{
  }
  /**********滚动条**********/
 (function($){
-	document.write("<script language='javascript' src='js/jquery.nicescroll.js'></script>");
+	document.write("<script language='javascript' src='../static/bgManager/js/jquery.nicescroll.js'></script>");
 })(jQuery);
 /*折叠*/
 jQuery.fold = function(obj,obj_c,speed,obj_type,Event){

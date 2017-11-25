@@ -22,16 +22,16 @@ import com.gms.util.StringUtil;
 
 /**
  * 用户Service实现类
- * @author jxc 
+ * 
+ * @author jxc
  *
  */
 @Service("userService")
-public class UserServiceImpl implements UserService{
+public class UserServiceImpl implements UserService {
 
 	@Resource
 	private UserRepository userRepository;
-	
-	
+
 	@Override
 	public User findByUserName(String userName) {
 		return userRepository.findByUserName(userName);
@@ -49,16 +49,20 @@ public class UserServiceImpl implements UserService{
 
 	@Override
 	public List<User> list(User user, Integer page, Integer pageSize, Direction direction, String... properties) {
-		Pageable pageable=new PageRequest(page-1, pageSize, direction,properties);
-		Page<User> pageUser=userRepository.findAll(new Specification<User>() {
-			
+		Pageable pageable = new PageRequest(page - 1, pageSize, direction, properties);
+		Page<User> pageUser = userRepository.findAll(new Specification<User>() {
+
 			@Override
 			public Predicate toPredicate(Root<User> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
-				Predicate predicate=cb.conjunction();
-				if(user!=null){
-					if(StringUtil.isNotEmpty(user.getUserAccount())){
-						predicate.getExpressions().add(cb.like(root.get("userName"), "%"+user.getUserAccount().trim()+"%"));
-					}	
+				Predicate predicate = cb.conjunction();
+				if (user != null) {
+					if (StringUtil.isNotEmpty(user.getUserAccount())) {
+						predicate.getExpressions()
+								.add(cb.like(root.get("userName"), "%" + user.getUserAccount().trim() + "%"));
+					}
+					if (user.getShopId() != null) {
+						predicate.getExpressions().add(cb.equal(root.get("shopId"), user.getShopId()));
+					}
 					predicate.getExpressions().add(cb.notEqual(root.get("id"), 1)); // 管理员除外
 				}
 				return predicate;
@@ -69,15 +73,16 @@ public class UserServiceImpl implements UserService{
 
 	@Override
 	public Long getCount(User user) {
-		Long count=userRepository.count(new Specification<User>() {
+		Long count = userRepository.count(new Specification<User>() {
 
 			@Override
 			public Predicate toPredicate(Root<User> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
-				Predicate predicate=cb.conjunction();
-				if(user!=null){
-					if(StringUtil.isNotEmpty(user.getUserAccount())){
-						predicate.getExpressions().add(cb.like(root.get("userName"), "%"+user.getUserAccount().trim()+"%"));
-					}	
+				Predicate predicate = cb.conjunction();
+				if (user != null) {
+					if (StringUtil.isNotEmpty(user.getUserAccount())) {
+						predicate.getExpressions()
+								.add(cb.like(root.get("userName"), "%" + user.getUserAccount().trim() + "%"));
+					}
 					predicate.getExpressions().add(cb.notEqual(root.get("id"), 1)); // 管理员除外
 				}
 				return predicate;
@@ -100,6 +105,4 @@ public class UserServiceImpl implements UserService{
 	public User findUserByTelephone(String telephone) {
 		return userRepository.findUserByTelephone(telephone);
 	}
-
-
 }

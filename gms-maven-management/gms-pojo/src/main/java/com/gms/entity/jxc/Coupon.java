@@ -12,21 +12,67 @@ import javax.persistence.*;
 @Entity
 @Table(name = "t_coupon")
 public class Coupon {
-    @Id
-    @GeneratedValue
-    private Integer id;
 
-    @ManyToOne
-	@JoinColumn(name="shopId")
+	@Id
+	@GeneratedValue
+	private Integer id;
+
+	@ManyToOne
+	@JoinColumn(name = "shopId")
 	private Shop shop; // 商品类别
 
 	/**
-     * 优惠券批次号
-     */
-    @Column(length=11)
-    private Integer batchNum;
+	 * 优惠券批次号
+	 */
+	@Column(length = 11)
+	private Integer totalCount;
+	/**
+	 * 优惠券剩余库存
+	 */
+	@Column(length = 11)
+	private Integer remainCount;
+	
+	/*优惠券title*/
+	@Column(length = 50)
+	private String couponName;
+	
+	/*优惠券说明*/
+	@Column(length = 500)
+	private String couponInfo;
 
-    public Shop getShop() {
+	/**
+	 * 领取次数（每人限领）
+	 */
+	@Column(length = 45)
+	private String couponCount;
+
+	/**
+	 * 有效开始时间
+	 */
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date expiryDateStart;
+
+	/**
+	 * 有效结束时间
+	 */
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date expiryDateStop;
+
+	private Double minAmount;
+	
+	private Double maxAmount;
+	
+	private Double couponAmount;
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	public Shop getShop() {
 		return shop;
 	}
 
@@ -34,123 +80,84 @@ public class Coupon {
 		this.shop = shop;
 	}
 
-	/**
-     * 优惠劵状态 初始化 0 进行中 1 已失效 2
-     */
-    @Column(length=1)
-    private String status;
 
-    /**
-     * 领取次数（每人限领）
-     */
-    @Column(length=45)
-    private String couponCount;
-
-    /**
-     * 有效开始时间
-     */
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date expiryDateStart;
-
-    /**
-     * 有效结束时间
-     */
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date expiryDateStop;
-
-    /**
-     * @return id
-     */
-    public Integer getId() {
-        return id;
-    }
-
-    /**
-     * @param id
-     */
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-	/**
-     * 获取优惠券批次号
-     *
-     * @return batch_num - 优惠券批次号
-     */
-    public Integer getBatchNum() {
-        return batchNum;
-    }
-
-    /**
-     * 设置优惠券批次号
-     *
-     * @param batchNum 优惠券批次号
-     */
-    public void setBatchNum(Integer batchNum) {
-        this.batchNum = batchNum;
-    }
-
-  
-
-    public String getStatus() {
-		return status;
+	public Integer getTotalCount() {
+		return totalCount;
 	}
 
-	public void setStatus(String status) {
-		this.status = status;
+	public void setTotalCount(Integer totalCount) {
+		this.totalCount = totalCount;
 	}
 
-	/**
-     * 获取领取次数（每人限领）
-     *
-     * @return coupon_count - 领取次数（每人限领）
-     */
-    public String getCouponCount() {
-        return couponCount;
-    }
+	public Integer getRemainCount() {
+		return remainCount;
+	}
 
-    /**
-     * 设置领取次数（每人限领）
-     *
-     * @param couponCount 领取次数（每人限领）
-     */
-    public void setCouponCount(String couponCount) {
-        this.couponCount = couponCount;
-    }
+	public void setRemainCount(Integer remainCount) {
+		this.remainCount = remainCount;
+	}
 
-    /**
-     * 获取有效开始时间
-     *
-     * @return expiry_date_start - 有效开始时间
-     */
-    public Date getExpiryDateStart() {
-        return expiryDateStart;
-    }
+	public String getCouponName() {
+		return couponName;
+	}
 
-    /**
-     * 设置有效开始时间
-     *
-     * @param expiryDateStart 有效开始时间
-     */
-    public void setExpiryDateStart(Date expiryDateStart) {
-        this.expiryDateStart = expiryDateStart;
-    }
+	public void setCouponName(String couponName) {
+		this.couponName = couponName;
+	}
 
-    /**
-     * 获取有效结束时间
-     *
-     * @return expiry_date_stop - 有效结束时间
-     */
-    public Date getExpiryDateStop() {
-        return expiryDateStop;
-    }
+	public String getCouponInfo() {
+		return couponInfo;
+	}
 
-    /**
-     * 设置有效结束时间
-     *
-     * @param expiryDateStop 有效结束时间
-     */
-    public void setExpiryDateStop(Date expiryDateStop) {
-        this.expiryDateStop = expiryDateStop;
-    }
+	public void setCouponInfo(String couponInfo) {
+		this.couponInfo = couponInfo;
+	}
+
+	public String getCouponCount() {
+		return couponCount;
+	}
+
+	public void setCouponCount(String couponCount) {
+		this.couponCount = couponCount;
+	}
+
+	public Date getExpiryDateStart() {
+		return expiryDateStart;
+	}
+
+	public void setExpiryDateStart(Date expiryDateStart) {
+		this.expiryDateStart = expiryDateStart;
+	}
+
+	public Date getExpiryDateStop() {
+		return expiryDateStop;
+	}
+
+	public void setExpiryDateStop(Date expiryDateStop) {
+		this.expiryDateStop = expiryDateStop;
+	}
+
+	public Double getMinAmount() {
+		return minAmount;
+	}
+
+	public void setMinAmount(Double minAmount) {
+		this.minAmount = minAmount;
+	}
+
+	public Double getMaxAmount() {
+		return maxAmount;
+	}
+
+	public void setMaxAmount(Double maxAmount) {
+		this.maxAmount = maxAmount;
+	}
+
+	public Double getCouponAmount() {
+		return couponAmount;
+	}
+
+	public void setCouponAmount(Double couponAmount) {
+		this.couponAmount = couponAmount;
+	}
 }

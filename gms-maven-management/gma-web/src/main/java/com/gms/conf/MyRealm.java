@@ -68,7 +68,7 @@ public class MyRealm extends AuthorizingRealm{
 		String userName=(String)token.getPrincipal();
 		User user=userRepository.findByUserName(userName);
 		if(user!=null){
-			AuthenticationInfo authcInfo=new SimpleAuthenticationInfo(user.getUserName(),user.getPassword(),"xxx");
+			AuthenticationInfo authcInfo=new SimpleAuthenticationInfo(user.getUserAccount(),user.getPassword(),"xxx");
 			return authcInfo;
 		}else{
 			return null;				

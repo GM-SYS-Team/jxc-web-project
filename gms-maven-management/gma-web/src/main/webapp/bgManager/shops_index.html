@@ -44,7 +44,7 @@
        <img src="../static/bgManager/images/avatar.png"  width="36px"/><span class="user-info">欢迎你,超级管理员</span><i class="glyph-icon fa  fa-caret-down"></i>
        <ul class="dropdown-menu">
         <li><a href="#"><i class="fa fa-user"></i>个人信息</a></li>
-        <li><a href="#"><i class="fa fa-cog"></i>系统设置</a></li>
+        <!-- <li><a href="#"><i class="fa fa-cog"></i>系统设置</a></li> -->
         <li><a href="javascript:void(0)" id="Exit_system"><i class="fa fa-user-times"></i>退出</a></li>
        </ul>
      </div>
@@ -165,27 +165,10 @@
 		     </dt>
 		     <dd class="submenu">
 			    <ul>
-			       <li class="home"><a href="javascript:void(0)" name="../basicData/shop.html" title="店铺管理" class="iframeurl"><i class="fa fa-angle-double-right"></i>店铺管理</a></li>
 			       <li class="home"><a href="javascript:void(0)" name="../basicData/supplier.html" title="供应商管理" class="iframeurl"><i class="fa fa-angle-double-right"></i>供应商管理</a></li>
 			       <li class="home"><a href="javascript:void(0)" name="../basicData/customer.html" title="客户管理" class="iframeurl"><i class="fa fa-angle-double-right"></i>客户管理</a></li>
 			       <li class="home"><a href="javascript:void(0)" name="../basicData/goods.html" title="商品管理" class="iframeurl"><i class="fa fa-angle-double-right"></i>商品管理</a></li>
 			       <li class="home"><a href="javascript:void(0)" name="../basicData/stock.html" title="期初库存" class="iframeurl"><i class="fa fa-angle-double-right"></i>期初库存</a></li>
-			    </ul>
-			 </dd>
-			 
-			 <dt class="nav_link">
-		     	<a href="#" class="dropdown-toggle title_nav">
-		     		<i class="fa fa-cogs"></i><span class="menu-text"> 系统管理</span>
-		     		<b class="arrow fa fa-angle-down"></b>
-		     	</a>
-		     </dt>
-		     <dd class="submenu">
-			    <ul>
-			       <li class="home"><a href="javascript:void(0)" name="../power/role.html" title="角色管理" class="iframeurl"><i class="fa fa-angle-double-right"></i>角色管理</a></li>
-			       <li class="home"><a href="javascript:void(0)" name="../power/user.html" title="角色管理" class="iframeurl"><i class="fa fa-angle-double-right"></i>用户管理</a></li>
-			       <li class="home"><a href="javascript:void(0)" name="../power/log.html" title="系统日志" class="iframeurl"><i class="fa fa-angle-double-right"></i>系统日志</a></li>
-			       <li class="home"><a href="javascript:void(0)" name="" title="修改密码" class="iframeurl"><i class="fa fa-angle-double-right"></i>修改密码</a></li>
-			       <li class="home"><a href="javascript:void(0)" name="" title="安全退出" class="iframeurl"><i class="fa fa-angle-double-right"></i>安全退出</a></li>
 			    </ul>
 			 </dd>
 	    </dl>  
@@ -269,7 +252,7 @@ $('#Exit_system').on('click', function(){
 	 icon:2,
     }, 
 	function(){
-	  location.href="login.html";
+	  location.href="../login.html";
         
     });
 });
