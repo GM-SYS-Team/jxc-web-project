@@ -75,6 +75,10 @@ public class Shop {
     @Column(length=100)
     private String shopName;
 
+    
+    @Column(length=11)
+    private Integer userId;
+    
     public String getShopName() {
 		return shopName;
 	}
@@ -258,4 +262,12 @@ public class Shop {
     public void setShopAddress(String shopAddress) {
         this.shopAddress = shopAddress;
     }
+
+	public Integer getUserId() {
+		return userId;
+	}
+
+	public void setUserId(Integer userId) {
+		this.userId = userId;
+	}
 }

@@ -155,7 +155,7 @@ public class UserAdminController {
 	public Map<String,Object> save(User user)throws Exception{
 		Map<String, Object> resultMap = new HashMap<>();
 		if(user.getId()==null){
-			if(userService.findByUserName(user.getUserName())!=null){
+			if(userService.findByUserName(user.getUserAccount())!=null){
 				resultMap.put("success", false);
 				resultMap.put("errorInfo", "用户名已经存在!");
 				return resultMap;

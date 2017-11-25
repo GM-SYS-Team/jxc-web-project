@@ -59,6 +59,9 @@ public class ShopServiceImpl implements ShopService{
 					if(StringUtil.isNotEmpty(Shop.getShopName())){
 						predicate.getExpressions().add(cb.like(root.get("ShopName"), "%"+Shop.getShopName().trim()+"%"));
 					}	
+					if (Shop.getUserId() != null) {
+						predicate.getExpressions().add(cb.equal(root.get("UserId"), Shop.getUserId()));
+					}
 				}
 				return predicate;
 			}
