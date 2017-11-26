@@ -65,4 +65,6 @@ public interface ShopService {
 	 * @return
 	 */
 	public Shop findPhoneNum(String phoneNum);
+	
+	public List<Shop> findByUserId(Integer userId);
 }

@@ -98,7 +98,15 @@ public class UserController {
 			String userName=(String) SecurityUtils.getSubject().getPrincipal();
 			User currentUser=userService.findByUserName(userName);
 			if(currentUser.getUserType().equals(Constant.SHOPTYPE)){
-				Shop shop = shopService.findById(currentUser.getShopId());
+				Shop shop =null;
+				if(currentUser.getCurrentLoginShopId()!=null){
+					shop = shopService.findById(currentUser.getCurrentLoginShopId());
+				}else{
+					shop = shopService.findByUserId(currentUser.getId()).get(0);
+					currentUser.setCurrentLoginShopId(shop.getId());
+					userService.save(currentUser);
+				}
+				
 				session.setAttribute("currentShop", shop);
 			}
 			session.setAttribute("currentUser", currentUser);

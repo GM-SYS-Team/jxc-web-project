@@ -75,7 +75,7 @@ public class OverflowListAdminController extends BaseController{
 	public Map<String,Object> list(OverflowList overflowList,HttpServletRequest request)throws Exception{
 		User currentUser = getCurrentUser(request);
 		if(currentUser.getUserType().equals(Constant.SHOPTYPE)){
-			overflowList.setShopId(currentUser.getShopId());
+			overflowList.setShopId(currentUser.getCurrentLoginShopId());
 		}
 		Map<String, Object> resultMap = new HashMap<>();
 		List<OverflowList> overflowListList=overflowListService.list(overflowList, Direction.DESC, "overflowDate");
@@ -138,7 +138,7 @@ public class OverflowListAdminController extends BaseController{
 			HttpServletRequest request)throws Exception{
 		User currentUser = getCurrentUser(request);
 		if(currentUser.getUserType().equals(Constant.SHOPTYPE)){
-			overflowList.setShopId(currentUser.getShopId());
+			overflowList.setShopId(currentUser.getCurrentLoginShopId());
 		}
 		Map<String, Object> resultMap = new HashMap<>();
 		overflowList.setUser(userService.findByUserName((String) SecurityUtils.getSubject().getPrincipal())); // 设置操作用户

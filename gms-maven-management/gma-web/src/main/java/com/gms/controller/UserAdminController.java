@@ -100,7 +100,7 @@ public class UserAdminController {
 	public Map<String,Object> list(User user,@RequestParam(value="page",required=false)Integer page,@RequestParam(value="rows",required=false)Integer rows,@RequestParam(value="shopid",required=false)Integer shopid)throws Exception{
 		if(shopid!=null){
 			if(user==null){user=new User();}
-			user.setShopId(shopid);
+			user.setCurrentLoginShopId(shopid);
 		}
 		List<User> userList=userService.list(user, page, rows, Direction.ASC, "id");
 		for(User u:userList){
@@ -174,7 +174,7 @@ public class UserAdminController {
 		user.setCreateTime(new Date());
 		user.setUpdateTime(new Date());
 		user.setUuid(UUIDUtil.getUUIDKey());
-		if(user.getShopId()!=null){
+		if(user.getCurrentLoginShopId()!=null){
 			user.setUserType("1");
 		}else{user.setUserType("0");}
 		userService.save(user);			

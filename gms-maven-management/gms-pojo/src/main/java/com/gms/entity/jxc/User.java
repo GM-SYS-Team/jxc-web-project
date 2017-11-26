@@ -55,9 +55,6 @@ public class User {
 	@Column(length=1)
 	private String userType;
 	
-	@Column(length=11)
-    private Integer shopId; // 商户
-	
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date createTime;
 	
@@ -70,6 +67,17 @@ public class User {
 	@Transient
 	private String roles; 
 	
+	@Column(length=11)
+    private Integer currentLoginShopId;//上次访问的店铺
+    
+
+    public Integer getCurrentLoginShopId() {
+		return currentLoginShopId;
+	}
+
+	public void setCurrentLoginShopId(Integer currentLoginShopId) {
+		this.currentLoginShopId = currentLoginShopId;
+	}
 
 	public Integer getId() {
 		return id;
@@ -146,14 +154,6 @@ public class User {
 
 	public void setUserType(String userType) {
 		this.userType = userType;
-	}
-
-	public Integer getShopId() {
-		return shopId;
-	}
-
-	public void setShopId(Integer shopId) {
-		this.shopId = shopId;
 	}
 
 	public Date getCreateTime() {

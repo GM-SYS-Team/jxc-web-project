@@ -51,7 +51,7 @@ public class CustomerAdminController extends BaseController{
 			HttpServletRequest request)throws Exception{
 		User currentUser = getCurrentUser(request);
 		if(currentUser.getUserType().equals(Constant.SHOPTYPE)){
-			customer.setShopId(currentUser.getShopId());
+			customer.setShopId(currentUser.getCurrentLoginShopId());
 		}
 		List<Customer> customerList=customerService.list(customer, page, rows, Direction.ASC, "id");
 		Long total=customerService.getCount(customer);
@@ -77,7 +77,7 @@ public class CustomerAdminController extends BaseController{
 		}
 		User currentUser = getCurrentUser(request);
 		if(currentUser.getUserType().equals(Constant.SHOPTYPE)){
-			return customerService.findByShopAndName(currentUser.getShopId(),"%"+q+"%");
+			return customerService.findByShopAndName(currentUser.getCurrentLoginShopId(),"%"+q+"%");
 		}
 		return customerService.findByName("%"+q+"%");
 	}
@@ -99,7 +99,7 @@ public class CustomerAdminController extends BaseController{
 		}
 		User currentUser = getCurrentUser(request);
 		if(currentUser.getUserType().equals(Constant.SHOPTYPE)){
-			customer.setShopId(currentUser.getShopId());
+			customer.setShopId(currentUser.getCurrentLoginShopId());
 		}
 		Map<String, Object> resultMap = new HashMap<>();
 		customerService.save(customer);			

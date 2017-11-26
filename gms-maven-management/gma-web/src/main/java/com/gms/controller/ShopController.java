@@ -43,7 +43,8 @@ public class ShopController extends BaseController{
 	 */
 	@RequestMapping("/list")
 	public Map<String,Object> list(Shop shop,@RequestParam(value="page",required=false)Integer page,@RequestParam(value="rows",required=false)Integer rows,
-			HttpServletRequest request)throws Exception{
+			HttpServletRequest request,@RequestParam(value="userId",required=false)Integer userId)throws Exception{
+		shop.setUserId(userId);
 		List<Shop> shopList=shopService.list(shop, page, rows, Direction.ASC, "id");
 		Long total=shopService.getCount(shop);
 		Map<String, Object> resultMap = new HashMap<>();

@@ -75,7 +75,7 @@ public class ReturnListAdminController extends BaseController{
 	public Map<String,Object> list(ReturnList returnList,HttpServletRequest request)throws Exception{
 		User currentUser = getCurrentUser(request);
 		if(currentUser.getUserType().equals(Constant.SHOPTYPE)){
-			returnList.setShopId(currentUser.getShopId());
+			returnList.setShopId(currentUser.getCurrentLoginShopId());
 		}
 		Map<String, Object> resultMap = new HashMap<>();
 		List<ReturnList> returnListList=returnListService.list(returnList, Direction.DESC, "returnDate");
@@ -114,7 +114,7 @@ public class ReturnListAdminController extends BaseController{
 			HttpServletRequest request)throws Exception{
 		User currentUser = getCurrentUser(request);
 		if(currentUser.getUserType().equals(Constant.SHOPTYPE)){
-			returnList.setShopId(currentUser.getShopId());
+			returnList.setShopId(currentUser.getCurrentLoginShopId());
 		}
 		Map<String, Object> resultMap = new HashMap<>();
 		List<ReturnList> returnListList=returnListService.list(returnList, Direction.DESC, "returnDate");
@@ -166,7 +166,7 @@ public class ReturnListAdminController extends BaseController{
 			HttpServletRequest request)throws Exception{
 		User currentUser = getCurrentUser(request);
 		if(currentUser.getUserType().equals(Constant.SHOPTYPE)){
-			returnList.setShopId(currentUser.getShopId());
+			returnList.setShopId(currentUser.getCurrentLoginShopId());
 		}
 		Map<String, Object> resultMap = new HashMap<>();
 		returnList.setUser(userService.findByUserName((String) SecurityUtils.getSubject().getPrincipal())); // 设置操作用户

@@ -80,8 +80,19 @@ public class Shop {
      */
     @Column(length=100)
     private String pictureAddress;
+    
+    @Column(length=11)
+    private Integer userId;
 
-    public String getPictureAddress() {
+	public Integer getUserId() {
+		return userId;
+	}
+
+	public void setUserId(Integer userId) {
+		this.userId = userId;
+	}
+
+	public String getPictureAddress() {
 		return pictureAddress;
 	}
 

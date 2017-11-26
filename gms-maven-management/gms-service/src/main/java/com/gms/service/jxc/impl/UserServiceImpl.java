@@ -60,9 +60,6 @@ public class UserServiceImpl implements UserService{
 					if(StringUtil.isNotEmpty(user.getUserName())){
 						predicate.getExpressions().add(cb.like(root.get("userName"), "%"+user.getUserName().trim()+"%"));
 					}
-					if(user.getShopId()!=null){
-						predicate.getExpressions().add(cb.equal(root.get("shopId"), user.getShopId()));
-					}
 					predicate.getExpressions().add(cb.notEqual(root.get("id"), 1)); // 管理员除外
 				}
 				return predicate;
