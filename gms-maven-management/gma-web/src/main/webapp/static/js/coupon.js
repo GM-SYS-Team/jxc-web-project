@@ -251,7 +251,6 @@ function chooseGoods(){
 			var str = "";
 			$("input[name='goodsId']:checked").each(function(){ 
 				str += $(this).val()+","; 
-				alert(str);
 			}) 
 			if(str ==""){
 			   layer.alert("请选择使用商品",{
