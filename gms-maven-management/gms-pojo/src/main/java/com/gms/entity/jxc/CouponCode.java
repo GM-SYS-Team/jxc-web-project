@@ -8,6 +8,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 /**
  * @author zhoutianqi
  * @className CouponCode.java
@@ -41,10 +43,12 @@ public class CouponCode {
     private String isUsed;
     
    /* 领取时间*/
+    @Temporal(TemporalType.TIMESTAMP)
     private Date receiveTime;
     
     /*使用时间*/
-    private Date userTime;
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date usedTime;
     
     private Integer amount;
     
@@ -106,12 +110,12 @@ public class CouponCode {
         this.isUsed = isUsed;
     }
 
-	public Date getUserTime() {
-		return userTime;
+	public Date getUsedTime() {
+		return usedTime;
 	}
 
-	public void setUserTime(Date userTime) {
-		this.userTime = userTime;
+	public void setUsedTime(Date usedTime) {
+		this.usedTime = usedTime;
 	}
 
 	public Date getReceiveTime() {

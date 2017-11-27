@@ -39,4 +39,11 @@ public interface SaleListRepository extends JpaRepository<SaleList, Integer>,Jpa
 	 */
 	@Query(value="SELECT SUM(t3.purchasing_price*t1.num) AS amountCost,SUM(t1.price*t1.num) AS amountSale,DATE_FORMAT(t2.`sale_date`,'%Y-%m') AS saleDate FROM t_sale_list_goods t1 LEFT JOIN t_sale_list t2 ON t1.`sale_list_id`=t2.`id`   LEFT JOIN t_goods t3 ON t3.`id`=t1.`goods_id` WHERE t2.`shop_id`=?3 and DATE_FORMAT(t2.`sale_date`,'%Y-%m') BETWEEN ?1 AND ?2 GROUP BY DATE_FORMAT(t2.`sale_date`,'%Y-%m') ",nativeQuery=true)
 	public List<Object> countSaleByMonth(String begin,String end,Integer shopId);
+	
+	/**
+	 * 统计收货单各状态订单总数
+	 * @return
+	 */
+	@Query(value="SELECT count(*) FROM t_sale_list WHERE shop_id=?1 and state=?2",nativeQuery=true)
+	public int getSaleOrderPayedListCount(Integer shopId,Integer state);
 }

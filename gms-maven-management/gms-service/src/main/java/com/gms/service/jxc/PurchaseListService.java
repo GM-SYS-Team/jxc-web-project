@@ -56,5 +56,9 @@ public interface PurchaseListService {
 	 * @param purchaseList
 	 */
 	public void update(PurchaseList purchaseList);
-
+	/**
+	 * 获取已支付的进货单数
+	 * @param shopId
+	 */
+	public int getPurchasePayedListCount(Integer shopId,Integer state);
 }

@@ -100,6 +100,11 @@ public class DamageListServiceImpl implements DamageListService{
 		return damageListRepository.findOne(id);
 	}
 
+	@Override
+	public int getDamageOrderListCount(Integer shopId) {
+		return damageListRepository.getDamageOrderListCount(shopId);
+	}
+
 
 
 }
