@@ -10,10 +10,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.gms.annoation.NeedAuth;
+import com.gms.entity.jxc.Goods;
 import com.gms.entity.jxc.Shop;
 import com.gms.entity.jxc.User;
+import com.gms.service.jxc.GoodsService;
 import com.gms.service.jxc.ShopService;
 import com.gms.util.StringUtil;
 
@@ -25,6 +28,9 @@ public class ShopController extends BaseAppController {
 	@Autowired
 	private ShopService shopService;
 	
+	@Autowired
+	private GoodsService goodsService;
+	
 	/**
 	 * 分页查询商铺信息
 	 * @param customer
@@ -34,6 +40,7 @@ public class ShopController extends BaseAppController {
 	 * @throws Exception
 	 */
 	@RequestMapping("/list")
+	@ResponseBody
 	public Map<String,Object> list(@RequestParam(value="page",required=false)Integer page,@RequestParam(value="rows",required=false)Integer rows)throws Exception{
 		User user = getUser();
 		Shop shop = new Shop();
@@ -46,6 +53,8 @@ public class ShopController extends BaseAppController {
 		return resultMap;
 	}
 	
+	
+	
 	/**
 	 * 添加或者修改供应商信息
 	 * @param supplier
@@ -53,6 +62,7 @@ public class ShopController extends BaseAppController {
 	 * @throws Exception
 	 */
 	@RequestMapping("/save")
+	@ResponseBody
 	public Map<String,Object> save(Shop shop)throws Exception{
 		User user = getUser();
 		if (StringUtil.isEmpty(shop.getShopName())) {
@@ -62,13 +72,9 @@ public class ShopController extends BaseAppController {
 		if(shop.getId()!=null){ 
 			shop.setCreateTime(new Date());
 		}
-		Shop existedNameOne = shopService.findByShopName(shop.getShopName());
-		if(existedNameOne!=null){
-			return error("该商铺名称已存在");
-		}
 		shop.setUserId(user.getId());
 		shopService.save(shop);			
-		return success();
+		return success(shop);
 	}
 	
 	
@@ -80,15 +86,21 @@ public class ShopController extends BaseAppController {
 	 * @throws Exception
 	 */
 	@RequestMapping("/delete")
-	public Map<String,Object> delete(String ids)throws Exception{
-		if (StringUtils.isEmpty(ids)) {
-			return error("非法请求");
+	@ResponseBody
+	public Map<String,Object> delete(Integer shopId)throws Exception{
+		if (StringUtils.isEmpty(shopId) || shopId <= 0) {
+			return error("shopId不能为空");
 		}
-		String []idsStr=ids.split(",");
-		for(int i=0;i<idsStr.length;i++){
-			int id=Integer.parseInt(idsStr[i]);
-			shopService.delete(id);							
+		User user = getUser();
+		Shop shop = shopService.queryShopByShopIdAndUserId(shopId, user.getId());
+		if (shop == null) {
+			return error("店铺不存在");
 		}
+		List<Goods> goodsList = goodsService.findGoodsByShopId(shopId);
+		if (goodsList != null && goodsList.size() > 0) {
+			return error("该店铺下存在商品，不可删除");
+		}
+		shopService.delete(shopId);							
 		return success();
 	}
 }

@@ -1,9 +1,9 @@
 package com.gms.interceptor;
 
-import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
@@ -14,7 +14,7 @@ import com.gms.util.CacheUtil;
 
 public class UserInterceptor extends HandlerInterceptorAdapter {
 	
-	@Resource
+	@Autowired
 	private UserService userService;
 	
 	@Override

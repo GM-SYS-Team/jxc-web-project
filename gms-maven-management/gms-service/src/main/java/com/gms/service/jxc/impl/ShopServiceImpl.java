@@ -107,6 +107,4 @@ public class ShopServiceImpl implements ShopService{
 	public List<Shop> findByUserId(Integer userId) {
 		return shopRepository.findByUserId(userId);
 	}
-
-
 }

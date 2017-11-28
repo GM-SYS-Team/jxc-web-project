@@ -140,5 +140,4 @@ public class CouponCode {
 	public void setReceiveTime(Date receiveTime) {
 		this.receiveTime = receiveTime;
 	}
-
 }

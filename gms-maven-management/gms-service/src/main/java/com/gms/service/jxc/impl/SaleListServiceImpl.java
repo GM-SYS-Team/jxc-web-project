@@ -129,7 +129,4 @@ public class SaleListServiceImpl implements SaleListService{
 	public int getSaleOrderPayedListCount(Integer shopId, Integer state) {
 		return saleListRepository.getSaleOrderPayedListCount(shopId, state);
 	}
-
-
-
 }

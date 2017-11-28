@@ -105,6 +105,4 @@ public class DamageListServiceImpl implements DamageListService{
 		return damageListRepository.getDamageOrderListCount(shopId);
 	}
 
-
-
 }

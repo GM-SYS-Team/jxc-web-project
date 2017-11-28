@@ -6,6 +6,8 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.web.bind.annotation.ModelAttribute;
+
 import com.gms.entity.jxc.User;
 import com.gms.util.CacheUtil;
 
@@ -39,6 +41,11 @@ public class BaseAppController {
         return responseThreadLocal.get();
     }
     
+	@ModelAttribute  
+    public void setReqAndRes(HttpServletRequest request, HttpServletResponse response){  
+	    requestThreadLocal.set(request);
+	    responseThreadLocal.set(response);
+    }
     
     /**
      * 获取当前用户
@@ -52,7 +59,7 @@ public class BaseAppController {
 
     
 	void cacheUser(User user) {
-		CacheUtil.put(CacheUtil.USER, user.getUuid(), user);
+		CacheUtil.put(CacheUtil.USER, user.getUuid(), new User(user));
 	}
 
 	Object getUserCache(String key) {
@@ -77,7 +84,7 @@ public class BaseAppController {
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("code", 1);
 		map.put("data", data);
-		map.put("message", message);
+		map.put("msg", message);
 		return map;
 	}
 	
@@ -91,35 +98,35 @@ public class BaseAppController {
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("code", 1);
 		map.put("data", data);
-		map.put("message", "操作成功");
+		map.put("msg", "操作成功");
 		return map;
 	}
 
 	Map<String, Object> success(String message) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("code", 1);
-		map.put("message", message);
+		map.put("msg", message);
 		return map;
 	}
 
 	Map<String, Object> success() {
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("code", 1);
-		map.put("message", "操作成功");
+		map.put("msg", "操作成功");
 		return map;
 	}
 
 	Map<String, Object> error(String message) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("code", 0);
-		map.put("message", message);
+		map.put("msg", message);
 		return map;
 	}
 
 	Map<String, Object> error() {
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("code", 0);
-		map.put("message", "操作失败");
+		map.put("msg", "操作失败");
 		return map;
 	}
 }

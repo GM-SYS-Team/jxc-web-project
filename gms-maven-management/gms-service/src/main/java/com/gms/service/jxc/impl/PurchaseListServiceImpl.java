@@ -124,7 +124,4 @@ public class PurchaseListServiceImpl implements PurchaseListService{
 	public int getPurchasePayedListCount(Integer shopId,Integer state) {
 		return purchaseListRepository.getPurchasePayedListCount(shopId,state);
 	}
-
-
-
 }
