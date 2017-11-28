@@ -56,13 +56,11 @@ public class UserServiceImpl implements UserService {
 			public Predicate toPredicate(Root<User> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
 				Predicate predicate = cb.conjunction();
 				if (user != null) {
-					if (StringUtil.isNotEmpty(user.getUserAccount())) {
+					if (StringUtil.isNotEmpty(user.getUserName())) {
 						predicate.getExpressions()
-								.add(cb.like(root.get("userName"), "%" + user.getUserAccount().trim() + "%"));
+								.add(cb.like(root.get("userName"), "%" + user.getUserName().trim() + "%"));
 					}
-					if (user.getShopId() != null) {
-						predicate.getExpressions().add(cb.equal(root.get("shopId"), user.getShopId()));
-					}
+					
 					predicate.getExpressions().add(cb.notEqual(root.get("id"), 1)); // 管理员除外
 				}
 				return predicate;
@@ -79,9 +77,9 @@ public class UserServiceImpl implements UserService {
 			public Predicate toPredicate(Root<User> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
 				Predicate predicate = cb.conjunction();
 				if (user != null) {
-					if (StringUtil.isNotEmpty(user.getUserAccount())) {
+					if (StringUtil.isNotEmpty(user.getUserName())) {
 						predicate.getExpressions()
-								.add(cb.like(root.get("userName"), "%" + user.getUserAccount().trim() + "%"));
+								.add(cb.like(root.get("userName"), "%" + user.getUserName().trim() + "%"));
 					}
 					predicate.getExpressions().add(cb.notEqual(root.get("id"), 1)); // 管理员除外
 				}

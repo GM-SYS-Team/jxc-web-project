@@ -6,6 +6,7 @@ public class Constant {
 	public static String ROOTTYPE = "0";
 	//商户用户类别
 	public static String SHOPTYPE = "1";
+	
 	//用户未登录状态码
 	public static String RET_CODE_NOT_LOGIN_EXCEPTION = "1000";
 	//用户未登录提示信息

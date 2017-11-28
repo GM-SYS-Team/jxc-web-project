@@ -164,7 +164,7 @@ public class UserController extends BaseAppController {
     	if (StringUtil.isEmpty(password)) {
     		return error("密码不能为空");
     	}
-    	user.setUserAccount(telePhone);
+    	user.setUserName(telePhone);
     	user.setPhoneNum(telePhone);
     	user.setUserType(User.CUSTOMER);
     	user.setPassword(MD5Util.encode(password));
@@ -205,9 +205,6 @@ public class UserController extends BaseAppController {
     	if (StringUtil.isEmpty(password)) {
     		return error("密码不能为空");
     	}
-    	if (StringUtil.isEmpty(user.getShopName())) {
-    		return error("商户名不能为空");
-    	}
     	if (StringUtil.isEmpty(user.getTrueName())) {
     		return error("联系人不能为空");
     	}
@@ -217,7 +214,7 @@ public class UserController extends BaseAppController {
     	if (StringUtil.isEmpty(user.getDistrict())) {
     		return error("省区不能为空");
     	}
-    	user.setUserAccount(telePhone);
+    	user.setUserName(telePhone);
     	user.setPhoneNum(telePhone);
     	user.setPassword(MD5Util.encode(password));
     	user.setUserType(User.SHOPER);

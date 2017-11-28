@@ -48,7 +48,7 @@ public class User {
 	
 	@NotEmpty(message="请输入用户名！")
 	@Column(length=50)
-	private String userAccount; // 用户名
+	private String userName; // 用户名
 	
 	@NotEmpty(message="请输入密码！")
 	@Column(length=50)
@@ -57,9 +57,6 @@ public class User {
 	
 	@Column(length=50)
 	private String trueName; // 真实姓名
-	
-	@Column(length=200)
-	private String shopName; // 商户名称
 	
 	@Column(length=50)
 	private String nickName = "新用户";
@@ -78,9 +75,6 @@ public class User {
 	
 	@Column(length=1)
 	private String userType;
-	
-	@Column(length=11)
-    private Integer shopId; // 商户
 	
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date createTime;
@@ -165,14 +159,6 @@ public class User {
 		this.userType = userType;
 	}
 
-	public Integer getShopId() {
-		return shopId;
-	}
-
-	public void setShopId(Integer shopId) {
-		this.shopId = shopId;
-	}
-
 	public Date getCreateTime() {
 		return createTime;
 	}
@@ -223,13 +209,6 @@ public class User {
 		this.imgUrl = imgUrl;
 	}
 
-	public String getUserAccount() {
-		return userAccount;
-	}
-
-	public void setUserAccount(String userAccount) {
-		this.userAccount = userAccount;
-	}
 
 	public String getNickName() {
 		return nickName;
@@ -237,14 +216,6 @@ public class User {
 
 	public void setNickName(String nickName) {
 		this.nickName = nickName;
-	}
-
-	public String getShopName() {
-		return shopName;
-	}
-
-	public void setShopName(String shopName) {
-		this.shopName = shopName;
 	}
 
 	public void generateUUID(){
@@ -275,7 +246,15 @@ public class User {
 		this.uuid = user.getUuid();
 		this.remarks = user.getRemarks();
 		this.userType = user.getUserType();
-		this.userAccount = user.getUserAccount();
+		this.setUserName(user.getUserName());
 		this.updateTime = user.getUpdateTime();
+	}
+
+	public String getUserName() {
+		return userName;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
 	}
 }

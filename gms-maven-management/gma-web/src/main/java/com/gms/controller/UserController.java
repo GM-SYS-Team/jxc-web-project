@@ -92,7 +92,7 @@ public class UserController {
     		return map;
     	}
 		Subject subject=SecurityUtils.getSubject();
-		UsernamePasswordToken token=new UsernamePasswordToken(user.getUserAccount(), MD5Util.encode(user.getPassword()));
+		UsernamePasswordToken token=new UsernamePasswordToken(user.getUserName(), MD5Util.encode(user.getPassword()));
 		try{
 			subject.login(token); // 登录认证
 			String userName=(String) SecurityUtils.getSubject().getPrincipal();

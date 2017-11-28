@@ -109,6 +109,6 @@ public class OverviewController extends BaseController {
 	public String getUser(HttpServletRequest request)
 			throws ParseException {
 		User user = getCurrentUser(request);
-		return user.getUserAccount();
+		return user.getUserName();
 	}
 }
