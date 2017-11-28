@@ -713,7 +713,7 @@ div {
     display: table;
     content: " ";
 }
-a:hover
+#list_coupon a:hover
 { 
 	color:#fff;
 }

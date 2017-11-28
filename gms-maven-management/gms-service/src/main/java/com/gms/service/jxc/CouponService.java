@@ -2,6 +2,8 @@ package com.gms.service.jxc;
 
 import java.util.List;
 
+import org.springframework.data.domain.Sort.Direction;
+
 import com.gms.entity.jxc.Coupon;
 import com.gms.entity.jxc.CouponCode;
 import com.gms.entity.jxc.CouponGoods;
@@ -31,7 +33,6 @@ public interface CouponService {
 	* @throws 
 	*/
 	public List<Coupon> findCouponAll(Integer shopId);
-	public int findCouponCount(Integer shopId);
 
 	/** 
 	* @Title: findCouponByStatus 
@@ -41,15 +42,6 @@ public interface CouponService {
 	* @throws 
 	*/
 	public List<Coupon> findCouponByStatus(Integer status,Integer shopId);
-	
-	/** 
-	* @Title: findCouponCountByStatus 
-	* @Description: TODO(这里用一句话描述这个方法的作用) 1-未开始  2-进行中  3-已过期
-	* @param @param status    设定文件 
-	* @return List<Coupon>    返回类型 
-	* @throws 
-	*/
-	public int findCouponCountByStatus(Integer status,Integer shopId);
 	
 	/** 
 	* @Title: saveCouponGoods 
@@ -89,5 +81,17 @@ public interface CouponService {
 	 * @return
 	 */
 	public List<CouponCode> findListByCouponId(Integer couponId);
+	
+	/**
+	 * 根据优惠券编码或者名称分页查询没有库存的商品信息
+	 * @param codeOrName
+	 * @param page
+	 * @param pageSize
+	 * @param direction
+	 * @param properties
+	 * @return
+	 */
+	public List<Coupon> list(Coupon coupon,Integer page,Integer pageSize,Direction direction,Integer state, String... properties);
+	public Long listCount(Coupon coupon,Integer state);
 
 }

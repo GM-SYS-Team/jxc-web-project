@@ -2,7 +2,6 @@ package com.gms.controller;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,6 +10,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -91,21 +91,16 @@ public class CouponController extends BaseController {
 
 	@PostMapping("/list")
 	public Map<String, Object> list(
-			@RequestParam(value = "num", required = true) Integer num,
-			HttpServletRequest request) throws Exception {
-		List<Coupon> couponList = new ArrayList<Coupon>();
+			@RequestParam(value = "num", required = true) Integer num,HttpServletRequest request,@RequestParam(value="page",required=false)Integer page,@RequestParam(value="rows",required=false)Integer rows) throws Exception {
 		/* 当前登录的店铺 */
 		Shop shop = getCurrentShop(request);
-		int couponListSize = 0;
-		if (num == 0) {
-			couponList = couponService.findCouponAll(shop.getId());
-			couponListSize = couponService.findCouponCount(shop.getId());
-		} else {
-			couponList = couponService.findCouponByStatus(num, shop.getId());
-			couponListSize = couponService.findCouponCountByStatus(num, shop.getId());
-		}
+		Coupon ParamCoupon = new Coupon();
+		ParamCoupon.setShopId(shop.getId());
+		List<Coupon> couponListResult = couponService.list(ParamCoupon, page, rows, Direction.ASC, num, "id");
+		Long couponListSize = couponService.listCount(ParamCoupon, num);
+		
 		Map<String, Object> resultMap = new HashMap<>();
-		resultMap.put("couponList", couponList);
+		resultMap.put("couponList", couponListResult);
 		resultMap.put("size", couponListSize);
 		logService.save(new Log(Log.SEARCH_ACTION, "查询优惠券信息")); // 写入日志
 		return resultMap;

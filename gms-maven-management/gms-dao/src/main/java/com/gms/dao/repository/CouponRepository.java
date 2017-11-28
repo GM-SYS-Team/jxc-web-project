@@ -27,19 +27,7 @@ public interface CouponRepository extends JpaRepository<Coupon, Integer>,JpaSpec
 	@Query(value="select * from t_coupon where expiry_date_stop>=?1 and expiry_date_start<=?1 and shop_id = ?2 order by id desc",nativeQuery=true)
 	public List<Coupon> findCouponBybt(Date date,Integer shopId);
 	
-	@Query(value="select count(*) from t_coupon where expiry_date_start>?1 and shop_id = ?2 ",nativeQuery=true)
-	public int findCouponCountBygt(Date date,Integer shopId);
-	
-	@Query(value="select count(*) from t_coupon where expiry_date_stop<?1 and shop_id = ?2 ",nativeQuery=true)
-	public int findCouponCountBylt(Date date,Integer shopId);
-	
-	@Query(value="select count(*) from t_coupon where expiry_date_stop>=?1 and expiry_date_start<=?1 and shop_id = ?2 ",nativeQuery=true)
-	public int findCouponCountBybt(Date date,Integer shopId);
-	
 	@Query(value="select * from t_coupon where shop_id = ?1",nativeQuery=true)
 	public List<Coupon> findCouponAll(Integer shopId);
-	
-	@Query(value="select count(*) from t_coupon where shop_id = ?1",nativeQuery=true)
-	public int findCouponCount(Integer shopId);
 	
 }

@@ -146,15 +146,18 @@ function getCouponList(obj) {
 	var num = $(obj).parent().attr("data_num");
 	$(".pull-left li").removeClass("active");
 	$(obj).parent().addClass("active");
-	couponAjax(num);
+	var page_size = $("#page_size").val();
+	couponAjax(num,1,page_size);
 }
-function couponAjax(num){
+function couponAjax(num,current_page,page_size){
 	btnQuit();
 	$.ajax( {
 		url : "/admin/coupon/list",
 		type : "POST",
 		data : {
-			num : num
+			num : num,
+			current_page:current_page,
+			page_size:page_size
 		},
 		success : function(data) {
 			var html = "";
@@ -185,6 +188,16 @@ function couponAjax(num){
 					html += "</tr>";
 				})
 				$("#coupon_tbody").html(html);
+				if(data.size>page_size){
+					$("#fenye_coupon").show();
+					$("#total_page").val(data.size);
+					$("#search_page").val(currentPage);
+					$("#current_page").html(currentPage);
+					$(".start_num").html((currentPage-1)*page_size+1);
+					$(".end_num").html((currentPage-1)*page_size + data.rows.length);
+					$(".total_num").html(data.size);
+				}
+				
 			}else{
 				$(".js-list-empty-region").show();
 				$("#table_list").hide();
@@ -192,25 +205,29 @@ function couponAjax(num){
 		}
 	});
 }
-function showPage(param) {
-	var num = $(".pull-left .active").attr("data_num");
+
+function showPageCoupon(param) {
+	var num = $(".pull-left li").attr("data_num");
     var currentPage = parseInt($("#search_page").val());
     var page_size = $("#page_size").val();
     var total_page = $("#total_page").val();
 	var flag = 0;
 	if('prePage'==param) {
 		if(currentPage==1){
-			currentPage ==1;
+			currentPage =1;
 			flag = 1;
 		}else{
 			currentPage = currentPage-1;
+			$(".prev a").attr('disabled',"false");
 		}
 	}else if('nextPage'==param) {
 		if(currentPage==total_page){
 			currentPage = total_page;
 			flag = 1;
+			$(".next a").attr('disabled',"true");
 		}else{
 			currentPage = currentPage+1;
+			$(".next a").attr('disabled',"false");
 		}
 	}
 	if(flag==0){
@@ -237,7 +254,9 @@ function coupon_del(obj,id){
 }
 
 function chooseGoods(){
-	goodsAjax();
+	var currentPage = parseInt($("#goods_search_page").val());
+    var page_size = $("#goods_page_size").val();
+	goodsAjax(currentPage,page_size);
 	layer.open({
         type: 1,
         offset: '50px',
@@ -266,13 +285,13 @@ function chooseGoods(){
     })
 }
 
-function goodsAjax(){
+function goodsAjax(currentPage,page_size){
 	$.ajax( {
 		url : "/admin/goods/listHasInventoryQuantity",
 		type : "GET",
 		data : {
-			page:1,
-			rows:5
+			page:currentPage,
+			rows:page_size
 		},
 		success : function(data) {
 			var html = "";
@@ -288,12 +307,53 @@ function goodsAjax(){
 							     +"</tr>";
 				})
 				$("#goods_tbody").html(html);
+				if(data.total>page_size){
+					$("#fenye_goods").show();
+					$("#goods_total_page").val(data.total);
+					$("#goods_search_page").val(currentPage);
+					$("#current_page_goods").html(currentPage);
+					$(".start_num_goods").html((currentPage-1)*page_size+1);
+					$(".end_num_goods").html((currentPage-1)*page_size + data.rows.length);
+					$(".total_num_goods").html(data.total);
+				}
 			}else{
 				alert("暂无商品");
 			}
 		}
 	});
 }
+
+
+function showPage(param) {
+    var currentPage = parseInt($("#goods_search_page").val());
+    var page_size = $("#goods_page_size").val();
+    var total_page = $("#goods_total_page").val();
+	var flag = 0;
+	if('prePage'==param) {
+		if(currentPage==1){
+			currentPage =1;
+			flag = 1;
+		}else{
+			currentPage = currentPage-1;
+			$(".prev a").attr('disabled',"false");
+		}
+	}else if('nextPage'==param) {
+		if(currentPage==total_page){
+			currentPage = total_page;
+			flag = 1;
+			$(".next a").attr('disabled',"true");
+		}else{
+			currentPage = currentPage+1;
+			$(".next a").attr('disabled',"false");
+		}
+	}
+	if(flag==0){
+		goodsAjax(currentPage,page_size);
+	 }
+}
+
+
+
 
 
 
