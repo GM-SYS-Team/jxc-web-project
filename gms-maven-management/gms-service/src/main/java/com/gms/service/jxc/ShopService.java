@@ -5,8 +5,6 @@ import java.util.List;
 import org.springframework.data.domain.Sort.Direction;
 
 import com.gms.entity.jxc.Shop;
-import com.gms.entity.jxc.User;
-
 /**
  * 商铺Service接口
  * @author jxc 
@@ -65,4 +63,16 @@ public interface ShopService {
 	 * @return
 	 */
 	public Shop findPhoneNum(String phoneNum);
+	
+	
+	/**
+	 * 根据用户id和店铺id查询店铺
+	 * @param shopId
+	 * @param id
+	 * @return
+	 */
+	public Shop queryShopByShopIdAndUserId(Integer shopId, Integer userId);
+
+	
+	public List<Shop> findByUserId(Integer userId);
 }

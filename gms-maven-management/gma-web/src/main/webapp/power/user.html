@@ -98,7 +98,17 @@
 		 $("#userName").attr("readonly","readonly")
 		 url="/admin/user/save?id="+row.id;
 	 }
-	
+	function openShopForUserDialog(){
+		var selectedRows=$("#dg").datagrid("getSelections");
+		 if(selectedRows.length!=1){
+			 $.messager.alert("系统提示","请选择一条要修改的数据！");
+			 return;
+		 }
+		$("#dlg3").dialog("open").dialog("setTitle","添加商铺信息");
+		url="/admin/shop/save";
+		//打开弹框时保存userid
+		$("#shopUserId").val(selectedRows[0].id);
+	}
 	
 	
 	function saveUser(){
@@ -130,9 +140,23 @@
 		 $("#remarks").val("");
 	 }
 	
+	function resetShopValue(){
+		 $("#shopName").val("");
+		 $("#business").val("");
+		 $("#contactName").val("");
+		 $("#contactCode").val("");
+		 $("#contactNum").val("");
+		 $("#phoneNum").val("");
+		 $("#shopAddress").val("");
+	 }
+	
 	 function closeUserDialog(){
 		 $("#dlg").dialog("close");
 		 resetValue();
+	 }
+	 function closeUserShopDialog(){
+		 $("#dlg3").dialog("close");
+		 resetShopValue();
 	 }
 	 
 	 function searchUser(){
@@ -140,114 +164,215 @@
 			"user.userName":$("#s_userName").val() 
 		});	
 	}
+	 function saveShopForUser(){
+		 $("#fm3").form("submit",{
+			url:url,
+			onSubmit:function(){
+				return $(this).form("validate");
+			},
+			success:function(result){
+				var result=eval('('+result+')');
+				if(result.success){
+					$.messager.alert("系统提示","保存成功！");
+					resetShopValue();
+					reloadShop();
+					$("#dlg3").dialog("close");
+				}else{
+					$.messager.alert("系统提示",result.errorInfo);
+				}
+			}
+		 });
+	 }
 	 
-	 
+	 function reloadShop(){
+		 var selectedRows=$("#dg").datagrid("getSelections");
+		 $("#dg3").datagrid({
+				url:'/admin/shop/list',
+				queryParams:{
+					userId:selectedRows[0].id,
+					pagination:true,
+					page:1,
+		            rows:20
+				}
+			});
+	 }
 	
 	 $(function () {  
 		 
 		 $("#dg").datagrid({  
 		        //双击事件  
 		        onDblClickRow: function (index, row) {  
-			   		 $("#dlg").dialog("open").dialog("setTitle","修改用户信息");
-			   		 $("#fm").form("load",row);
-			   		 $("#userName").attr("readonly","readonly")
-			   		 url="/admin/user/save?id="+row.id;
+					$("#dg3").datagrid({
+						url:'/admin/shop/list',
+						queryParams:{
+							userId:row.id,
+							pagination:true,
+							page:1,
+				            rows:20
+						}
+					});
 		        }  
 		    });  
 		 
 		 
 	 });
+	 
+	 
 </script>
 </head>
-<body style="margin: 1px">
-<table id="dg" title="用户管理" class="easyui-datagrid"
-   fitColumns="true" pagination="true" rownumbers="true" singleSelect="true"
-   url="/admin/user/list" fit="true" toolbar="#tb">
-   <thead>
-   	<tr>    
-   		<th field="id" width="20" align="center">编号</th>
-   		<th field="userName" width="50" align="center">用户名</th>
-   		<th field="password" width="50" align="center">密码</th>
-   		<th field="trueName" width="50" align="center">真实姓名</th>
-   		<th field="remarks" width="80" align="center">备注</th>
-   		<th field="roles" width="150" align="center">拥有角色</th>
-   		<th field="aa" width="50" align="center" formatter="formatEdit">角色设置</th>
-   	</tr>
-   </thead>
- </table>
- 
- <div id="tb">
- 	<div>
- 		<a href="javascript:openUserAddDialog()" class="easyui-linkbutton" iconCls="icon-add" plain="true">添加</a>
- 		<a href="javascript:openUserModifyDialog()" class="easyui-linkbutton" iconCls="icon-edit" plain="true">修改</a>
- 		<a href="javascript:deleteUser()" class="easyui-linkbutton" iconCls="icon-remove" plain="true">删除</a>
- 	</div> 
- 	<div>
- 		&nbsp;用户名：&nbsp;<input type="text" id="s_userName" size="20" onkeydown="if(event.keyCode==13) searchUser()"/>
- 		<a href="javascript:searchUser()" class="easyui-linkbutton" iconCls="icon-search" plain="true">搜索</a>
- 	</div>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  
- </div>
- 
- <div id="dlg" class="easyui-dialog" style="width:450px;height:300px;padding: 10px 20px"
-   closed="true" buttons="#dlg-buttons" data-options="onClose:function(){resetValue()}">
-   
-   <form id="fm" method="post">
-   	<table cellspacing="8px">
-   		<tr>
-   			<td>用户名：</td>
-   			<td><input type="text" id="userName" name="userName" class="easyui-validatebox" required="true" /></td>
-   		</tr>
-   		<tr>
-   			<td>密码：</td>
-   			<td><input type="text" id="password" name="password" class="easyui-validatebox"  required="true" style="width: 250px"/></td>
-   		</tr>
-   		<tr>
-   			<td>真是姓名：</td>
-   			<td>
-   				<input type="text" id="trueName" name="trueName" class="easyui-validatebox"  required="true" style="width: 250px"/>
-   				
-   			</td>
-   		</tr>
-   		<tr hidden="hidden">
-   			<td></td>
-   			<td><input type="text" id="userType" name="userType" class="easyui-validatebox"  required="true" value="0"/></td>
-   		</tr>
-   		<tr>
-   			<td valign="top">备注：</td>
-   			<td>
-   				<textarea rows="5" cols="40" id="remarks" name="remarks"></textarea>
-   			</td>
-   		</tr>
-   	</table>
-   </form>
- </div>
- 
- <div id="dlg-buttons">
- 	<a href="javascript:saveUser()" class="easyui-linkbutton" iconCls="icon-ok">保存</a>
- 	<a href="javascript:closeUserDialog()" class="easyui-linkbutton" iconCls="icon-cancel">关闭</a>
- </div>
- 
-  <div id="roleSetDialog" class="easyui-dialog" style="width:500px;height:350px;"
-   closed="true" buttons="#dlg-buttons2">
-   <input type="hidden" id="userId" name="userId"/>
-   <table id="roleDg"  class="easyui-datagrid" fitColumns="true" 
-	       fit="true" >
-	    <thead>
-	    	<tr>
-	    		<th field="cb" checkbox="true" align="center"></th>
-	    		<th field="id" width="50" align="left" hidden="true">编号</th>
-	    		<th field="name" width="100" align="left">角色名称</th>
-	    		<th field="remarks" width="200" align="left">备注</th>
-	    	</tr>
-	    </thead>
-	</table>
-   
- </div>
- 
- <div id="dlg-buttons2">
- 	<a href="javascript:saveRoleSet()" class="easyui-linkbutton" iconCls="icon-ok">保存</a>
- 	<a href="javascript:closeRoleSetDialog()" class="easyui-linkbutton" iconCls="icon-cancel">关闭</a>
- </div>
+<body class="easyui-layout" style="margin: 1px">
+<div region="north" style="height: 350px;">
+	<table id="dg" title="用户管理" class="easyui-datagrid"
+	   fitColumns="true" pagination="true" rownumbers="true" singleSelect="true"
+	   url="/admin/user/list" fit="true" toolbar="#tb">
+	   <thead>
+	   	<tr>    
+	   		<th field="id" width="20" align="center">编号</th>
+	   		<th field="userName" width="50" align="center">用户名</th>
+	   		<th field="password" width="50" align="center">密码</th>
+	   		<th field="trueName" width="50" align="center">真实姓名</th>
+	   		<th field="remarks" width="80" align="center">备注</th>
+	   		<th field="roles" width="150" align="center">拥有角色</th>
+	   		<th field="aa" width="50" align="center" formatter="formatEdit">角色设置</th>
+	   	</tr>
+	   </thead>
+	 </table>
+	 
+	 <div id="tb">
+	 	<div>
+	 		<a href="javascript:openUserAddDialog()" class="easyui-linkbutton" iconCls="icon-add" plain="true">添加</a>
+	 		<a href="javascript:openUserModifyDialog()" class="easyui-linkbutton" iconCls="icon-edit" plain="true">修改</a>
+	 		<a href="javascript:deleteUser()" class="easyui-linkbutton" iconCls="icon-remove" plain="true">删除</a>
+	 		<a href="javascript:openShopForUserDialog()" class="easyui-linkbutton" iconCls="icon-remove" plain="true">增加商铺</a>
+	 	</div> 
+	 	<div>
+	 		&nbsp;用户名：&nbsp;<input type="text" id="s_userName" size="20" onkeydown="if(event.keyCode==13) searchUser()"/>
+	 		<a href="javascript:searchUser()" class="easyui-linkbutton" iconCls="icon-search" plain="true">搜索</a>
+	 	</div>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  
+	 </div>
+	 
+	 <div id="dlg" class="easyui-dialog" style="width:450px;height:300px;padding: 10px 20px"
+	   closed="true" buttons="#dlg-buttons" data-options="onClose:function(){resetValue()}">
+	   
+	   <form id="fm" method="post">
+	   	<table cellspacing="8px">
+	   		<tr>
+	   			<td>用户名：</td>
+	   			<td><input type="text" id="userName" name="userName" class="easyui-validatebox" required="true" /></td>
+	   		</tr>
+	   		<tr>
+	   			<td>密码：</td>
+	   			<td><input type="text" id="password" name="password" class="easyui-validatebox"  required="true" style="width: 250px"/></td>
+	   		</tr>
+	   		<tr>
+	   			<td>真是姓名：</td>
+	   			<td>
+	   				<input type="text" id="trueName" name="trueName" class="easyui-validatebox"  required="true" style="width: 250px"/>
+	   				
+	   			</td>
+	   		</tr>
+	   		<tr hidden="hidden">
+	   			<td></td>
+	   			<td><input type="text" id="userType" name="userType" class="easyui-validatebox"  required="true" value="0"/></td>
+	   		</tr>
+	   		<tr>
+	   			<td valign="top">备注：</td>
+	   			<td>
+	   				<textarea rows="5" cols="40" id="remarks" name="remarks"></textarea>
+	   			</td>
+	   		</tr>
+	   	</table>
+	   </form>
+	 </div>
+	 
+	 <div id="dlg-buttons">
+	 	<a href="javascript:saveUser()" class="easyui-linkbutton" iconCls="icon-ok">保存</a>
+	 	<a href="javascript:closeUserDialog()" class="easyui-linkbutton" iconCls="icon-cancel">关闭</a>
+	 </div>
+	 <div id="dlg3" class="easyui-dialog" style="width:500px;height:350px;padding: 10px 20px"
+	   closed="true" buttons="#dlg-buttons3" data-options="onClose:function(){resetShopValue()}">
+	   
+		   <form id="fm3" method="get">
+		   	<table cellspacing="8px">
+		   		<tr>
+		   			<td>商铺名称：</td>
+		   			<td><input type="text" id="shopName" name="shopName" class="easyui-validatebox"  required="true" style="width: 250px"/></td>
+		   		</tr>
+		   		<tr>
+		   			<td>经营范围：</td>
+		   			<td><input type="text" id="business" name="business" class="easyui-validatebox"  required="true" style="width: 250px"/></td>
+		   		</tr>
+		   		<tr>
+		   			<td>联系人：</td>
+		   			<td><input type="text" id="contactName" name="contactName" class="easyui-validatebox"  required="true" style="width: 250px"/></td>
+		   		</tr>
+		   		<tr>
+		   			<td>邮政编码：</td>
+		   			<td><input type="text" id="contactCode" name="contactCode" class="easyui-validatebox"  required="true" style="width: 250px"/></td>
+		   		</tr>
+		   		<tr>
+		   			<td>固定电话：</td>
+		   			<td><input type="text" id="contactNum" name="contactNum" class="easyui-validatebox"  required="true" style="width: 250px"/></td>
+		   		</tr>
+		   		<tr>
+		   			<td>手机号码：</td>
+		   			<td><input type="text" id="phoneNum" name="phoneNum" class="easyui-validatebox"  required="true" style="width: 250px"/></td>
+		   		</tr>
+		   		<tr>
+		   			<td>商户地址：</td>
+		   			<td><input type="text" id="shopAddress" name="shopAddress" class="easyui-validatebox"  required="true" style="width: 250px"/></td>
+		   		</tr>
+		   		<tr hidden="hidden">
+		   			<td>用户：</td>
+		   			<td><input type="text" id="shopUserId" name="userId" class="easyui-validatebox"  required="true" style="width: 250px" value="-1"/></td>
+		   		</tr>
+		   	</table>
+		   </form>
+	 </div>
+	 <div id="dlg-buttons3">
+	 	<a href="javascript:saveShopForUser()" class="easyui-linkbutton" iconCls="icon-ok">保存</a>
+	 	<a href="javascript:closeUserShopDialog()" class="easyui-linkbutton" iconCls="icon-cancel">关闭</a>
+	 </div>
+	 
+	  <div id="roleSetDialog" class="easyui-dialog" style="width:500px;height:350px;"
+	   closed="true" buttons="#dlg-buttons2">
+	   <input type="hidden" id="userId" name="userId"/>
+	   <table id="roleDg"  class="easyui-datagrid" fitColumns="true" 
+		       fit="true" >
+		    <thead>
+		    	<tr>
+		    		<th field="cb" checkbox="true" align="center"></th>
+		    		<th field="id" width="50" align="left" hidden="true">编号</th>
+		    		<th field="name" width="100" align="left">角色名称</th>
+		    		<th field="remarks" width="200" align="left">备注</th>
+		    	</tr>
+		    </thead>
+		</table>
+	   
+	 </div>
+	 
+	 <div id="dlg-buttons2">
+	 	<a href="javascript:saveRoleSet()" class="easyui-linkbutton" iconCls="icon-ok">保存</a>
+	 	<a href="javascript:closeRoleSetDialog()" class="easyui-linkbutton" iconCls="icon-cancel">关闭</a>
+	 </div>
+</div>
+<div region="center" style="margin-top: 5px;">
+	 <table id="dg3"  class="easyui-datagrid" fit=true
+	   fitColumns="true"  rownumbers="true" singleSelect="true"
+	      >
+	   <thead>
+	   	<tr>
+	   		<th field="shopName" width="100" align="center">商铺名称</th>
+	   		<th field="business" width="50" align="center">经营范围</th>
+	   		<th field="contactName" width="50" align="center">联系人姓名</th>
+	   		<th field="contactNum" width="50" align="center">联系电话</th>
+	   		<th field="phoneNum" width="50" align="center">手机号码</th>
+	   		<th field="shopAddress" width="150" align="center">商铺地址</th>
+	   		<th field="updateTime" width="50" align="center">更新时间</th>
+	   	</tr>
+	   </thead>
+	 </table>
+</div>
  
 </body>
 </html>

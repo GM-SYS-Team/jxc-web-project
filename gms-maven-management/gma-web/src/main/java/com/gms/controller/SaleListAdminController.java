@@ -78,7 +78,7 @@ public class SaleListAdminController extends BaseController{
 	public Map<String,Object> list(SaleList saleList,HttpServletRequest request)throws Exception{
 		User currentUser = getCurrentUser(request);
 		if(currentUser.getUserType().equals(Constant.SHOPTYPE)){
-			saleList.setShopId(currentUser.getShopId());
+			saleList.setShopId(currentUser.getCurrentLoginShopId());
 		}
 		Map<String, Object> resultMap = new HashMap<>();
 		List<SaleList> saleListList=saleListService.list(saleList, Direction.DESC, "saleDate");
@@ -117,7 +117,7 @@ public class SaleListAdminController extends BaseController{
 			HttpServletRequest request)throws Exception{
 		User currentUser = getCurrentUser(request);
 		if(currentUser.getUserType().equals(Constant.SHOPTYPE)){
-			saleList.setShopId(currentUser.getShopId());
+			saleList.setShopId(currentUser.getCurrentLoginShopId());
 		}
 		Map<String, Object> resultMap = new HashMap<>();
 		List<SaleList> saleListList=saleListService.list(saleList, Direction.DESC, "saleDate");
@@ -187,7 +187,7 @@ public class SaleListAdminController extends BaseController{
 			HttpServletRequest request)throws Exception{
 		User currentUser = getCurrentUser(request);
 		if(currentUser.getUserType().equals(Constant.SHOPTYPE)){
-			saleList.setShopId(currentUser.getShopId());
+			saleList.setShopId(currentUser.getCurrentLoginShopId());
 		}
 		Map<String, Object> resultMap = new HashMap<>();
 		saleList.setUser(userService.findByUserName((String) SecurityUtils.getSubject().getPrincipal())); // 设置操作用户
@@ -229,7 +229,7 @@ public class SaleListAdminController extends BaseController{
 		Map<String, Object> resultMap = new HashMap<>();
 		List<SaleCount> scdList=new ArrayList<SaleCount>();
 		List<String> datas=DateUtil.getRangeDates(begin, end);
-		List<Object> ll= saleListService.countSaleByDay(begin, end,currentUser.getShopId());
+		List<Object> ll= saleListService.countSaleByDay(begin, end,currentUser.getCurrentLoginShopId());
 		for(String data:datas){
 			SaleCount scd=new SaleCount();
 			scd.setDate(data);
@@ -270,7 +270,7 @@ public class SaleListAdminController extends BaseController{
 		Map<String, Object> resultMap = new HashMap<>();
 		List<SaleCount> scList=new ArrayList<SaleCount>();
 		List<String> datas=DateUtil.getRangeMonth(begin, end);
-		List<Object> ll= saleListService.countSaleByMonth(begin, end, currentUser.getShopId());
+		List<Object> ll= saleListService.countSaleByMonth(begin, end, currentUser.getCurrentLoginShopId());
 		for(String data:datas){
 			SaleCount sc=new SaleCount();
 			sc.setDate(data);

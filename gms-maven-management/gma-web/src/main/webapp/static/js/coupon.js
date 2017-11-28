@@ -40,6 +40,7 @@ Date.prototype.format = function (format) {
 }
 
 function addCoupon() {
+	emptyText();
 	$("#list_coupon").hide(1000);
 	$("#add_coupon").show(1000);
 }
@@ -61,6 +62,16 @@ function keyupDate() {
 }
 function keyupIntro() {
 	$(".js-desc-detail").html($("#couponIntro").val());
+}
+
+function emptyText(){
+	$("#couponName").val("");
+	$("#totalCount").val("");
+	$("#couponAmount").val("");
+	$("#couponCount").val("");
+	$("#expiryDate").val("");
+	$("#goodsIds").html("");
+	$("#couponIntro").val("");
 }
 
 function saveCoupon() {
@@ -138,6 +149,7 @@ function getCouponList(obj) {
 	couponAjax(num);
 }
 function couponAjax(num){
+	btnQuit();
 	$.ajax( {
 		url : "/admin/coupon/list",
 		type : "POST",
@@ -228,6 +240,7 @@ function chooseGoods(){
 	goodsAjax();
 	layer.open({
         type: 1,
+        offset: '50px',
         title: '选择适用商品',
 		maxmin: true, 
 		shadeClose: false, //点击遮罩关闭层
@@ -238,7 +251,6 @@ function chooseGoods(){
 			var str = "";
 			$("input[name='goodsId']:checked").each(function(){ 
 				str += $(this).val()+","; 
-				alert(str);
 			}) 
 			if(str ==""){
 			   layer.alert("请选择使用商品",{

@@ -10,6 +10,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+
 /**
  * @author zhoutianqi
  * @className CouponCode.java
@@ -29,7 +30,7 @@ public class CouponCode {
     @ManyToOne
 	@JoinColumn(name="couponId")
 	private Coupon coupon; // 优惠券
-
+	
     /**
      * 用户ID
      */
@@ -45,8 +46,18 @@ public class CouponCode {
     /**
      * 优惠卷金额
      */
-    private Float amount;
+    private Integer amount;
 
+    
+    /* 领取时间*/
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date receiveTime;
+    
+    /*使用时间*/
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date usedTime;
+    
+    
     /**
      * @return id
      */
@@ -69,11 +80,11 @@ public class CouponCode {
 	}
 
 
-    public Float getAmount() {
+	public Integer getAmount() {
 		return amount;
 	}
 
-	public void setAmount(Float amount) {
+	public void setAmount(Integer amount) {
 		this.amount = amount;
 	}
 
@@ -112,4 +123,22 @@ public class CouponCode {
     public void setIsUsed(String isUsed) {
         this.isUsed = isUsed;
     }
+    
+
+	public Date getUsedTime() {
+		return usedTime;
+	}
+
+	public void setUsedTime(Date usedTime) {
+		this.usedTime = usedTime;
+	}
+
+	public Date getReceiveTime() {
+		return receiveTime;
+	}
+
+	public void setReceiveTime(Date receiveTime) {
+		this.receiveTime = receiveTime;
+	}
+
 }

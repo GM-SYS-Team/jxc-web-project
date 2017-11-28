@@ -105,4 +105,9 @@ public class UserServiceImpl implements UserService {
 	public User findUserByTelephone(String telephone) {
 		return userRepository.findUserByTelephone(telephone);
 	}
+
+	@Override
+	public User findUserByTelephone(String telephone, String userType) {
+		return userRepository.findUserByTelephone(telephone, userType);
+	}
 }

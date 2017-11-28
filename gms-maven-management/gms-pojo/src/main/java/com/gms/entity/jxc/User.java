@@ -44,6 +44,8 @@ public class User {
 	@GeneratedValue
 	private Integer id; // 编号
 	
+	
+	
 	@NotEmpty(message="请输入用户名！")
 	@Column(length=50)
 	private String userAccount; // 用户名
@@ -60,7 +62,7 @@ public class User {
 	private String shopName; // 商户名称
 	
 	@Column(length=50)
-	private String nickName;
+	private String nickName = "新用户";
 	
 	@Column(length=1000)
 	private String remarks; // 备注
@@ -70,6 +72,9 @@ public class User {
 	
 	@Column(length=500)
 	private String address;
+	
+	@Column(length=100)
+	private String district;
 	
 	@Column(length=1)
 	private String userType;
@@ -91,6 +96,18 @@ public class User {
 	
 	@Column
 	private String imgUrl; //用户头像
+	
+	@Column(length=11)
+    private Integer currentLoginShopId;//上次访问的店铺
+    
+
+    public Integer getCurrentLoginShopId() {
+		return currentLoginShopId;
+	}
+
+	public void setCurrentLoginShopId(Integer currentLoginShopId) {
+		this.currentLoginShopId = currentLoginShopId;
+	}
 	
 	public Integer getId() {
 		return id;
@@ -232,5 +249,33 @@ public class User {
 
 	public void generateUUID(){
 		this.uuid =  UUID.randomUUID().toString().replaceAll("-", "");
+	}
+
+	public String getDistrict() {
+		return district;
+	}
+
+	public void setDistrict(String district) {
+		this.district = district;
+	}
+	
+	public User() {
+		
+	}
+	
+	public User(User user) {
+		this.address = user.getAddress();
+		this.createTime = user.getCreateTime();
+		this.district = user.getDistrict();
+		this.id = user.getId();
+		this.imgUrl = user.getImgUrl();
+		this.nickName = user.getNickName();
+		this.phoneNum = user.getPhoneNum();
+		this.password = user.getPassword();
+		this.uuid = user.getUuid();
+		this.remarks = user.getRemarks();
+		this.userType = user.getUserType();
+		this.userAccount = user.getUserAccount();
+		this.updateTime = user.getUpdateTime();
 	}
 }

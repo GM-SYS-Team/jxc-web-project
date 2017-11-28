@@ -5,7 +5,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -128,9 +127,9 @@ public class DateUtil {
      *            是否包含结束日期；    
      * @return    
      */    
-    public static Map<String, String> getTwoDay(String endTime,    
+    public static List<String> getTwoDay(String endTime,    
             String beginTime, boolean isEndTime) {    
-        Map<String, String> result = new HashMap<String, String>();    
+        List<String> result = new ArrayList<>();    
         if ((endTime == null || endTime.equals("") || (beginTime == null || beginTime    
                 .equals(""))))    
             return null;    
@@ -140,7 +139,7 @@ public class DateUtil {
             java.util.Date mydate = ymdSDF.parse(beginTime);    
             long day = (date.getTime() - mydate.getTime())    
                     / (24 * 60 * 60 * 1000);    
-            result = getDate(endTime, Integer.parseInt(day + ""), isEndTime);    
+            result = getDate(beginTime, Integer.parseInt(day + ""), isEndTime);    
         } catch (Exception e) {    
         }    
         return result;    
@@ -180,18 +179,18 @@ public class DateUtil {
      * @param isEndTime    
      * @return    
      */    
-    public static Map<String, String> getDate(String endTime, Integer interval,    
+    public static List<String> getDate(String endTime, Integer interval,    
             boolean isEndTime) {    
-        Map<String, String> result = new HashMap<String, String>();    
+    	List<String> result = new ArrayList<>();
         if (interval == 0 || isEndTime) {    
             if (isEndTime)    
-                result.put(endTime, endTime);    
+                result.add(endTime);    
         }    
         if (interval > 0) {    
             int begin = 0;    
             for (int i = begin; i < interval; i++) {    
                 endTime = givedTimeToBefer(endTime, DATEMM, ymd);    
-                result.put(endTime, endTime);    
+                result.add(endTime);    
             }    
         }    
         return result;    
@@ -525,13 +524,10 @@ public class DateUtil {
 	
 	
 	public static void main(String[] args) throws Exception{
-		/*List<String> datas=getRangeDatas("2017-10-28","2017-11-02");
-		for(String data:datas){
-			System.out.println(data);
-		}*/
-		List<String> months=getRangeMonth("2017-09","2018-12");
-		for(String month:months){
-			System.out.println(month);
-		}
+		Date today = new Date();
+		Date dayBeforeSeven =  DateUtil.getDateBeforeWeek(today);
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		List<String>  dateMap = DateUtil.getTwoDay(sdf.format(today), sdf.format(dayBeforeSeven), true);
+		System.out.println(dateMap);
 	}
 }

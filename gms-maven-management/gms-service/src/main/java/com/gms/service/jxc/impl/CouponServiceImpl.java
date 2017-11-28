@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.gms.dao.repository.CouponGoodsRepository;
 import com.gms.dao.repository.CouponRepository;
 import com.gms.entity.jxc.Coupon;
+import com.gms.entity.jxc.CouponCode;
 import com.gms.entity.jxc.CouponGoods;
 import com.gms.service.jxc.CouponService;
 
@@ -34,7 +35,7 @@ public class CouponServiceImpl implements CouponService {
 	}
 
 	@Override
-	public List<Coupon> findCouponAll() {
+	public List<Coupon> findCouponAll(Integer shopId) {
 		/*Pageable pageable = new PageRequest(current_page - 1, page_size);
 		Page<Coupon> pageCoupon = couponRepository.findAll(
 				new Specification<Coupon>() {
@@ -45,19 +46,23 @@ public class CouponServiceImpl implements CouponService {
 						return predicate;
 					}
 				}, pageable);*/
-		return couponRepository.findAll();
+		return couponRepository.findCouponAll(shopId);
 	}
 
 	@Override
 	public List<Coupon> findCouponByStatus(Integer status,Integer shopId) {
 		Date today = new Date();
-		if (status == 1) {
+		if (status == -1) {
+			return couponRepository.findCouponAll(shopId);
+		}
+		else if (status == 1) {
 			return couponRepository.findCouponBygt(today,shopId);
 		} else if (status == 2) {
 			return couponRepository.findCouponBybt(today,shopId);
 		} else {
 			return couponRepository.findCouponBylt(today,shopId);
 		}
+
 	}
 
 	@Override
@@ -69,6 +74,21 @@ public class CouponServiceImpl implements CouponService {
 	public void deleteCoupon(Integer id,Integer shopId) {
 		couponGoodsRepository.deleteCouponGoods(id, shopId);
 		couponRepository.delete(id);
+	}
+
+	@Override
+	public List<CouponGoods> findCouponListByGoodsId(Integer goodsId) {
+		return couponGoodsRepository.findCouponListByGoodsId(goodsId);
+	}
+
+	@Override
+	public Coupon findCouponById(Integer couponId) {
+		return couponRepository.findOne(couponId);
+	}
+
+	@Override
+	public List<CouponCode> findListByCouponId(Integer couponId) {
+		return null;
 	}
 
 }

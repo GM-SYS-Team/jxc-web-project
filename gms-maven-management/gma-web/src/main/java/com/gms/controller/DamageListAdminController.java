@@ -75,7 +75,7 @@ public class DamageListAdminController extends BaseController{
 	public Map<String,Object> list(DamageList damageList,HttpServletRequest request)throws Exception{
 		User currentUser = getCurrentUser(request);
 		if(currentUser.getUserType().equals(Constant.SHOPTYPE)){
-			damageList.setShopId(currentUser.getShopId());
+			damageList.setShopId(currentUser.getCurrentLoginShopId());
 		}
 		Map<String, Object> resultMap = new HashMap<>();
 		List<DamageList> damageListList=damageListService.list(damageList, Direction.DESC, "damageDate");
@@ -138,7 +138,7 @@ public class DamageListAdminController extends BaseController{
 			HttpServletRequest request)throws Exception{
 		User currentUser = getCurrentUser(request);
 		if(currentUser.getUserType().equals(Constant.SHOPTYPE)){
-			damageList.setShopId(currentUser.getShopId());
+			damageList.setShopId(currentUser.getCurrentLoginShopId());
 		}
 		Map<String, Object> resultMap = new HashMap<>();
 		damageList.setUser(userService.findByUserName((String) SecurityUtils.getSubject().getPrincipal())); // 设置操作用户

@@ -14,6 +14,7 @@ import com.gms.entity.jxc.Goods;
 public interface GoodsService {
 
 	
+
 	/**
 	 * 根据id查询商品实体
 	 * @param id
@@ -97,6 +98,13 @@ public interface GoodsService {
 	 * @return
 	 */
 	public List<Goods> listAlarm(Integer shopId);
+
+	/**
+	 * 根据店铺ID查询对应的商品
+	 * @param shopId
+	 * @return
+	 */
+	public List<Goods> findGoodsByShopId(Integer shopId);
 	
 
 }

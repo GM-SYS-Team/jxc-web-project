@@ -15,10 +15,10 @@
 <script src="../static/bgManager/js/shopFrame.js" type="text/javascript"></script>
 <script src="../static/bgManager/js/jquery.nicescroll.js" type="text/javascript"></script>
 <script type="text/javascript" src="../static/bgManager/js/jquery.cookie.js"></script> 
-<title>店铺管理</title>
+<title>国码扫后台管理系统</title>
 <style>
 .logo_name{
-	font-size: 30px;
+	font-size: 28px;
     padding-left: 10px;
     font-family: serif;
 }
@@ -33,19 +33,17 @@
  <div class="Sellerber" id="Sellerber">
  <!--顶部-->
   <div class="Sellerber_header apex clearfix" id="Sellerber_header">
-   	<div class="l_f logo">
+   	<div class="l_f logo" style="padding-top: 12px;">
    		<!--<img src="../static/bgManager/images/logo_03.png" /> -->
-   		<span class="logo_name">后台管理系统</span>
+   		<span class="logo_name">国码扫后台管理系统</span>
    	</div>
    	<div class="r_f Columns_top clearfix">
   	 <!--<div class="time_style"><i class="fa  fa-clock-o"></i><span id="time"></span></div>-->
-   <div class="news l_f"><a href="#" class="fa  fa-bell "></a><em>5</em></div>
-     <div class="administrator l_f">
-       <img src="../static/bgManager/images/avatar.png"  width="36px"/><span class="user-info">欢迎你,超级管理员</span><i class="glyph-icon fa  fa-caret-down"></i>
+   <!-- <div class="news l_f"><a href="#" class="fa  fa-bell "></a><em>5</em></div> -->
+     <div class="administrator l_f" style="padding-right: 10px;float: right;">
+       <img src="../static/bgManager/images/avatar.png"  width="36px"/><span class="user-info"></span><i class="glyph-icon fa  fa-caret-down"></i>
        <ul class="dropdown-menu">
-        <li><a href="#"><i class="fa fa-user"></i>个人信息</a></li>
-        <!-- <li><a href="#"><i class="fa fa-cog"></i>系统设置</a></li> -->
-        <li><a href="javascript:void(0)" id="Exit_system"><i class="fa fa-user-times"></i>退出</a></li>
+        	<li><a href="javascript:void(0)" id="Exit_system"><i class="fa fa-user-times"></i>退出</a></li>
        </ul>
      </div>
    </div>
@@ -61,8 +59,8 @@
          <li><a class="colorpick-btn selected" href="javascript:ovid()"data-val="default"  id="default" style="background-color:#222A2D" ></a></li>
          <li><a class="colorpick-btn" href="javascript:ovid()" data-val="blue" style="background-color:#438EB9;" ></a></li>
          <li><a class="colorpick-btn" href="javascript:ovid()" data-val="green" style="background-color:#72B63F;" ></a></li>
-         <li><a class="colorpick-btn" href="javascript:ovid()" data-val="blue" style="background-color:#D0D0D0;" ></a></li>
-         <li><a class="colorpick-btn" href="javascript:ovid()" data-val="blue" style="background-color:#FF6868;" ></a></li>
+         <li><a class="colorpick-btn" href="javascript:ovid()" data-val="gray" style="background-color:#D0D0D0;" ></a></li>
+         <li><a class="colorpick-btn" href="javascript:ovid()" data-val="red" style="background-color:#FF6868;" ></a></li>
         </ul>     
      </div>
     <!--  <div class="search_style">
@@ -171,6 +169,14 @@
 			       <li class="home"><a href="javascript:void(0)" name="../basicData/stock.html" title="期初库存" class="iframeurl"><i class="fa fa-angle-double-right"></i>期初库存</a></li>
 			    </ul>
 			 </dd>
+			 
+		     
+		     <dt class="shop_index nav_link " >
+		     	<a href="javascript:void(0)" name="personal_info.html" class="iframeurl" title="">
+		     		<i class="fa fa-user"></i>个人信息
+		     	</a>
+		     </dt>
+		     <dd class="submenu" style="height:0px; border:0px;"></dd>
 	    </dl>  
     </div>
   </div>
@@ -224,6 +230,15 @@
 		Sellerber_menu:'.list_content',
 		Sellerber_header:'.Sellerber_header',
 	});
+	$.ajax( {
+		url : "/admin/overview/user",
+		type : "POST",
+		data : {
+		},
+		success : function(data) {
+			$(".user-info").html("欢迎你，"+data);
+		}
+	})
 });
 //时间设置
   function currentTime(){ 
@@ -256,8 +271,6 @@ $('#Exit_system').on('click', function(){
         
     });
 });
-</script>
-<script type="text/javascript">
 $("#menu_style").niceScroll({  
 	cursorcolor:"#888888",  
 	cursoropacitymax:1,  
