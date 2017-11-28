@@ -108,7 +108,7 @@
 					colorbtn.find('a').removeClass("selected");
 				   $(this).addClass("selected");				
 		          $.cookie("MYCssSkin",v,{path:'/',expires:10}); 
-				  $("#skin").attr("href","skin/"+v+"/skin.css");				  
+				  $("#skin").attr("href","../static/bgManager/skin/"+v+"/skin.css");				  
 					});
 					var cookie_skin=$.cookie("MyCssSkin");
 					if(cookie_skin){switchskin(cookie_skin)};
