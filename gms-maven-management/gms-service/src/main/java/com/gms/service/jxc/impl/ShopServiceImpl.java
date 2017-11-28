@@ -94,7 +94,7 @@ public class ShopServiceImpl implements ShopService{
 	}
 	
 	@Override
-	public Shop findPhoneNum(String telephone) {
+	public List<Shop> findPhoneNum(String telephone) {
 		return shopRepository.findPhoneNum(telephone);
 	}
 

@@ -73,23 +73,43 @@ public class ShopController extends BaseController {
 	@RequestMapping("/save")
 	public Map<String, Object> save(Shop shop, HttpServletRequest request)
 			throws Exception {
+		boolean flag = true;
 		shop.setUpdateTime(new Date());
 		Map<String, Object> resultMap = new HashMap<>();
+		Shop existedNameOne = shopService.findByShopName(shop.getShopName());
+		List<Shop> existedPhoneOne = shopService.findPhoneNum(shop
+				.getPhoneNum());
 		if (shop.getId() != null) { // 写入日志
 			logService.save(new Log(Log.UPDATE_ACTION, "更新商铺信息" + shop));
-			shop.setCreateTime(new Date());
+			Shop old_shop = shopService.findById(shop.getId());
+			if (!shop.getPhoneNum().equals(old_shop.getPhoneNum())) {
+				if (existedPhoneOne.size() > 0) {
+					resultMap.put("error", "该手机号码已存在");
+					flag = false;
+				}
+			}
+			if(!shop.getShopName().equals(old_shop.getShopName())){
+				if (existedNameOne != null) {
+					resultMap.put("error", "该商铺名称已存在");
+					flag = false;
+				} 
+			}
 		} else {
-			logService.save(new Log(Log.ADD_ACTION, "添加商铺信息" + shop));
+			if (existedNameOne != null) {
+				resultMap.put("error", "该商铺名称已存在");
+				flag = false;
+			} else if (existedPhoneOne.size() > 0) {
+				resultMap.put("error", "该手机号码已存在");
+				flag = false;
+			} else {
+				logService.save(new Log(Log.ADD_ACTION, "添加商铺信息" + shop));
+				shop.setCreateTime(new Date());
+			}
 		}
-		Shop existedNameOne = shopService.findByShopName(shop.getShopName());
-		Shop existedPhoneOne = shopService.findPhoneNum(shop.getPhoneNum());
-		if (existedNameOne != null) {
-			resultMap.put("error", "该商铺名称已存在");
-		} else if (existedPhoneOne != null) {
-			resultMap.put("error", "该手机号码已存在");
+		if (flag) {
+			shopService.save(shop);
+			resultMap.put("success", true);
 		}
-		shopService.save(shop);
-		resultMap.put("success", true);
 		return resultMap;
 	}
 
@@ -117,7 +137,7 @@ public class ShopController extends BaseController {
 	}
 
 	@PostMapping("/currentMap")
-	public Map<String, Object> getCurrentMap(HttpServletRequest request){
+	public Map<String, Object> getCurrentMap(HttpServletRequest request) {
 		Shop shop = getCurrentShop(request);
 		User user = getCurrentUser(request);
 		Map<String, Object> resultMap = new HashMap<>();

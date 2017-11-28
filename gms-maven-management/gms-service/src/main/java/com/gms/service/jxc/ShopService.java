@@ -62,7 +62,7 @@ public interface ShopService {
 	 * @param telephone
 	 * @return
 	 */
-	public Shop findPhoneNum(String phoneNum);
+	public List<Shop> findPhoneNum(String phoneNum);
 	
 	
 	/**
