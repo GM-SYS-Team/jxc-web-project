@@ -96,14 +96,17 @@ public class CouponController extends BaseController {
 		List<Coupon> couponList = new ArrayList<Coupon>();
 		/* 当前登录的店铺 */
 		Shop shop = getCurrentShop(request);
+		int couponListSize = 0;
 		if (num == 0) {
 			couponList = couponService.findCouponAll(shop.getId());
+			couponListSize = couponService.findCouponCount(shop.getId());
 		} else {
 			couponList = couponService.findCouponByStatus(num, shop.getId());
+			couponListSize = couponService.findCouponCountByStatus(num, shop.getId());
 		}
 		Map<String, Object> resultMap = new HashMap<>();
 		resultMap.put("couponList", couponList);
-		resultMap.put("size", couponList == null ? 0 : couponList.size());
+		resultMap.put("size", couponListSize);
 		logService.save(new Log(Log.SEARCH_ACTION, "查询优惠券信息")); // 写入日志
 		return resultMap;
 	}

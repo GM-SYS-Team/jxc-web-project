@@ -261,6 +261,15 @@
 	   			<td><input type="text" id="userName" name="userName" class="easyui-validatebox" required="true" /></td>
 	   		</tr>
 	   		<tr>
+	   			<td>用户类型</td>
+	   			<td>
+	 				<select class="easyui-combobox"  id="userType" name="userType" style="width: 250px;" required=true>
+	 					<option value="0">管理用户</option>
+						<option value="1" selected>商铺用户</option>
+	 				</select>
+ 				</td>
+ 			</tr>
+	   		<tr>
 	   			<td>密码：</td>
 	   			<td><input type="text" id="password" name="password" class="easyui-validatebox"  required="true" style="width: 250px"/></td>
 	   		</tr>
@@ -271,14 +280,11 @@
 	   				
 	   			</td>
 	   		</tr>
-	   		<tr hidden="hidden">
-	   			<td></td>
-	   			<td><input type="text" id="userType" name="userType" class="easyui-validatebox"  required="true" value="0"/></td>
-	   		</tr>
+	   		
 	   		<tr>
 	   			<td valign="top">备注：</td>
 	   			<td>
-	   				<textarea rows="5" cols="40" id="remarks" name="remarks"></textarea>
+	   				<textarea rows="5" cols="40" id="remarks" style="width: 250px;" name="remarks"></textarea>
 	   			</td>
 	   		</tr>
 	   	</table>

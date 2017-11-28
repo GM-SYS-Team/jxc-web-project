@@ -97,12 +97,18 @@ public class UserController {
 			subject.login(token); // 登录认证
 			String userName=(String) SecurityUtils.getSubject().getPrincipal();
 			User currentUser=userService.findByUserName(userName);
-			if(currentUser.getUserType().equals(Constant.SHOPTYPE)){
+			List<Shop> shopList = shopService.findByUserId(currentUser.getId());
+			if(currentUser.getUserType().equals(Constant.SHOPTYPE) && shopList.isEmpty()){
+				map.put("success", false);
+	    		map.put("errorInfo", "该用户名下未注册商铺");
+	    		return map;
+			}
+ 			if(currentUser.getUserType().equals(Constant.SHOPTYPE)){
 				Shop shop =null;
 				if(currentUser.getCurrentLoginShopId()!=null){
 					shop = shopService.findById(currentUser.getCurrentLoginShopId());
 				}else{
-					shop = shopService.findByUserId(currentUser.getId()).get(0);
+					shop = shopList.get(0);//默认进入第一家店铺
 					currentUser.setCurrentLoginShopId(shop.getId());
 					userService.save(currentUser);
 				}

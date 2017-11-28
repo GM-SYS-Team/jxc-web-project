@@ -36,17 +36,12 @@ public class CouponServiceImpl implements CouponService {
 
 	@Override
 	public List<Coupon> findCouponAll(Integer shopId) {
-		/*Pageable pageable = new PageRequest(current_page - 1, page_size);
-		Page<Coupon> pageCoupon = couponRepository.findAll(
-				new Specification<Coupon>() {
-					@Override
-					public Predicate toPredicate(Root<Coupon> root,
-							CriteriaQuery<?> query, CriteriaBuilder cb) {
-						Predicate predicate = cb.conjunction();
-						return predicate;
-					}
-				}, pageable);*/
 		return couponRepository.findCouponAll(shopId);
+	}
+	
+	@Override
+	public int findCouponCount(Integer shopId) {
+		return couponRepository.findCouponCount(shopId);
 	}
 
 	@Override
@@ -89,6 +84,21 @@ public class CouponServiceImpl implements CouponService {
 	@Override
 	public List<CouponCode> findListByCouponId(Integer couponId) {
 		return null;
+	}
+
+	@Override
+	public int findCouponCountByStatus(Integer status, Integer shopId) {
+		Date today = new Date();
+		if (status == -1) {
+			return couponRepository.findCouponCount(shopId);
+		}
+		else if (status == 1) {
+			return couponRepository.findCouponCountBygt(today,shopId);
+		} else if (status == 2) {
+			return couponRepository.findCouponCountBybt(today,shopId);
+		} else {
+			return couponRepository.findCouponCountBylt(today,shopId);
+		}
 	}
 
 }

@@ -174,9 +174,9 @@ public class UserAdminController {
 		user.setCreateTime(new Date());
 		user.setUpdateTime(new Date());
 		user.setUuid(UUIDUtil.getUUIDKey());
-		if(user.getCurrentLoginShopId()!=null){
+		/*if(user.getCurrentLoginShopId()!=null){
 			user.setUserType("1");
-		}else{user.setUserType("0");}
+		}else{user.setUserType("0");}*/
 		userService.save(user);			
 		resultMap.put("success", true);
 		return resultMap;

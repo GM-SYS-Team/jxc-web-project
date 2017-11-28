@@ -31,6 +31,7 @@ public interface CouponService {
 	* @throws 
 	*/
 	public List<Coupon> findCouponAll(Integer shopId);
+	public int findCouponCount(Integer shopId);
 
 	/** 
 	* @Title: findCouponByStatus 
@@ -40,6 +41,15 @@ public interface CouponService {
 	* @throws 
 	*/
 	public List<Coupon> findCouponByStatus(Integer status,Integer shopId);
+	
+	/** 
+	* @Title: findCouponCountByStatus 
+	* @Description: TODO(这里用一句话描述这个方法的作用) 1-未开始  2-进行中  3-已过期
+	* @param @param status    设定文件 
+	* @return List<Coupon>    返回类型 
+	* @throws 
+	*/
+	public int findCouponCountByStatus(Integer status,Integer shopId);
 	
 	/** 
 	* @Title: saveCouponGoods 
