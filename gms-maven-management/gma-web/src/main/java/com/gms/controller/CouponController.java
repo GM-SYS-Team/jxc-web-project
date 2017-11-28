@@ -91,14 +91,19 @@ public class CouponController extends BaseController {
 
 	@PostMapping("/list")
 	public Map<String, Object> list(
-			@RequestParam(value = "num", required = true) Integer num,HttpServletRequest request,@RequestParam(value="page",required=false)Integer page,@RequestParam(value="rows",required=false)Integer rows) throws Exception {
+			@RequestParam(value = "num", required = true) Integer num,
+			HttpServletRequest request,
+			@RequestParam(value = "page", required = false) Integer page,
+			@RequestParam(value = "rows", required = false) Integer rows)
+			throws Exception {
 		/* 当前登录的店铺 */
 		Shop shop = getCurrentShop(request);
 		Coupon ParamCoupon = new Coupon();
 		ParamCoupon.setShopId(shop.getId());
-		List<Coupon> couponListResult = couponService.list(ParamCoupon, page, rows, Direction.ASC, num, "id");
+		List<Coupon> couponListResult = couponService.list(ParamCoupon, page,
+				rows, Direction.ASC, num, "id");
 		Long couponListSize = couponService.listCount(ParamCoupon, num);
-		
+
 		Map<String, Object> resultMap = new HashMap<>();
 		resultMap.put("couponList", couponListResult);
 		resultMap.put("size", couponListSize);

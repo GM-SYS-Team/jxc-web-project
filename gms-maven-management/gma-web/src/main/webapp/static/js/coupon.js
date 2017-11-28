@@ -1,5 +1,6 @@
 $(function () { 
-	couponAjax(0);
+	var page_size = $("#page_size").val();
+	couponAjax(0,1,page_size);
 	$('#expiryDate').daterangepicker({ 
 	    format: 'yyyy-MM-dd',
 	    startDate: new Date(),
@@ -129,7 +130,8 @@ function saveCoupon() {
 				$("#list_coupon").show();
 				$(".pull-left li").removeClass("active");
 				$(".pull-left li:first").addClass("active");
-				couponAjax(0);
+				var page_size = $("#page_size").val();
+				couponAjax(0,1,page_size);
 			}
 		}
 	});
@@ -149,15 +151,15 @@ function getCouponList(obj) {
 	var page_size = $("#page_size").val();
 	couponAjax(num,1,page_size);
 }
-function couponAjax(num,current_page,page_size){
+function couponAjax(num,currentPage,page_size){
 	btnQuit();
 	$.ajax( {
 		url : "/admin/coupon/list",
 		type : "POST",
 		data : {
 			num : num,
-			current_page:current_page,
-			page_size:page_size
+			page:currentPage,
+			rows:page_size
 		},
 		success : function(data) {
 			var html = "";
@@ -194,10 +196,11 @@ function couponAjax(num,current_page,page_size){
 					$("#search_page").val(currentPage);
 					$("#current_page").html(currentPage);
 					$(".start_num").html((currentPage-1)*page_size+1);
-					$(".end_num").html((currentPage-1)*page_size + data.rows.length);
+					$(".end_num").html((currentPage-1)*page_size + data.couponList.length);
 					$(".total_num").html(data.size);
+				}else{
+					$("#fenye_coupon").hide();
 				}
-				
 			}else{
 				$(".js-list-empty-region").show();
 				$("#table_list").hide();
@@ -215,19 +218,16 @@ function showPageCoupon(param) {
 	if('prePage'==param) {
 		if(currentPage==1){
 			currentPage =1;
-			flag = 1;
+			flag = 1; cursor: ;
 		}else{
 			currentPage = currentPage-1;
-			$(".prev a").attr('disabled',"false");
 		}
 	}else if('nextPage'==param) {
-		if(currentPage==total_page){
+		if(currentPage*page_size>=total_page){
 			currentPage = total_page;
 			flag = 1;
-			$(".next a").attr('disabled',"true");
 		}else{
 			currentPage = currentPage+1;
-			$(".next a").attr('disabled',"false");
 		}
 	}
 	if(flag==0){
@@ -335,16 +335,13 @@ function showPage(param) {
 			flag = 1;
 		}else{
 			currentPage = currentPage-1;
-			$(".prev a").attr('disabled',"false");
 		}
 	}else if('nextPage'==param) {
-		if(currentPage==total_page){
+		if(currentPage*page_size>=total_page){
 			currentPage = total_page;
 			flag = 1;
-			$(".next a").attr('disabled',"true");
 		}else{
 			currentPage = currentPage+1;
-			$(".next a").attr('disabled',"false");
 		}
 	}
 	if(flag==0){

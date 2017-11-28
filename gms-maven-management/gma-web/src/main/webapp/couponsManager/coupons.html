@@ -37,6 +37,11 @@
 html{height:100%;}
 body{height:100%;overflow:hidden;}
 body{overflow:scroll;}
+#sample-table_paginate a:hover{
+	color: #777!important;
+    background-color: #fff!important;
+    border-color: #ddd!important;
+}
 </style>
 <body>
 	<div class="app">
@@ -96,7 +101,7 @@ body{overflow:scroll;}
 							</table>
 							
 							<!-- 分页开始 -->
-							<div class="row" id="fenye_coupon" style="display: none;">
+							<div class="row" id="fenye_coupon" style="display: none;font-size: 13px;">
 								<input type="hidden" id="search_page" value="1"/>
 								<input type="hidden" id="page_size" value="10"/>
 								<input type="hidden" id="total_page" value=""/>
@@ -111,9 +116,9 @@ body{overflow:scroll;}
 									<div class="dataTables_paginate paging_bootstrap"
 										id="sample-table_paginate">
 										<ul class="pagination">
-											<li class="prev disabled"><a href="javascript:void(0);" onclick="showPageCoupon('prePage');">上一页</a></li>
+											<li class="prev"><a href="javascript:void(0);" onclick="showPageCoupon('prePage');">上一页</a></li>
 											<li class="active"><a href="#" id="current_page">1</a></li>
-											<li class="next disabled"><a href="javascript:void(0);"  onclick="showPageCoupon('nextPage');">下一页</a></li>
+											<li class="next"><a href="javascript:void(0);"  onclick="showPageCoupon('nextPage');">下一页</a></li>
 										</ul>
 									</div>
 								</div>
