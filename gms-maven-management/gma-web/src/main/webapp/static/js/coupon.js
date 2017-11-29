@@ -19,7 +19,42 @@ $(function () {
 	}, function (start, end, label) {
 		$('#expiryDate').html(start.format('yyyy-MM-dd HH') + ' 至  ' + end.format('yyyy-MM-dd HH'));
 	})
+	
+	$('.form_datetime').datetimepicker({
+        language:  'fr',
+        weekStart: 1,
+        todayBtn:  1,
+		autoclose: 1,
+		todayHighlight: 1,
+		startView: 2,
+		forceParse: 0,
+        showMeridian: 1,
+        format: 'yyyy-mm-dd hh:ii',
+        language:"zh-CN"
+    });
+	 today("startExpiryDate");
+	 today("stopExpiryDate");
+	 
+	 keyupDate();
 })
+
+function today(input_id){
+	var myDate = new Date();
+	//获取当前年
+	var year=myDate.getFullYear();
+	//获取当前月
+	var month=myDate.getMonth()+1;
+	//获取当前日
+	var date=myDate.getDate(); 
+	var h=myDate.getHours();       //获取当前小时数(0-23)
+	var m=myDate.getMinutes();     //获取当前分钟数(0-59)
+	var now=year+'-'+p(month)+"-"+p(date)+" "+p(h)+':'+p(m);
+	document.getElementById(input_id).value = now;
+	function p(s) {
+	    return s < 10 ? '0' + s: s;
+	}
+	$('.form_datetime').attr("data-date",now);
+}
 
 Date.prototype.format = function (format) {
     var o = {
@@ -56,10 +91,20 @@ function keyup() {
 }
 
 function keyupAmount() {
-	$("#coupon-amount").html($("#couponAmount").val());
+	var minAmount = $("#min_amount").val();
+	$("#coupon-amount").html(minAmount);
+	$("#max_amount").attr("min",minAmount);
+}
+
+function keyRadomAmount(){
+	var minAmount = $("#min_amount").val();
+	var maxAmount = $("#max_amount").val();
+	$("#coupon-amount").html(minAmount+"~"+maxAmount);
 }
 function keyupDate() {
-	$("#coupon-date-section").html($("#expiryDate").val());
+	var startExpiryDate = $("#startExpiryDate").val();
+	var stopExpiryDate = $("#stopExpiryDate").val();
+	$("#coupon-date-section").html(startExpiryDate+"~"+stopExpiryDate);
 }
 function keyupIntro() {
 	$(".js-desc-detail").html($("#couponIntro").val());
@@ -68,9 +113,9 @@ function keyupIntro() {
 function emptyText(){
 	$("#couponName").val("");
 	$("#totalCount").val("");
-	$("#couponAmount").val("");
+	$("#min_amount").val("");
+	$("#max_amount").val("");
 	$("#couponCount").val("");
-	$("#expiryDate").val("");
 	$("#goodsIds").html("");
 	$("#couponIntro").val("");
 }
@@ -86,19 +131,41 @@ function saveCoupon() {
 		alert("优惠券发放总量不能为空！");
 		return false;
 	}
-	var couponAmount = $("#couponAmount").val();
-	if(isEmpty(couponAmount)){
-		alert("优惠券面值不能为空！");
-		return false;
+	var min_amount = $("#min_amount").val();
+	var max_amount = $("#max_amount").val();
+	if($("#set_amount input[type='checkbox']").is(':checked')){
+		if(isEmpty(min_amount)){
+			alert("优惠券随机面值最小值不能为空！");
+			return false;
+		}
+		if(isEmpty(max_amount)){
+			alert("优惠券随机面值最大值不能为空！");
+			return false;
+		}
+		if(min_amount>max_amount){
+			alert("优惠券随机面值设置有误！");
+			return false;
+		}
+	}else{
+		if(isEmpty(min_amount)){
+			alert("优惠券面值不能为空！");
+			return false;
+		}
+		max_amount = min_amount;
 	}
 	var couponCount = $("#couponCount").val();
 	if(isEmpty(couponCount)){
 		alert("优惠券每人限领数量不能为空！");
 		return false;
 	}
-	var expiryDate = $("#expiryDate").val();
-	if(isEmpty(expiryDate)){
+	var startExpiryDate = $("#startExpiryDate").val();
+	if(isEmpty(startExpiryDate)){
 		alert("优惠券使用起始日期不能为空！");
+		return false;
+	}
+	var stopExpiryDate = $("#stopExpiryDate").val();
+	if(isEmpty(stopExpiryDate)){
+		alert("优惠券使用结束日期不能为空！");
 		return false;
 	}
 	var goodsIds = $("#goodsIds").html();
@@ -113,9 +180,11 @@ function saveCoupon() {
 		data : {
 			couponName : couponName,
 			totalCount : totalCount,
-			couponAmount : couponAmount,
+			minAmount : min_amount,
+			maxAmount : max_amount,
 			couponCount : couponCount,
-			expiryDate : expiryDate,
+			startExpiryDate : startExpiryDate,
+			stopExpiryDate : stopExpiryDate,
 			couponIntro : couponIntro,
 			goodsIds:goodsIds
 		},
@@ -174,17 +243,24 @@ function couponAjax(num,currentPage,page_size){
 				$(".js-list-empty-region").hide();
 				$("#table_list").show();
 				$.each(data.couponList, function (index, item) {
+					var value = "";
+					if(item.minAmount == item.maxAmount){
+						value = item.minAmount;
+					}else{
+						value = item.minAmount+"~"+item.maxAmount;
+					}
 					html += "<tr>"
 							     +"<td>"+ item.couponName +"</td>"
-							     +"<td>"+ item.couponAmount +"</td>"
+							     +"<td>"+ value +"</td>"
 							     +"<td>"+ item.totalCount +"</td>"
 							     +"<td>"+ item.remainCount +"</td>"
 							     +"<td>"+ item.couponCount +"</td>"
-							     +"<td>"+ new Date(item.expiryDateStart).format("yyyy-MM-dd") +"</td>"
-							     +"<td>"+ new Date(item.expiryDateStop).format("yyyy-MM-dd") +"</td>";
+							     +"<td>"+ new Date(item.expiryDateStart).format("yyyy-MM-dd hh:mm") +"</td>"
+							     +"<td>"+ new Date(item.expiryDateStop).format("yyyy-MM-dd hh:mm") +"</td>";
 					if(num == 1){
 						html += "<td>"
-								     +"<a href='javascript:ovid()' onclick='coupon_del(this,"+ item.id +")' class='btn btn-danger operation_btn'>删除</a>"
+								     +"<a href='javascript:ovid()' onclick='coupon_del(this,"+ item.id +")' class='btn btn-danger operation_btn'>删除</a>&nbsp;&nbsp;&nbsp;&nbsp;"
+								     +"<a href='javascript:ovid()' onclick='coupon_share(this,"+ item.id +")' class='btn bg-deep-blue operation_btn'>共享</a>"
 							     +"</td>";
 					}
 					html += "</tr>";
@@ -251,6 +327,24 @@ function coupon_del(obj,id){
 			}
 		});
 	});
+}
+
+function coupon_share(obj,id){
+	/*layer.confirm('确认要共享吗？',{icon:0,},function(index){
+		$(obj).parents("tr").remove();
+		$.ajax( {
+			url : "/admin/coupon/delete",
+			type : "post",
+			data : {
+				id:id
+			},
+			success : function(data) {
+				if(data.success){
+					layer.msg('共享成功!',{icon:1,time:1000});
+				}
+			}
+		});
+	});*/
 }
 
 function chooseGoods(){
@@ -349,9 +443,13 @@ function showPage(param) {
 	 }
 }
 
-
-
-
-
+function is_check(){
+	if($("#set_amount input[type='checkbox']").is(':checked')){
+    	$(".js-random").show();
+    }else{
+    	$(".js-random").hide();
+    }
+}
+    
 
 

@@ -48,7 +48,7 @@ public class CouponController extends BaseController {
 		String[] goodsIds = request.getParameter("goodsIds").split(",");
 		/* 当前登录的店铺 */
 		Shop shop = getCurrentShop(request);
-		SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm");
 		Map<String, Object> resultMap = new HashMap<>();
 		Coupon coupon = new Coupon();
 		coupon.setCouponName(request.getParameter("couponName"));
@@ -58,11 +58,14 @@ public class CouponController extends BaseController {
 				.getParameter("totalCount")));
 		coupon.setCouponInfo(request.getParameter("couponIntro"));
 		coupon.setCouponCount(request.getParameter("couponCount"));
-		coupon.setCouponAmount(Double.parseDouble(request
-				.getParameter("couponAmount")));
-		String[] expiryDate = request.getParameter("expiryDate").split("-");
-		coupon.setExpiryDateStart(sdf.parse(expiryDate[0].trim()));
-		coupon.setExpiryDateStop(sdf.parse(expiryDate[1].trim()));
+		coupon.setMinAmount(Double.parseDouble(request
+				.getParameter("minAmount")));
+		coupon.setMaxAmount(Double.parseDouble(request
+				.getParameter("maxAmount")));
+		coupon.setExpiryDateStart(sdf.parse(request
+				.getParameter("startExpiryDate")));
+		coupon.setExpiryDateStop(sdf.parse(request
+				.getParameter("stopExpiryDate")));
 		coupon.setShopId(shop.getId());
 		couponService.save(coupon);
 		for (String goodsId : goodsIds) {
