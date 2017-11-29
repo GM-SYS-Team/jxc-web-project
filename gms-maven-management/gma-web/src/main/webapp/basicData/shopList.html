@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>商铺管理</title>
+<link rel="stylesheet" type="text/css" href="/static/jquery-easyui-1.3.3/themes/default/easyui.css"></link>
+<link rel="stylesheet" type="text/css" href="/static/jquery-easyui-1.3.3/themes/icon.css"></link>
+<script type="text/javascript" src="/static/jquery-easyui-1.3.3/jquery.min.js"></script>
+<script type="text/javascript" src="/static/jquery-easyui-1.3.3/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="/static/jquery-easyui-1.3.3/locale/easyui-lang-zh_CN.js"></script>
+<script type="text/javascript">
+
+	var url;
+	
+	function formatEdit(val,row){
+		return "<a href=\"javascript:exchangeCurrentShop("+row.id+")\"><img style='margin-top: 4px' src='/static/images/exchange.png' /></a>";
+	}
+	
+	function exchangeCurrentShop(rowid){
+		$.messager.confirm("系统提示","您确定要切换商铺吗？",function(r){
+				if(r){
+					$.post("/admin/shop/exchangeShop",{shopid:rowid},function(result){
+						if(result.success){
+							 parent.location.reload();
+						}else{
+							$.messager.alert("系统提示",result.errorInfo);
+						}
+					},"json");
+				} 
+	   });
+	}
+	
+	function deleteShop(){
+		var selectedRows=$("#dg").datagrid("getSelections");
+		if(selectedRows.length==0){
+			 $.messager.alert("系统提示","请选择要删除的数据！");
+			 return;
+		 }
+		var strIds=[];
+		 for(var i=0;i<selectedRows.length;i++){
+			 strIds.push(selectedRows[i].id);
+		 }
+		 var ids=strIds.join(",");
+		 $.messager.confirm("系统提示","您确定要删除这<font color=red>"+selectedRows.length+"</font>条数据吗？",function(r){
+				if(r){
+					$.post("/admin/shop/delete",{ids:ids},function(result){
+						if(result.success){
+							 $.messager.alert("系统提示","数据已成功删除！");
+							 $("#dg").datagrid("reload");
+						}else{
+							$.messager.alert("系统提示",result.errorInfo);
+						}
+					},"json");
+				} 
+	   });
+	}
+	
+	
+	function openShopAddDialog(){
+		$("#dlg").dialog("open").dialog("setTitle","添加商户信息");
+		$("#shopName").attr("readonly","");
+		url="/admin/shop/save";
+	}
+
+	function openShopModifyDialog(){
+		var selectedRows=$("#dg").datagrid("getSelections");
+		 if(selectedRows.length!=1){
+			 $.messager.alert("系统提示","请选择一条要修改的数据！");
+			 return;
+		 }
+		 var row=selectedRows[0];
+		 $("#dlg").dialog("open").dialog("setTitle","修改商铺信息");
+		 $("#fm").form("load",row);
+		 $("#shopName").attr("readonly","readonly");
+		 url="/admin/shop/save?id="+row.id;
+	 }
+	
+	
+	
+	function saveShop(){
+		 $("#fm").form("submit",{
+			url:url,
+			onSubmit:function(){
+				return $(this).form("validate");
+			},
+			success:function(result){
+				var result=eval('('+result+')');
+				if(result.success){
+					$.messager.alert("系统提示","保存成功！");
+					resetValue();
+					$("#dlg").dialog("close");
+					$("#dg").datagrid("reload");
+				}else{
+					$.messager.alert("系统提示",result.errorInfo);
+				}
+			}
+		 });
+	 }
+	
+	function resetValue(){
+		 $("#shopName").val("");
+		 $("#business").val("");
+		 $("#contactCode").val("");
+		 $("#contactNum").val("");
+		 $("#shopAddress").val("");
+		 $("#phoneNum").val("");
+		 $("#contactName").val("");
+	 }
+	
+	 function closeShopDialog(){
+		 $("#dlg").dialog("close");
+		 resetValue();
+	 }
+	 
+	 
+	 function searchShop(){
+		$("#dg").datagrid('load',{
+			"shopName":$("#s_name").val() 
+		});	
+	 }
+	 
+	$(document).ready(function(){
+		$('#dg').datagrid({
+				onDblClickRow: function(index,row){
+					$("#dlg").dialog("open").dialog("setTitle","修改用户信息");
+			   		 $("#fm").form("load",row);
+			   		 $("#shopName").attr("readonly","readonly")
+			   		 url="/admin/shop/save?id="+row.id;
+				}
+		});
+	});
+</script>
+</head>
+<body style="margin: 1px">
+<table id="dg" title="商铺管理" class="easyui-datagrid"
+   fitColumns="true" pagination="true" rownumbers="true" singleSelect="true"
+   url="/admin/shop/list" fit="true" toolbar="#tb">
+   <thead>
+   	<tr>    
+   		<th field="id" width="20" align="center">编号</th>
+   		<th field="shopName" width="100" align="center">商铺名称</th>
+   		<th field="business" width="50" align="center">经营范围</th>
+   		<th field="contactName" width="50" align="center">联系人姓名</th>
+   		<th field="contactNum" width="50" align="center">联系电话</th>
+   		<th field="phoneNum" width="50" align="center">手机号码</th>
+   		<th field="shopAddress" width="150" align="center">商铺地址</th>
+   		<th field="aa" width="50" align="center" formatter="formatEdit">商铺切换</th>
+   	</tr>
+   </thead>
+ </table>
+ 
+ <div id="tb">
+ 	<div>
+ 		
+ 		<a href="javascript:openShopModifyDialog()" class="easyui-linkbutton" iconCls="icon-edit" plain="true">修改</a>
+ 		<a href="javascript:deleteShop()" class="easyui-linkbutton" iconCls="icon-remove" plain="true">删除</a>
+ 	</div> 
+ 	<div>
+ 		&nbsp;商铺名称：&nbsp;<input type="text" id="s_name" size="20" onkeydown="if(event.keyCode==13) searchShop()"/>
+ 		<a href="javascript:searchShop()" class="easyui-linkbutton" iconCls="icon-search" plain="true">搜索</a>
+ 	</div>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  
+ </div>
+ 
+ <div id="dlg" class="easyui-dialog" style="width:500px;height:350px;padding: 10px 20px"
+   closed="true" buttons="#dlg-buttons" data-options="onClose:function(){resetValue()}">
+   
+	   <form id="fm" method="post">
+	   	<table cellspacing="8px">
+	   		<tr>
+	   			<td>商铺名称：</td>
+	   			<td><input type="text" id="shopName" name="shopName" class="easyui-validatebox"  required="true" style="width: 250px"/></td>
+	   		</tr>
+	   		<tr>
+	   			<td>经营范围：</td>
+	   			<td><input type="text" id="business" name="business" class="easyui-validatebox"  required="true" style="width: 250px"/></td>
+	   		</tr>
+	   		<tr>
+	   			<td>联系人：</td>
+	   			<td><input type="text" id="contactName" name="contactName" class="easyui-validatebox"  required="true" style="width: 250px"/></td>
+	   		</tr>
+	   		<tr>
+	   			<td>邮政编码：</td>
+	   			<td><input type="text" id="contactCode" name="contactCode" class="easyui-validatebox"  required="true" style="width: 250px"/></td>
+	   		</tr>
+	   		<tr>
+	   			<td>固定电话：</td>
+	   			<td><input type="text" id="contactNum" name="contactNum" class="easyui-validatebox"  required="true" style="width: 250px"/></td>
+	   		</tr>
+	   		<tr>
+	   			<td>手机号码：</td>
+	   			<td><input type="text" id="phoneNum" name="phoneNum" class="easyui-validatebox"  required="true" style="width: 250px"/></td>
+	   		</tr>
+	   		<tr>
+	   			<td>商户地址：</td>
+	   			<td><input type="text" id="shopAddress" name="shopAddress" class="easyui-validatebox"  required="true" style="width: 250px"/></td>
+	   		</tr>
+	   	</table>
+	   </form>
+ </div>
+ 
+ <div id="dlg-buttons">
+ 	<a href="javascript:saveShop()" class="easyui-linkbutton" iconCls="icon-ok">保存</a>
+ 	<a href="javascript:closeShopDialog()" class="easyui-linkbutton" iconCls="icon-cancel">关闭</a>
+ </div>
+</body>
+</html>

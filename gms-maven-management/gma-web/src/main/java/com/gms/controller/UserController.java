@@ -114,6 +114,7 @@ public class UserController {
 				}
 				
 				session.setAttribute("currentShop", shop);
+				currentUser.setShopList(shopList);//缓存店铺信息
 			}
 			session.setAttribute("currentUser", currentUser);
 			List<Role> roleList=roleService.findByUserId(currentUser.getId());

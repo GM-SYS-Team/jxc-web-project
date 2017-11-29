@@ -7,6 +7,7 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,7 @@ import com.gms.entity.jxc.Shop;
 import com.gms.entity.jxc.User;
 import com.gms.service.jxc.LogService;
 import com.gms.service.jxc.ShopService;
+import com.gms.util.Constant;
 
 @RestController
 @RequestMapping("/admin/shop")
@@ -52,7 +54,12 @@ public class ShopController extends BaseController {
 			HttpServletRequest request,
 			@RequestParam(value = "userId", required = false) Integer userId)
 			throws Exception {
-		shop.setUserId(userId);
+		shop.setUserId(userId);//优先考虑入参userid
+		//获取当前用户，判断是管理员操作还是商铺操作
+		User currentUser = getCurrentUser(request);
+		if(currentUser.getUserType().equals(Constant.SHOPTYPE)){//如果是商铺账户，只取当前账户的商铺列表
+			shop.setUserId(currentUser.getId());
+		}
 		List<Shop> shopList = shopService.list(shop, page, rows, Direction.ASC,
 				"id");
 		Long total = shopService.getCount(shop);
@@ -64,7 +71,7 @@ public class ShopController extends BaseController {
 	}
 
 	/**
-	 * 添加或者修改供应商信息
+	 * 添加或者修改供应商信息  管理员与商户公用逻辑
 	 * 
 	 * @param supplier
 	 * @return
@@ -73,6 +80,11 @@ public class ShopController extends BaseController {
 	@RequestMapping("/save")
 	public Map<String, Object> save(Shop shop, HttpServletRequest request)
 			throws Exception {
+		//获取当前用户，判断是管理员操作还是商铺操作
+		User currentUser = getCurrentUser(request);
+		if(currentUser.getUserType().equals(Constant.SHOPTYPE)){
+			shop.setUserId(currentUser.getId());
+		}
 		boolean flag = true;
 		shop.setUpdateTime(new Date());
 		Map<String, Object> resultMap = new HashMap<>();
@@ -82,12 +94,6 @@ public class ShopController extends BaseController {
 		if (shop.getId() != null) { // 写入日志
 			logService.save(new Log(Log.UPDATE_ACTION, "更新商铺信息" + shop));
 			Shop old_shop = shopService.findById(shop.getId());
-			if (!shop.getPhoneNum().equals(old_shop.getPhoneNum())) {
-				if (existedPhoneOne.size() > 0) {
-					resultMap.put("error", "该手机号码已存在");
-					flag = false;
-				}
-			}
 			if(!shop.getShopName().equals(old_shop.getShopName())){
 				if (existedNameOne != null) {
 					resultMap.put("error", "该商铺名称已存在");
@@ -145,5 +151,27 @@ public class ShopController extends BaseController {
 		resultMap.put("user", user);
 		return resultMap;
 	}
-
+	
+	/**
+	 * 商铺切换，重置session中的shop信息 
+	 * 
+	 * @param id
+	 * @param response
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping("/exchangeShop")
+	@RequiresPermissions(value = { "供应商管理" })
+	public Map<String, Object> exchangeShop(@RequestParam(value = "shopid", required = true)Integer shopid,HttpSession session) throws Exception {
+		Map<String, Object> resultMap = new HashMap<>();
+		try {
+			session.setAttribute("currentShop", shopService.findById(shopid));
+			resultMap.put("success", true);
+		} catch (Exception e) {
+			resultMap.put("success", false);
+			resultMap.put("errorInfo", "系统异常，请联系系统管理员");
+		}
+		
+		return resultMap;
+	}
 }

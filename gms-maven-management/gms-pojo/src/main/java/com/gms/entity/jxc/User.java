@@ -1,6 +1,7 @@
 package com.gms.entity.jxc;
 
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 import javax.persistence.Column;
@@ -87,9 +88,20 @@ public class User {
 	
 	@Transient
 	private String roles; 
-	
+	//缓存用户所有店铺
+	@Transient
+	private List<Shop> shopList;
+
 	@Column
 	private String imgUrl; //用户头像
+	
+	public List<Shop> getShopList() {
+		return shopList;
+	}
+
+	public void setShopList(List<Shop> shopList) {
+		this.shopList = shopList;
+	}
 	
 	@Column(length=11)
     private Integer currentLoginShopId;//上次访问的店铺

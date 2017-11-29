@@ -79,7 +79,7 @@ public class ShopServiceImpl implements ShopService{
 				Predicate predicate=cb.conjunction();
 				if(Shop!=null){
 					if(StringUtil.isNotEmpty(Shop.getShopName())){
-						predicate.getExpressions().add(cb.like(root.get("ShopName"), "%"+Shop.getShopName().trim()+"%"));
+						predicate.getExpressions().add(cb.like(root.get("shopName"), "%"+Shop.getShopName().trim()+"%"));
 					}	
 				}
 				return predicate;
