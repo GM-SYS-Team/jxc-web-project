@@ -259,9 +259,11 @@ function couponAjax(num,currentPage,page_size){
 							     +"<td>"+ new Date(item.expiryDateStop).format("yyyy-MM-dd hh:mm") +"</td>";
 					if(num == 1){
 						html += "<td>"
-								     +"<a href='javascript:ovid()' onclick='coupon_del(this,"+ item.id +")' class='btn btn-danger operation_btn'>删除</a>&nbsp;&nbsp;&nbsp;&nbsp;"
-								     +"<a href='javascript:ovid()' onclick='coupon_share(this,"+ item.id +")' class='btn bg-deep-blue operation_btn'>共享</a>"
-							     +"</td>";
+								     +"<a href='javascript:ovid()' onclick='coupon_del(this,"+ item.id +")' class='btn btn-danger operation_btn'>删除</a>";
+						if(item.status !=1){
+							html += "&nbsp;&nbsp;&nbsp;&nbsp;<a href='javascript:ovid()' onclick='coupon_share(this,"+ item.id +")' class='btn bg-deep-blue operation_btn' id='share_btn'>共享</a>"
+						}
+						html +="</td>";
 					}
 					html += "</tr>";
 				})
@@ -330,10 +332,10 @@ function coupon_del(obj,id){
 }
 
 function coupon_share(obj,id){
-	/*layer.confirm('确认要共享吗？',{icon:0,},function(index){
-		$(obj).parents("tr").remove();
+	layer.confirm('确认要共享吗？',{icon:0,},function(index){
+		$(obj).remove();
 		$.ajax( {
-			url : "/admin/coupon/delete",
+			url : "/admin/coupon/shareCoupon",
 			type : "post",
 			data : {
 				id:id
@@ -344,7 +346,7 @@ function coupon_share(obj,id){
 				}
 			}
 		});
-	});*/
+	});
 }
 
 function chooseGoods(){

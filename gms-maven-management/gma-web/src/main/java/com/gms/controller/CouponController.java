@@ -14,6 +14,7 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.gms.entity.jxc.Coupon;
@@ -111,6 +112,25 @@ public class CouponController extends BaseController {
 		resultMap.put("couponList", couponListResult);
 		resultMap.put("size", couponListSize);
 		logService.save(new Log(Log.SEARCH_ACTION, "查询优惠券信息")); // 写入日志
+		return resultMap;
+	}
+	
+	
+	/**
+	 * 优惠券共享
+	 * 
+	 * @param couponId
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping("/shareCoupon")
+	@ResponseBody
+	public Map<String, Object> shareCoupon(Integer id,HttpServletRequest request) throws Exception {
+		Coupon coupon = couponService.findCouponById(id);
+		coupon.setStatus(Coupon.STATUS_SHARE);
+		couponService.save(coupon);
+		Map<String, Object> resultMap = new HashMap<>();
+		resultMap.put("success", true);
 		return resultMap;
 	}
 }
