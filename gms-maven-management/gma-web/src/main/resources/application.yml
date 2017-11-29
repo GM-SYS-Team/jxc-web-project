@@ -9,7 +9,7 @@ spring:
         show-sql: true
     datasource: 
         name: db_jxc
-        url: jdbc:mysql://localhost:3306/gms_new
+        url: jdbc:mysql://localhost:3306/db_jxc?characterEncoding=UTF-8
         username: root
         password: root 
         # 使用druid数据源

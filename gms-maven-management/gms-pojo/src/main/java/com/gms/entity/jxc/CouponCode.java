@@ -1,4 +1,5 @@
 package com.gms.entity.jxc;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -7,6 +8,9 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
 /**
  * @author zhoutianqi
  * @className CouponCode.java
@@ -26,12 +30,7 @@ public class CouponCode {
     @ManyToOne
 	@JoinColumn(name="couponId")
 	private Coupon coupon; // 优惠券
-    /**
-     * 优惠券编码
-     */
-    @Column(length=45)
-    private String couponCode;
-
+	
     /**
      * 用户ID
      */
@@ -43,7 +42,22 @@ public class CouponCode {
      */
     @Column(length=1)
     private String isUsed;
+    
+    /**
+     * 优惠卷金额
+     */
+    private Integer amount;
 
+    
+    /* 领取时间*/
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date receiveTime;
+    
+    /*使用时间*/
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date usedTime;
+    
+    
     /**
      * @return id
      */
@@ -57,7 +71,6 @@ public class CouponCode {
     public void setId(Integer id) {
         this.id = id;
     }
-
 	public Coupon getCoupon() {
 		return coupon;
 	}
@@ -66,25 +79,16 @@ public class CouponCode {
 		this.coupon = coupon;
 	}
 
+
+	public Integer getAmount() {
+		return amount;
+	}
+
+	public void setAmount(Integer amount) {
+		this.amount = amount;
+	}
+
 	/**
-     * 获取优惠券编码
-     *
-     * @return coupon_code - 优惠券编码
-     */
-    public String getCouponCode() {
-        return couponCode;
-    }
-
-    /**
-     * 设置优惠券编码
-     *
-     * @param couponCode 优惠券编码
-     */
-    public void setCouponCode(String couponCode) {
-        this.couponCode = couponCode;
-    }
-
-    /**
      * 获取用户ID
      *
      * @return user_id - 用户ID
@@ -119,4 +123,21 @@ public class CouponCode {
     public void setIsUsed(String isUsed) {
         this.isUsed = isUsed;
     }
+    
+
+	public Date getUsedTime() {
+		return usedTime;
+	}
+
+	public void setUsedTime(Date usedTime) {
+		this.usedTime = usedTime;
+	}
+
+	public Date getReceiveTime() {
+		return receiveTime;
+	}
+
+	public void setReceiveTime(Date receiveTime) {
+		this.receiveTime = receiveTime;
+	}
 }

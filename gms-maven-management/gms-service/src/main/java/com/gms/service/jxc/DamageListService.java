@@ -50,5 +50,11 @@ public interface DamageListService {
 	 * @param id
 	 */
 	public void delete(Integer id);
+	
+	/**
+	 * 报损订单总数
+	 * @return
+	 */
+	public int getDamageOrderListCount(Integer shopId);
 
 }

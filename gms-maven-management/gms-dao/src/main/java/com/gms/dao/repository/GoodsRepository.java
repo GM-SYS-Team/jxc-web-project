@@ -30,5 +30,13 @@ public interface GoodsRepository extends JpaRepository<Goods, Integer>,JpaSpecif
 	 */
 	@Query(value="SELECT * FROM t_goods WHERE inventory_quantity<min_num and shop_id=?1",nativeQuery=true)
 	public List<Goods> listAlarm(Integer shopId);
+
+	/**
+	 * 根据店铺ID查询对应的商品
+	 * @param shopId
+	 * @return
+	 */
+	@Query(value="SELECT * FROM t_goods where shop_id=?1",nativeQuery=true)
+	public List<Goods> findGoodsByShopId(Integer shopId);
 	
 }

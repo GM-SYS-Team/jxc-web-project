@@ -20,19 +20,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-import com.gms.entity.jxc.Log;
-import com.gms.entity.jxc.User;
 import com.gms.entity.jxc.CustomerReturnList;
 import com.gms.entity.jxc.CustomerReturnListGoods;
-import com.gms.service.jxc.LogService;
-import com.gms.service.jxc.UserService;
+import com.gms.entity.jxc.Log;
+import com.gms.entity.jxc.User;
 import com.gms.service.jxc.CustomerReturnListGoodsService;
 import com.gms.service.jxc.CustomerReturnListService;
+import com.gms.service.jxc.LogService;
+import com.gms.service.jxc.UserService;
 import com.gms.util.Constant;
 import com.gms.util.DateUtil;
 import com.gms.util.StringUtil;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 /**
  * 客户退货单Controller类
@@ -75,7 +75,7 @@ public class CustomerReturnListAdminController extends BaseController{
 	public Map<String,Object> list(CustomerReturnList customerReturnList,HttpServletRequest request)throws Exception{
 		User currentUser = getCurrentUser(request);
 		if(currentUser.getUserType().equals(Constant.SHOPTYPE)){
-			customerReturnList.setShopId(currentUser.getShopId());
+			customerReturnList.setShopId(currentUser.getCurrentLoginShopId());
 		}
 		Map<String, Object> resultMap = new HashMap<>();
 		List<CustomerReturnList> customerReturnListList=customerReturnListService.list(customerReturnList, Direction.DESC, "customerReturnDate");
@@ -114,7 +114,7 @@ public class CustomerReturnListAdminController extends BaseController{
 			HttpServletRequest request)throws Exception{
 		User currentUser = getCurrentUser(request);
 		if(currentUser.getUserType().equals(Constant.SHOPTYPE)){
-			customerReturnList.setShopId(currentUser.getShopId());
+			customerReturnList.setShopId(currentUser.getCurrentLoginShopId());
 		}
 		Map<String, Object> resultMap = new HashMap<>();
 		List<CustomerReturnList> customerReturnListList=customerReturnListService.list(customerReturnList, Direction.DESC, "customerReturnDate");
@@ -168,7 +168,7 @@ public class CustomerReturnListAdminController extends BaseController{
 			HttpServletRequest request)throws Exception{
 		User currentUser = getCurrentUser(request);
 		if(currentUser.getUserType().equals(Constant.SHOPTYPE)){
-			customerReturnList.setShopId(currentUser.getShopId());
+			customerReturnList.setShopId(currentUser.getCurrentLoginShopId());
 		}
 		Map<String, Object> resultMap = new HashMap<>();
 		customerReturnList.setUser(userService.findByUserName((String) SecurityUtils.getSubject().getPrincipal())); // 设置操作用户

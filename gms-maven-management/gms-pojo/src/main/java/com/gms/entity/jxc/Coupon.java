@@ -3,7 +3,6 @@ package com.gms.entity.jxc;
 import java.util.Date;
 
 import javax.persistence.*;
-
 /**
  * @author zhoutianqi
  * @className Coupon.java
@@ -18,10 +17,9 @@ public class Coupon {
 	@GeneratedValue
 	private Integer id;
 
-	@ManyToOne
-	@JoinColumn(name = "shopId")
-	private Shop shop; // 商品类别
-
+	@Column
+	private Integer shopId;
+	
 	/**
 	 * 优惠券批次号
 	 */
@@ -59,36 +57,32 @@ public class Coupon {
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date expiryDateStop;
 
+	@Column
 	private Double minAmount;
 	
+	@Column
 	private Double maxAmount;
-	/**
-	 * 优惠券优惠金额
-	 */
+	
+	@Column
 	private Double couponAmount;
-
-	public Double getCouponAmount() {
-		return couponAmount;
-	}
-
-	public void setCouponAmount(Double couponAmount) {
-		this.couponAmount = couponAmount;
-	}
-
+	
+	/**
+	 * 优惠券状态 默认为0， 1-发放优惠券
+	 */
+	@Column
+	private String status;
+	
+	/**
+	 * 表示优惠券为共享优惠券
+	 */
+	public final static String STATUS_SHARE = "1";
+	
 	public Integer getId() {
 		return id;
 	}
 
 	public void setId(Integer id) {
 		this.id = id;
-	}
-
-	public Shop getShop() {
-		return shop;
-	}
-
-	public void setShop(Shop shop) {
-		this.shop = shop;
 	}
 
 	public Integer getTotalCount() {
@@ -163,6 +157,27 @@ public class Coupon {
 		this.maxAmount = maxAmount;
 	}
 
-	
-	
+	public Double getCouponAmount() {
+		return couponAmount;
+	}
+
+	public void setCouponAmount(Double couponAmount) {
+		this.couponAmount = couponAmount;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+	public Integer getShopId() {
+		return shopId;
+	}
+
+	public void setShopId(Integer shopId) {
+		this.shopId = shopId;
+	}
 }

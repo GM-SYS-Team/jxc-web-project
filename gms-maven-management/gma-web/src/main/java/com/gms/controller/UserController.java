@@ -97,8 +97,22 @@ public class UserController {
 			subject.login(token); // 登录认证
 			String userName=(String) SecurityUtils.getSubject().getPrincipal();
 			User currentUser=userService.findByUserName(userName);
-			if(currentUser.getUserType().equals(Constant.SHOPTYPE)){
-				Shop shop = shopService.findById(currentUser.getShopId());
+			List<Shop> shopList = shopService.findByUserId(currentUser.getId());
+			if(currentUser.getUserType().equals(Constant.SHOPTYPE) && shopList.isEmpty()){
+				map.put("success", false);
+	    		map.put("errorInfo", "该用户名下未注册商铺");
+	    		return map;
+			}
+ 			if(currentUser.getUserType().equals(Constant.SHOPTYPE)){
+				Shop shop =null;
+				if(currentUser.getCurrentLoginShopId()!=null){
+					shop = shopService.findById(currentUser.getCurrentLoginShopId());
+				}else{
+					shop = shopList.get(0);//默认进入第一家店铺
+					currentUser.setCurrentLoginShopId(shop.getId());
+					userService.save(currentUser);
+				}
+				
 				session.setAttribute("currentShop", shop);
 			}
 			session.setAttribute("currentUser", currentUser);
@@ -106,6 +120,11 @@ public class UserController {
 			map.put("roleList", roleList);
 			map.put("roleSize", roleList.size());
 			map.put("success", true);
+			if(currentUser.getUserType().equals(Constant.ROOTTYPE)){
+				map.put("userType", "root");
+			}else{
+				map.put("userType", "shop");
+			}
 			logService.save(new Log(Log.LOGIN_ACTION,"用户登录")); // 写入日志
 			return map;
 		}catch(Exception e){

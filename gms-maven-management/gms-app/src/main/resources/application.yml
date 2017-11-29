@@ -8,9 +8,11 @@ spring:
         show-sql: true
     datasource: 
         name: db_jxc
-        url: jdbc:mysql://45.77.28.184:3306/test?characterEncoding=utf-8
-        username: screeen
-        password: kWKAvgiEgbwu52U6
+        url: jdbc:mysql://121.40.178.249:3306/cms?characterEncoding=utf-8
+        username: baseframe
+        password: baseframe123
+        #username: screeen
+        #password: kWKAvgiEgbwu52U6
         # 使用druid数据源
         type: com.alibaba.druid.pool.DruidDataSource
         driver-class-name: com.mysql.jdbc.Driver
@@ -32,3 +34,4 @@ spring:
 picuploadPath: E://test//
 
 model: debug
+

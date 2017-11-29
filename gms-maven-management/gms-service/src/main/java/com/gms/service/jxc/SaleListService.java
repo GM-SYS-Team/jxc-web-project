@@ -72,5 +72,10 @@ public interface SaleListService {
 	 * @return
 	 */
 	public List<Object> countSaleByMonth(String begin,String end,Integer shopId);
-
+	
+	/**
+	 * 统计收货单各状态订单总数
+	 * @return
+	 */
+	public int getSaleOrderPayedListCount(Integer shopId,Integer state);
 }

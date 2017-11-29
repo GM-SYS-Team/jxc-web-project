@@ -51,7 +51,7 @@ public class SupplierAdminController extends BaseController{
 			HttpServletRequest request)throws Exception{
 		User currentUser = getCurrentUser(request);
 		if(currentUser.getUserType().equals(Constant.SHOPTYPE)){
-			supplier.setShopId(currentUser.getShopId());
+			supplier.setShopId(currentUser.getCurrentLoginShopId());
 		}
 		List<Supplier> supplierList=supplierService.list(supplier, page, rows, Direction.ASC, "id");
 		Long total=supplierService.getCount(supplier);
@@ -77,7 +77,7 @@ public class SupplierAdminController extends BaseController{
 			q="";
 		}
 		if(currentUser.getUserType().equals(Constant.SHOPTYPE)){
-			return supplierService.findByShopAndName(currentUser.getShopId(),"%"+q+"%");
+			return supplierService.findByShopAndName(currentUser.getCurrentLoginShopId(),"%"+q+"%");
 		}
 		return supplierService.findByName("%"+q+"%");
 	}
@@ -100,7 +100,7 @@ public class SupplierAdminController extends BaseController{
 		}
 		User currentUser = getCurrentUser(request);
 		if(currentUser.getUserType().equals(Constant.SHOPTYPE)){
-			supplier.setShopId(currentUser.getShopId());
+			supplier.setShopId(currentUser.getCurrentLoginShopId());
 		}
 		Map<String, Object> resultMap = new HashMap<>();
 		supplierService.save(supplier);			

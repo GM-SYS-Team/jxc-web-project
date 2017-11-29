@@ -26,4 +26,8 @@ public interface UserRepository extends JpaRepository<User, Integer>,JpaSpecific
 
 	@Query(value="select * from t_user where phone_num=?1", nativeQuery=true)
 	public User findUserByTelephone(String telephone);
+
+
+	@Query(value="select * from t_user where phone_num=?1 and user_type=?2", nativeQuery=true)
+	public User findUserByTelephone(String telephone, String userType);
 }
