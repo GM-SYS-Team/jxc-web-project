@@ -45,6 +45,13 @@ public class ShopController extends BaseAppController {
 		User user = getUser();
 		Shop shop = new Shop();
 		shop.setUserId(user.getId());
+		if (!User.SHOPER.equals(user.getUserType())) {
+			return error("该用户不是商户");
+		}
+		if (page == null) {
+			page = 1;
+			rows = 10;
+		}
 		List<Shop> shopList=shopService.list(shop, page, rows, Direction.ASC, "id");
 		Long total=shopService.getCount(shop);
 		Map<String, Object> resultMap = success();
@@ -68,8 +75,11 @@ public class ShopController extends BaseAppController {
 		if (StringUtil.isEmpty(shop.getShopName())) {
 			return error("店铺名称不能为空");
 		}
+		if (!User.SHOPER.equals(user.getUserType())) {
+			return error("该用户不是商户");
+		}
 		shop.setUpdateTime(new Date());
-		if(shop.getId()!=null){ 
+		if (shop.getId()==null){ 
 			shop.setCreateTime(new Date());
 		}
 		shop.setUserId(user.getId());
