@@ -109,7 +109,7 @@ public class ShopController extends BaseAppController {
 		List<Goods> goodsList = goodsService.findGoodsByShopId(shopId);
 		if (goodsList != null && goodsList.size() > 0) {
 			return error("该店铺下存在商品，不可删除");
-		}
+		}	
 		shopService.delete(shopId);							
 		return success();
 	}

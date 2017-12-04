@@ -15,7 +15,7 @@ public class MyWebAppConfigurer extends WebMvcConfigurerAdapter {
 	public HandlerInterceptor getUserInterceptor() {
 		return new UserInterceptor();
 	}
-
+	
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
 		// 多个拦截器组成一个拦截器链
