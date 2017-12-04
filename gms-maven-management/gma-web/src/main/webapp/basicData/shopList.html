@@ -105,6 +105,8 @@
 		 $("#shopAddress").val("");
 		 $("#phoneNum").val("");
 		 $("#contactName").val("");
+		 $("#pictureFile").val("");
+		 $("#pictureAddress").val("");
 	 }
 	
 	 function closeShopDialog(){
@@ -164,7 +166,7 @@
  <div id="dlg" class="easyui-dialog" style="width:500px;height:350px;padding: 10px 20px"
    closed="true" buttons="#dlg-buttons" data-options="onClose:function(){resetValue()}">
    
-	   <form id="fm" method="post">
+	   <form id="fm" method="post" enctype="multipart/form-data">
 	   	<table cellspacing="8px">
 	   		<tr>
 	   			<td>商铺名称：</td>
@@ -193,6 +195,14 @@
 	   		<tr>
 	   			<td>商户地址：</td>
 	   			<td><input type="text" id="shopAddress" name="shopAddress" class="easyui-validatebox"  required="true" style="width: 250px"/></td>
+	   		</tr>
+	   		<tr>
+	   			<td>头像选择：</td>
+	   			<td><input id="pictureFile" name="pictureFile"  style="width:250px" type="file" ></td>
+	   		</tr>
+	   		<tr hidden="hidden">
+	   			<td></td>
+	   			<td><input type="text" id="pictureAddress" name="pictureAddress" class="easyui-validatebox" style="width: 250px"/></td>
 	   		</tr>
 	   	</table>
 	   </form>

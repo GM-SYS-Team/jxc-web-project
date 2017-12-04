@@ -9,7 +9,7 @@ spring:
         show-sql: true
     datasource: 
         name: db_jxc
-        url: jdbc:mysql://localhost:3306/db_jxc?characterEncoding=UTF-8
+        url: jdbc:mysql://localhost:3306/gms_new?characterEncoding=UTF-8
         username: root
         password: root 
         # 使用druid数据源
@@ -41,5 +41,8 @@ spring:
         suffix: .html
         template-loader-path: classpath:/templates/
         request-context-attribute: request
-picuploadPath: E://test//
+image: 
+    server: 
+        url: http://localhost:7000
+        action: picture/upload
         

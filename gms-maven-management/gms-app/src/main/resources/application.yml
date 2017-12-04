@@ -33,5 +33,6 @@ spring:
         
 picuploadPath: E://test//
 
+picPath: localhost:8080/
 model: debug
 

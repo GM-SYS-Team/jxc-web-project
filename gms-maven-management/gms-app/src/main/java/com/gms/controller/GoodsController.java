@@ -37,8 +37,8 @@ public class GoodsController extends BaseAppController {
 	private CouponService couponService;
 	
 	//文件存储路径
-	@Value(value = "${picuploadPath}")
-	private String picturePath;
+	@Value(value = "${picPath}")
+	private String picPath;
 	
 	
 	/**
@@ -93,7 +93,7 @@ public class GoodsController extends BaseAppController {
 		if (StringUtil.isEmpty(pictureAddress)) {
 			return error("图片地址不能为空");
 		}
-		if (!pictureAddress.startsWith("picturePath")) {
+		if (!pictureAddress.startsWith(picPath)) {
 			return error("图片地址错误");
 		}
 		Shop shop = shopService.queryShopByShopIdAndUserId(shopId, user.getId());

@@ -16,13 +16,19 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import com.gms.conf.ImageServerProperties;
 import com.gms.entity.jxc.Log;
 import com.gms.entity.jxc.Shop;
 import com.gms.entity.jxc.User;
 import com.gms.service.jxc.LogService;
 import com.gms.service.jxc.ShopService;
 import com.gms.util.Constant;
+import com.gms.util.HttpsUtil;
+import com.gms.util.StringUtil;
 
 @RestController
 @RequestMapping("/admin/shop")
@@ -37,6 +43,8 @@ public class ShopController extends BaseController {
 	private LogService logService;
 	@Autowired
 	private ShopService shopService;
+	@Autowired
+	private ImageServerProperties imageServerProperties;
 
 	/**
 	 * 分页查询商铺信息
@@ -78,16 +86,33 @@ public class ShopController extends BaseController {
 	 * @throws Exception
 	 */
 	@RequestMapping("/save")
-	public Map<String, Object> save(Shop shop, HttpServletRequest request)
+	public Map<String, Object> save(Shop shop, HttpServletRequest request,@RequestParam("pictureFile") MultipartFile pictureFile)
 			throws Exception {
+		boolean flag = true;
+		Map<String, Object> resultMap = new HashMap<>();
 		//获取当前用户，判断是管理员操作还是商铺操作
 		User currentUser = getCurrentUser(request);
 		if(currentUser.getUserType().equals(Constant.SHOPTYPE)){
 			shop.setUserId(currentUser.getId());
 		}
-		boolean flag = true;
+		//选择了图像文件才会上传，否则用老的发黄的旧照片
+		if(pictureFile!=null && StringUtil.isValid(pictureFile.getOriginalFilename())){
+			String result = HttpsUtil.getInstance().sendHttpPost(imageServerProperties.getUrl()+"/"+
+					imageServerProperties.getAction(), pictureFile);
+			if(result!=null){
+				String imageName = null;
+				JSONObject resultJson = (JSONObject)JSONObject.parse(result);
+				if(resultJson.getString("message").equals("Ok")){
+					imageName = resultJson.getJSONObject("data").getString("imageName");
+					shop.setPictureAddress(imageName);
+				}else{
+					resultMap.put("error", "服务器请假了，请稍后重试");
+					flag = false;
+				}
+			}
+		}
+		
 		shop.setUpdateTime(new Date());
-		Map<String, Object> resultMap = new HashMap<>();
 		Shop existedNameOne = shopService.findByShopName(shop.getShopName());
 		List<Shop> existedPhoneOne = shopService.findPhoneNum(shop
 				.getPhoneNum());

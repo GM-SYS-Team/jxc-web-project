@@ -72,10 +72,12 @@ public class UserController extends BaseAppController {
      * 用户登录请求
      * @param user
      * @return
+	 * @throws Exception 
      */
     @ResponseBody
     @RequestMapping("/customer/login")
-    public Map<String,Object> login(String password, String telephone){
+    public Map<String,Object> login(String password, String telephone) throws Exception{
+    	password.getBytes();
     	if (StringUtils.isEmpty(telephone)) {
     		return error("手机号不能为空");
     	}
