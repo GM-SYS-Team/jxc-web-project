@@ -20,7 +20,7 @@ public class CouponGoods {
 	private Integer id; // 编号
 
 	@Column(length=20)
-	private Integer copponId; // 优惠券ID
+	private Integer couponId; // 优惠券ID
 	
 	@Column(length=20)
 	private Integer shopId; // 商铺ID
@@ -38,12 +38,12 @@ public class CouponGoods {
 		this.id = id;
 	}
 
-	public Integer getCopponId() {
-		return copponId;
+	public Integer getCouponId() {
+		return couponId;
 	}
 
-	public void setCopponId(Integer copponId) {
-		this.copponId = copponId;
+	public void setCouponId(Integer couponId) {
+		this.couponId = couponId;
 	}
 
 	public Integer getShopId() {

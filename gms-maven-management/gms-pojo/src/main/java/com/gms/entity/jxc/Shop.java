@@ -74,8 +74,26 @@ public class Shop {
      */
     @Column(length=100)
     private String shopName;
+    
+    /**
+     * 门店头像地址
+     */
+    @Column(length=100)
+    private String pictureAddress;
+    
 
-    public String getShopName() {
+    @Column(length=11)
+    private Integer userId;
+
+    public String getPictureAddress() {
+		return pictureAddress;
+	}
+
+	public void setPictureAddress(String pictureAddress) {
+		this.pictureAddress = pictureAddress;
+	}
+
+	public String getShopName() {
 		return shopName;
 	}
 
@@ -258,4 +276,12 @@ public class Shop {
     public void setShopAddress(String shopAddress) {
         this.shopAddress = shopAddress;
     }
+
+	public Integer getUserId() {
+		return userId;
+	}
+
+	public void setUserId(Integer userId) {
+		this.userId = userId;
+	}
 }

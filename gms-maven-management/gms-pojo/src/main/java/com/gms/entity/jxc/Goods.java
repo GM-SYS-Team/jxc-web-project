@@ -60,6 +60,9 @@ public class Goods {
 	@Column(length=1000)
 	private String remarks; // 备注
 	
+	@Column(length=200)
+	private String pictureAddress; // 图片地址
+	
 	@Column(length=11)
     private Integer shopId; // 商户
 
@@ -75,6 +78,14 @@ public class Goods {
 	private String codeOrName; // 查询用到  根据商品编码或者商品名称查询
 
 	
+
+	public String getPictureAddress() {
+		return pictureAddress;
+	}
+
+	public void setPictureAddress(String pictureAddress) {
+		this.pictureAddress = pictureAddress;
+	}
 
 	public Integer getId() {
 		return id;

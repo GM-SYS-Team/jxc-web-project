@@ -120,6 +120,8 @@ public class PurchaseListServiceImpl implements PurchaseListService{
 		purchaseListRepository.save(purchaseList);
 	}
 
-
-
+	@Override
+	public int getPurchasePayedListCount(Integer shopId,Integer state) {
+		return purchaseListRepository.getPurchasePayedListCount(shopId,state);
+	}
 }

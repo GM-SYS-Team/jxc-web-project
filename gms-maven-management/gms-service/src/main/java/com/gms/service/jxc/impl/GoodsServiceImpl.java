@@ -189,6 +189,12 @@ public class GoodsServiceImpl implements GoodsService {
 		return goodsRepository.listAlarm(shopId);
 	}
 
+	@Override
+	public List<Goods> findGoodsByShopId(Integer shopId) {
+		
+		return goodsRepository.findGoodsByShopId(shopId);
+	}
+
 
 
 }

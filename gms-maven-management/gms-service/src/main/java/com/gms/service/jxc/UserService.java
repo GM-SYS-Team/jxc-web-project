@@ -71,4 +71,11 @@ public interface UserService {
 	 * @return
 	 */
 	public User findUserByTelephone(String telephone);
+
+	/**
+	 * 根据手机号查询用户
+	 * @param telephone
+	 * @return
+	 */
+	public User findUserByTelephone(String telephone, String userType);
 }

@@ -48,18 +48,22 @@ public class ShopServiceImpl implements ShopService{
 	}
 
 	@Override
-	public List<Shop> list(Shop Shop, Integer page, Integer pageSize, Direction direction, String... properties) {
+	public List<Shop> list(Shop shop, Integer page, Integer pageSize, Direction direction, String... properties) {
 		Pageable pageable=new PageRequest(page-1, pageSize, direction,properties);
 		Page<Shop> pageShop=shopRepository.findAll(new Specification<Shop>() {
 			
 			@Override
 			public Predicate toPredicate(Root<Shop> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
 				Predicate predicate=cb.conjunction();
-				if(Shop!=null){
-					if(StringUtil.isNotEmpty(Shop.getShopName())){
-						predicate.getExpressions().add(cb.like(root.get("ShopName"), "%"+Shop.getShopName().trim()+"%"));
+				if(shop!=null){
+					if(StringUtil.isNotEmpty(shop.getShopName())){
+						predicate.getExpressions().add(cb.like(root.get("shopName"), "%"+shop.getShopName().trim()+"%"));
 					}	
+					if(shop.getUserId()!=null){
+						predicate.getExpressions().add(cb.equal(root.get("userId"), shop.getUserId()));	
+					}
 				}
+				
 				return predicate;
 			}
 		}, pageable);
@@ -75,7 +79,7 @@ public class ShopServiceImpl implements ShopService{
 				Predicate predicate=cb.conjunction();
 				if(Shop!=null){
 					if(StringUtil.isNotEmpty(Shop.getShopName())){
-						predicate.getExpressions().add(cb.like(root.get("ShopName"), "%"+Shop.getShopName().trim()+"%"));
+						predicate.getExpressions().add(cb.like(root.get("shopName"), "%"+Shop.getShopName().trim()+"%"));
 					}	
 				}
 				return predicate;
@@ -90,9 +94,17 @@ public class ShopServiceImpl implements ShopService{
 	}
 	
 	@Override
-	public Shop findPhoneNum(String telephone) {
+	public List<Shop> findPhoneNum(String telephone) {
 		return shopRepository.findPhoneNum(telephone);
 	}
 
+	@Override
+	public Shop queryShopByShopIdAndUserId(Integer shopId, Integer userId) {
+		return shopRepository.queryShopByShopIdAndUserId(shopId, userId);
+	}
 
+	@Override
+	public List<Shop> findByUserId(Integer userId) {
+		return shopRepository.findByUserId(userId);
+	}
 }

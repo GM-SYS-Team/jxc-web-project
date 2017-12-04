@@ -1,5 +1,6 @@
 $(function () { 
-	couponAjax(0);
+	var page_size = $("#page_size").val();
+	couponAjax(0,1,page_size);
 	$('#expiryDate').daterangepicker({ 
 	    format: 'yyyy-MM-dd',
 	    startDate: new Date(),
@@ -18,7 +19,42 @@ $(function () {
 	}, function (start, end, label) {
 		$('#expiryDate').html(start.format('yyyy-MM-dd HH') + ' 至  ' + end.format('yyyy-MM-dd HH'));
 	})
+	
+	$('.form_datetime').datetimepicker({
+        language:  'fr',
+        weekStart: 1,
+        todayBtn:  1,
+		autoclose: 1,
+		todayHighlight: 1,
+		startView: 2,
+		forceParse: 0,
+        showMeridian: 1,
+        format: 'yyyy-mm-dd hh:ii',
+        language:"zh-CN"
+    });
+	 today("startExpiryDate");
+	 today("stopExpiryDate");
+	 
+	 keyupDate();
 })
+
+function today(input_id){
+	var myDate = new Date();
+	//获取当前年
+	var year=myDate.getFullYear();
+	//获取当前月
+	var month=myDate.getMonth()+1;
+	//获取当前日
+	var date=myDate.getDate(); 
+	var h=myDate.getHours();       //获取当前小时数(0-23)
+	var m=myDate.getMinutes();     //获取当前分钟数(0-59)
+	var now=year+'-'+p(month)+"-"+p(date)+" "+p(h)+':'+p(m);
+	document.getElementById(input_id).value = now;
+	function p(s) {
+	    return s < 10 ? '0' + s: s;
+	}
+	$('.form_datetime').attr("data-date",now);
+}
 
 Date.prototype.format = function (format) {
     var o = {
@@ -40,17 +76,48 @@ Date.prototype.format = function (format) {
 }
 
 function addCoupon() {
-	$("#list_coupon").hide();
-	$("#add_coupon").show();
+	emptyText();
+	$("#list_coupon").hide(1000);
+	$("#add_coupon").show(1000);
 }
 
 function btnQuit() {
-	$("#list_coupon").show();
-	$("#add_coupon").hide();
+	$("#list_coupon").show(1000);
+	$("#add_coupon").hide(1000);
 }
 
 function keyup() {
-	$("#coupon-title").html($("#title").val());
+	$("#coupon_title_eg").html($("#couponName").val());
+}
+
+function keyupAmount() {
+	var minAmount = $("#min_amount").val();
+	$("#coupon-amount").html(minAmount);
+	$("#max_amount").attr("min",minAmount);
+}
+
+function keyRadomAmount(){
+	var minAmount = $("#min_amount").val();
+	var maxAmount = $("#max_amount").val();
+	$("#coupon-amount").html(minAmount+"~"+maxAmount);
+}
+function keyupDate() {
+	var startExpiryDate = $("#startExpiryDate").val();
+	var stopExpiryDate = $("#stopExpiryDate").val();
+	$("#coupon-date-section").html(startExpiryDate+"~"+stopExpiryDate);
+}
+function keyupIntro() {
+	$(".js-desc-detail").html($("#couponIntro").val());
+}
+
+function emptyText(){
+	$("#couponName").val("");
+	$("#totalCount").val("");
+	$("#min_amount").val("");
+	$("#max_amount").val("");
+	$("#couponCount").val("");
+	$("#goodsIds").html("");
+	$("#couponIntro").val("");
 }
 
 function saveCoupon() {
@@ -64,22 +131,44 @@ function saveCoupon() {
 		alert("优惠券发放总量不能为空！");
 		return false;
 	}
-	var couponAmount = $("#couponAmount").val();
-	if(isEmpty(couponAmount)){
-		alert("优惠券面值不能为空！");
-		return false;
+	var min_amount = $("#min_amount").val();
+	var max_amount = $("#max_amount").val();
+	if($("#set_amount input[type='checkbox']").is(':checked')){
+		if(isEmpty(min_amount)){
+			alert("优惠券随机面值最小值不能为空！");
+			return false;
+		}
+		if(isEmpty(max_amount)){
+			alert("优惠券随机面值最大值不能为空！");
+			return false;
+		}
+		if(min_amount>max_amount){
+			alert("优惠券随机面值设置有误！");
+			return false;
+		}
+	}else{
+		if(isEmpty(min_amount)){
+			alert("优惠券面值不能为空！");
+			return false;
+		}
+		max_amount = min_amount;
 	}
 	var couponCount = $("#couponCount").val();
 	if(isEmpty(couponCount)){
 		alert("优惠券每人限领数量不能为空！");
 		return false;
 	}
-	var expiryDate = $("#expiryDate").val();
-	if(isEmpty(expiryDate)){
+	var startExpiryDate = $("#startExpiryDate").val();
+	if(isEmpty(startExpiryDate)){
 		alert("优惠券使用起始日期不能为空！");
 		return false;
 	}
-	var goodsIds = $("#goodsIds").val();
+	var stopExpiryDate = $("#stopExpiryDate").val();
+	if(isEmpty(stopExpiryDate)){
+		alert("优惠券使用结束日期不能为空！");
+		return false;
+	}
+	var goodsIds = $("#goodsIds").html();
 	if(isEmpty(goodsIds)){
 		alert("适用商品不能为空！");
 		return false;
@@ -91,9 +180,11 @@ function saveCoupon() {
 		data : {
 			couponName : couponName,
 			totalCount : totalCount,
-			couponAmount : couponAmount,
+			minAmount : min_amount,
+			maxAmount : max_amount,
 			couponCount : couponCount,
-			expiryDate : expiryDate,
+			startExpiryDate : startExpiryDate,
+			stopExpiryDate : stopExpiryDate,
 			couponIntro : couponIntro,
 			goodsIds:goodsIds
 		},
@@ -104,6 +195,12 @@ function saveCoupon() {
 		success : function(data) {
 			if(data.success){
 				alert("插入成功！");
+				$("#add_coupon").hide();
+				$("#list_coupon").show();
+				$(".pull-left li").removeClass("active");
+				$(".pull-left li:first").addClass("active");
+				var page_size = $("#page_size").val();
+				couponAjax(0,1,page_size);
 			}
 		}
 	});
@@ -118,37 +215,70 @@ function isEmpty(value){
 
 function getCouponList(obj) {
 	var num = $(obj).parent().attr("data_num");
-	$(".pull-left li").removeClass("active")
+	$(".pull-left li").removeClass("active");
 	$(obj).parent().addClass("active");
-	couponAjax(num);
+	var page_size = $("#page_size").val();
+	couponAjax(num,1,page_size);
 }
-function couponAjax(num,current_page,page_size){
+function couponAjax(num,currentPage,page_size){
+	btnQuit();
 	$.ajax( {
 		url : "/admin/coupon/list",
 		type : "POST",
 		data : {
 			num : num,
-			current_page:current_page,
-			page_size:page_size
+			page:currentPage,
+			rows:page_size
 		},
 		success : function(data) {
 			var html = "";
 			if(data.size>0){
+				if(num == 1){
+					$(".oper_th").show();
+				}else{
+					$(".oper_th").hide();
+				}
+				$("#list_coupon").show(1000);
+				$("#add_coupon").hide(1000);
 				$(".js-list-empty-region").hide();
 				$("#table_list").show();
 				$.each(data.couponList, function (index, item) {
+					var value = "";
+					if(item.minAmount == item.maxAmount){
+						value = item.minAmount;
+					}else{
+						value = item.minAmount+"~"+item.maxAmount;
+					}
 					html += "<tr>"
-							     +"<td><label><input type='checkbox' name='couponId' class='ace' value='"+ item.id +"'/><span class='lbl'></span></label></td>"
 							     +"<td>"+ item.couponName +"</td>"
-							     +"<td>"+ item.couponAmount +"</td>"
+							     +"<td>"+ value +"</td>"
 							     +"<td>"+ item.totalCount +"</td>"
 							     +"<td>"+ item.remainCount +"</td>"
 							     +"<td>"+ item.couponCount +"</td>"
-							     +"<td>"+ new Date(item.expiryDateStart).format("yyyy-MM-dd") +"</td>"
-							     +"<td>"+ new Date(item.expiryDateStop).format("yyyy-MM-dd") +"</td>"
-							     +"</tr>";
+							     +"<td>"+ new Date(item.expiryDateStart).format("yyyy-MM-dd hh:mm") +"</td>"
+							     +"<td>"+ new Date(item.expiryDateStop).format("yyyy-MM-dd hh:mm") +"</td>";
+					if(num == 1){
+						html += "<td>"
+								     +"<a href='javascript:ovid()' onclick='coupon_del(this,"+ item.id +")' class='btn btn-danger operation_btn'>删除</a>";
+						if(item.status !=1){
+							html += "&nbsp;&nbsp;&nbsp;&nbsp;<a href='javascript:ovid()' onclick='coupon_share(this,"+ item.id +")' class='btn bg-deep-blue operation_btn' id='share_btn'>共享</a>"
+						}
+						html +="</td>";
+					}
+					html += "</tr>";
 				})
 				$("#coupon_tbody").html(html);
+				if(data.size>page_size){
+					$("#fenye_coupon").show();
+					$("#total_page").val(data.size);
+					$("#search_page").val(currentPage);
+					$("#current_page").html(currentPage);
+					$(".start_num").html((currentPage-1)*page_size+1);
+					$(".end_num").html((currentPage-1)*page_size + data.couponList.length);
+					$(".total_num").html(data.size);
+				}else{
+					$("#fenye_coupon").hide();
+				}
 			}else{
 				$(".js-list-empty-region").show();
 				$("#table_list").hide();
@@ -156,21 +286,22 @@ function couponAjax(num,current_page,page_size){
 		}
 	});
 }
-function showPage(param) {
-	var num = $(".pull-left .active").attr("data_num");
+
+function showPageCoupon(param) {
+	var num = $(".pull-left li").attr("data_num");
     var currentPage = parseInt($("#search_page").val());
     var page_size = $("#page_size").val();
     var total_page = $("#total_page").val();
 	var flag = 0;
 	if('prePage'==param) {
 		if(currentPage==1){
-			currentPage ==1;
-			flag = 1;
+			currentPage =1;
+			flag = 1; cursor: ;
 		}else{
 			currentPage = currentPage-1;
 		}
 	}else if('nextPage'==param) {
-		if(currentPage==total_page){
+		if(currentPage*page_size>=total_page){
 			currentPage = total_page;
 			flag = 1;
 		}else{
@@ -182,19 +313,49 @@ function showPage(param) {
 	 }
 }
 
-$('#table_list th input:checkbox').on('click',function(){
-	if($('input[name="checkbox"]').prop("checked")){
-		$("[name='couponId']").attr("checked",'true');//全选 
-	}else{
-		$("[name='couponId']").removeAttr("checked");//取消 
-	}	
-});
+function coupon_del(obj,id){
+	layer.confirm('确认要删除吗？',{icon:0,},function(index){
+		$(obj).parents("tr").remove();
+		$.ajax( {
+			url : "/admin/coupon/delete",
+			type : "post",
+			data : {
+				id:id
+			},
+			success : function(data) {
+				if(data.success){
+					layer.msg('已删除!',{icon:1,time:1000});
+				}
+			}
+		});
+	});
+}
 
+function coupon_share(obj,id){
+	layer.confirm('确认要共享吗？',{icon:0,},function(index){
+		$(obj).remove();
+		$.ajax( {
+			url : "/admin/coupon/shareCoupon",
+			type : "post",
+			data : {
+				id:id
+			},
+			success : function(data) {
+				if(data.success){
+					layer.msg('共享成功!',{icon:1,time:1000});
+				}
+			}
+		});
+	});
+}
 
 function chooseGoods(){
-	goodsAjax();
+	var currentPage = parseInt($("#goods_search_page").val());
+    var page_size = $("#goods_page_size").val();
+	goodsAjax(currentPage,page_size);
 	layer.open({
         type: 1,
+        offset: '50px',
         title: '选择适用商品',
 		maxmin: true, 
 		shadeClose: false, //点击遮罩关闭层
@@ -205,7 +366,6 @@ function chooseGoods(){
 			var str = "";
 			$("input[name='goodsId']:checked").each(function(){ 
 				str += $(this).val()+","; 
-				alert(str);
 			}) 
 			if(str ==""){
 			   layer.alert("请选择使用商品",{
@@ -221,13 +381,13 @@ function chooseGoods(){
     })
 }
 
-function goodsAjax(){
+function goodsAjax(currentPage,page_size){
 	$.ajax( {
 		url : "/admin/goods/listHasInventoryQuantity",
 		type : "GET",
 		data : {
-			page:1,
-			rows:5
+			page:currentPage,
+			rows:page_size
 		},
 		success : function(data) {
 			var html = "";
@@ -243,6 +403,15 @@ function goodsAjax(){
 							     +"</tr>";
 				})
 				$("#goods_tbody").html(html);
+				if(data.total>page_size){
+					$("#fenye_goods").show();
+					$("#goods_total_page").val(data.total);
+					$("#goods_search_page").val(currentPage);
+					$("#current_page_goods").html(currentPage);
+					$(".start_num_goods").html((currentPage-1)*page_size+1);
+					$(".end_num_goods").html((currentPage-1)*page_size + data.rows.length);
+					$(".total_num_goods").html(data.total);
+				}
 			}else{
 				alert("暂无商品");
 			}
@@ -251,5 +420,38 @@ function goodsAjax(){
 }
 
 
+function showPage(param) {
+    var currentPage = parseInt($("#goods_search_page").val());
+    var page_size = $("#goods_page_size").val();
+    var total_page = $("#goods_total_page").val();
+	var flag = 0;
+	if('prePage'==param) {
+		if(currentPage==1){
+			currentPage =1;
+			flag = 1;
+		}else{
+			currentPage = currentPage-1;
+		}
+	}else if('nextPage'==param) {
+		if(currentPage*page_size>=total_page){
+			currentPage = total_page;
+			flag = 1;
+		}else{
+			currentPage = currentPage+1;
+		}
+	}
+	if(flag==0){
+		goodsAjax(currentPage,page_size);
+	 }
+}
+
+function is_check(){
+	if($("#set_amount input[type='checkbox']").is(':checked')){
+    	$(".js-random").show();
+    }else{
+    	$(".js-random").hide();
+    }
+}
+    
 
 

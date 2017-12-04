@@ -125,6 +125,8 @@ public class SaleListServiceImpl implements SaleListService{
 		return saleListRepository.countSaleByMonth(begin, end, shopId);
 	}
 
-
-
+	@Override
+	public int getSaleOrderPayedListCount(Integer shopId, Integer state) {
+		return saleListRepository.getSaleOrderPayedListCount(shopId, state);
+	}
 }

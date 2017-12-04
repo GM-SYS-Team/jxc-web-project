@@ -60,7 +60,7 @@ public class GoodsAdminContrller extends BaseController{
 			HttpServletRequest request)throws Exception{
 		User currentUser = getCurrentUser(request);
 		if(currentUser.getUserType().equals(Constant.SHOPTYPE)){
-			goods.setShopId(currentUser.getShopId());
+			goods.setShopId(currentUser.getCurrentLoginShopId());
 		}
 		Map<String, Object> resultMap = new HashMap<>();
 		List<Goods> goodsList=goodsService.list(goods, page, rows, Direction.ASC, "id");
@@ -85,7 +85,7 @@ public class GoodsAdminContrller extends BaseController{
 			HttpServletRequest request)throws Exception{
 		User currentUser = getCurrentUser(request);
 		if(currentUser.getUserType().equals(Constant.SHOPTYPE)){
-			goods.setShopId(currentUser.getShopId());
+			goods.setShopId(currentUser.getCurrentLoginShopId());
 		}
 		Map<String, Object> resultMap = new HashMap<>();
 		List<Goods> goodsList=goodsService.list(goods, page, rows, Direction.ASC, "id");
@@ -111,7 +111,7 @@ public class GoodsAdminContrller extends BaseController{
 		Map<String, Object> resultMap = new HashMap<>();
 		List<Goods> alarmGoodsList = new ArrayList<>();
 		if(currentUser.getUserType().equals(Constant.SHOPTYPE)){
-			alarmGoodsList=goodsService.listAlarm(currentUser.getShopId());
+			alarmGoodsList=goodsService.listAlarm(currentUser.getCurrentLoginShopId());
 		}
 		resultMap.put("rows", alarmGoodsList);
 		return resultMap;
@@ -129,8 +129,8 @@ public class GoodsAdminContrller extends BaseController{
 			HttpServletRequest request)throws Exception{
 		User currentUser = getCurrentUser(request);
 		Map<String, Object> resultMap = new HashMap<>();
-		List<Goods> goodsList=goodsService.listNoInventoryQuantityByCodeOrName(currentUser.getShopId(),codeOrName, page, rows, Direction.ASC, "id");
-		Long total=goodsService.getCountNoInventoryQuantityByCodeOrName(currentUser.getShopId(),codeOrName);
+		List<Goods> goodsList=goodsService.listNoInventoryQuantityByCodeOrName(currentUser.getCurrentLoginShopId(),codeOrName, page, rows, Direction.ASC, "id");
+		Long total=goodsService.getCountNoInventoryQuantityByCodeOrName(currentUser.getCurrentLoginShopId(),codeOrName);
 		resultMap.put("rows", goodsList);
 		resultMap.put("total", total);
 		logService.save(new Log(Log.SEARCH_ACTION,"查询商品信息（无库存）")); // 写入日志
@@ -149,8 +149,8 @@ public class GoodsAdminContrller extends BaseController{
 			HttpServletRequest request)throws Exception{
 		User currentUser = getCurrentUser(request);
 		Map<String, Object> resultMap = new HashMap<>();
-		List<Goods> goodsList=goodsService.listHasInventoryQuantity(currentUser.getShopId(),page, rows, Direction.ASC, "id");
-		Long total=goodsService.getCountHasInventoryQuantity(currentUser.getShopId());
+		List<Goods> goodsList=goodsService.listHasInventoryQuantity(currentUser.getCurrentLoginShopId(),page, rows, Direction.ASC, "id");
+		Long total=goodsService.getCountHasInventoryQuantity(currentUser.getCurrentLoginShopId());
 		resultMap.put("rows", goodsList);
 		resultMap.put("total", total);
 		logService.save(new Log(Log.SEARCH_ACTION,"查询商品信息（有库存）")); // 写入日志
@@ -218,7 +218,7 @@ public class GoodsAdminContrller extends BaseController{
 		}
 		User currentUser = getCurrentUser(request);
 		if(currentUser.getUserType().equals(Constant.SHOPTYPE)){
-			goods.setShopId(currentUser.getShopId());
+			goods.setShopId(currentUser.getCurrentLoginShopId());
 		}
 		Map<String, Object> resultMap = new HashMap<>();
 		goodsService.save(goods);

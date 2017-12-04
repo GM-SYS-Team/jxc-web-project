@@ -46,8 +46,8 @@ html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p,
 }
 
 .page-content, .app__content {
-	width: 850px;
-	min-height: 420px;
+	/* width: 850px;
+	min-height: 420px; */
 	zoom: 1;
 }
 
@@ -115,7 +115,7 @@ html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p,
 
 .app-design .app-preview .app-config .app-field h1 {
 	padding: 18px 60px 0 60px;
-	height: 46px;
+	height: 60px;
 	line-height: 46px;
 	font-size: 16px;
 	color: #fff;
@@ -234,7 +234,7 @@ body.theme-new-ui .app-design .app-actions .form-actions {
 .app-preview .promote-card {
 	-webkit-tap-highlight-color: transparent;
 	position: relative;
-	min-height: 180px;
+	min-height: 160px;
 	background: -webkit-gradient(linear, 0 0, 0 100%, from(#fe314e),
 		to(#fe6263));
 	background: -moz-linear-gradient(to bottom, #fe314e, #fe6263);
@@ -244,10 +244,11 @@ body.theme-new-ui .app-design .app-actions .form-actions {
 .ui-nav {
 	position: relative;
 	margin-bottom: 15px;
-	height: 34px;
+	height: 44px;
 	padding-top: 10px;
     padding-left: 5px;
     font-size: 14px;
+    border-bottom: 1px solid #e5e5e5;
 }
 
 .ui-nav ul {
@@ -295,7 +296,7 @@ ol, ul {
 
 a {
 	color: #38f;
-	text-decoration: none;
+	text-decoration: none!important;
 }
 
 .ui-nav ul:after {
@@ -711,4 +712,8 @@ div {
 .row:before, .row:after {
     display: table;
     content: " ";
+}
+#list_coupon a:hover
+{ 
+	color:#fff;
 }

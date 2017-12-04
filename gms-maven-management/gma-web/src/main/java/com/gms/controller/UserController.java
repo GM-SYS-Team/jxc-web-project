@@ -64,9 +64,9 @@ public class UserController {
 	
 	@Resource
 	private LogService logService;
-	//文件存储路径
+	/*//文件存储路径
 	@Value(value = "${picuploadPath}")
-	private String picturePath;
+	private String picturePath;*/
 	/**
      * 用户登录请求
      * @param user
@@ -97,9 +97,24 @@ public class UserController {
 			subject.login(token); // 登录认证
 			String userName=(String) SecurityUtils.getSubject().getPrincipal();
 			User currentUser=userService.findByUserName(userName);
-			if(currentUser.getUserType().equals(Constant.SHOPTYPE)){
-				Shop shop = shopService.findById(currentUser.getShopId());
+			List<Shop> shopList = shopService.findByUserId(currentUser.getId());
+			if(currentUser.getUserType().equals(Constant.SHOPTYPE) && shopList.isEmpty()){
+				map.put("success", false);
+	    		map.put("errorInfo", "该用户名下未注册商铺");
+	    		return map;
+			}
+ 			if(currentUser.getUserType().equals(Constant.SHOPTYPE)){
+				Shop shop =null;
+				if(currentUser.getCurrentLoginShopId()!=null){
+					shop = shopService.findById(currentUser.getCurrentLoginShopId());
+				}else{
+					shop = shopList.get(0);//默认进入第一家店铺
+					currentUser.setCurrentLoginShopId(shop.getId());
+					userService.save(currentUser);
+				}
+				
 				session.setAttribute("currentShop", shop);
+				currentUser.setShopList(shopList);//缓存店铺信息
 			}
 			session.setAttribute("currentUser", currentUser);
 			List<Role> roleList=roleService.findByUserId(currentUser.getId());
@@ -211,7 +226,7 @@ public class UserController {
     	return jsonArray;
     }
     
-    //文件上传相关代码
+    /*//文件上传相关代码
     @ResponseBody
     @RequestMapping(value = "picture/upload")
     public ResultData upload(@RequestParam("pictureFile") MultipartFile pictureFile) {
@@ -240,5 +255,5 @@ public class UserController {
             e.printStackTrace();
         }
         return ResultData.serverInternalError().putDataValue("message", "服务器请假了，请稍后再试");
-    }
+    }*/
 }

@@ -1856,3 +1856,31 @@ INSERT INTO `t_user_role` VALUES ('28', '2', '3');
 INSERT INTO `t_user_role` VALUES ('29', '4', '3');
 INSERT INTO `t_user_role` VALUES ('30', '5', '3');
 INSERT INTO `t_user_role` VALUES ('31', '7', '3');
+
+
+-- ----------------------------
+-- Table structure for t_push_job
+-- ----------------------------
+DROP TABLE IF EXISTS `t_push_job`;
+CREATE TABLE `t_push_job` (
+  `push_job_id` int(11) NOT NULL COMMENT '主键',
+  `title` varchar(100) NOT NULL COMMENT '标题',
+  `content` varchar(1000) DEFAULT NULL COMMENT '内容',
+  `url` varchar(100) DEFAULT NULL COMMENT '推送的url',
+  `valid` varchar(1) NOT NULL COMMENT '是否有效(Y|N)',
+  `open_type` varchar(100) DEFAULT NULL COMMENT '打开方式',
+  `object_id` int(11) DEFAULT NULL COMMENT '数据对象ID',
+  `device_platform` varchar(100) NOT NULL COMMENT '设备平台(ANDROID|IPHONE|IPAD)',
+  `push_platform` varchar(100) NOT NULL COMMENT '推送平台',
+  `push_status` varchar(100) NOT NULL COMMENT '任务状态',
+  `push_type` varchar(100) NOT NULL COMMENT '推送类型(DEVICE_TOKEN|ALL|PROVINCE)',
+  `push_policy_id` varchar(4000) DEFAULT NULL COMMENT '推送策略对应ID',
+  `min_version` int(11) DEFAULT NULL COMMENT '支持的最小版本',
+  `max_version` int(11) DEFAULT NULL COMMENT '支持的最大版本',
+  `push_msg_id` varchar(1000) NOT NULL COMMENT '推送平台消息ID',
+  `push_time` datetime DEFAULT NULL COMMENT '推送时间',
+  `create_time` datetime NOT NULL COMMENT '创建时间',
+  `modify_time` datetime NOT NULL COMMENT '修改时间',
+  PRIMARY KEY (`push_job_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+

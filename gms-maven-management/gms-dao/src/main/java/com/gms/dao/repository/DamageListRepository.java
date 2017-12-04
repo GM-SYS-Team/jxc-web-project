@@ -19,4 +19,11 @@ public interface DamageListRepository extends JpaRepository<DamageList, Integer>
 	 */
 	@Query(value="SELECT MAX(damage_number) FROM t_damage_list WHERE TO_DAYS(damage_date) = TO_DAYS(NOW())",nativeQuery=true)
 	public String getTodayMaxDamageNumber();
+	
+	/**
+	 * 报损订单总数
+	 * @return
+	 */
+	@Query(value="SELECT count(*) FROM t_damage_list WHERE shop_id=?1",nativeQuery=true)
+	public int getDamageOrderListCount(Integer shopId);
 }
