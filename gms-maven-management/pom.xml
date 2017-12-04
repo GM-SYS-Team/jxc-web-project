@@ -12,6 +12,7 @@
     <module>gms-service</module>
     <module>gma-web</module>
     <module>gms-app</module>
+    <module>gms-imageserver</module>
   </modules>
   <parent>
 		<groupId>org.springframework.boot</groupId>
@@ -24,7 +25,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <!--  依赖版本  -->
         <pagehelper.version>4.1.1</pagehelper.version>
-        <httpclient.version>4.3.1</httpclient.version>
+        <httpclient.version>4.5.2</httpclient.version>
         <start-class>com.gms.JxcApplication</start-class>
     </properties>
     <dependencies>
@@ -89,6 +90,17 @@
             <artifactId>fastjson</artifactId>
             <version>1.2.40</version>
         </dependency>
+        <dependency>
+			  <groupId>org.apache.httpcomponents</groupId>
+			  <artifactId>httpclient</artifactId>
+			  <version>${httpclient.version}</version>
+		</dependency>
+		<dependency>
+		    <groupId>org.apache.httpcomponents</groupId>
+		    <artifactId>httpmime</artifactId>
+		    <version>${httpclient.version}</version>
+		</dependency>
+		
 	</dependencies>
 	<build>
         <plugins>
