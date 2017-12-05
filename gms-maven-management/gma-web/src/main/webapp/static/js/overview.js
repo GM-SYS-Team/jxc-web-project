@@ -21,7 +21,13 @@ function queryContent(){
 			$(".shop_phone").html(data.shop.phoneNum);
 			$(".shop_address").html(data.shop.shopAddress);
 			$(".shop_createTime").html(data.shop.createTime);
-			$('#shopPic').attr('src',data.shop.pictureAddress);
+			
+			if(data.shop.pictureAddress != "" && data.shop.pictureAddress!=null){
+				$('#shopPic').attr('src',data.url + data.shop.pictureAddress);
+			}else{
+				$('#shopPic').attr('src',"../static/images/nopic.jpg");
+			}
+			
 			
 			$("#jin_num1").html("("+data.jin_num1+")");
 			$("#jin_num2").html("("+data.jin_num2+")");
