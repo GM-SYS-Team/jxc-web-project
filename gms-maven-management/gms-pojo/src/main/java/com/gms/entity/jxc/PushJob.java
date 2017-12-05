@@ -17,7 +17,7 @@ public class PushJob {
 
     @Id
     @Column(name = "push_job_id")
-    private Long pushJobId;
+    private Long id;
 
     @Basic
     @Column(name = "title")
@@ -87,12 +87,12 @@ public class PushJob {
     private Timestamp modifyTime;
 
 
-    public Long getPushJobId() {
-        return pushJobId;
+    public Long getId() {
+        return id;
     }
 
-    public void setPushJobId(Long pushJobId) {
-        this.pushJobId = pushJobId;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getTitle() {
@@ -242,7 +242,7 @@ public class PushJob {
 
         PushJob pushJob = (PushJob) o;
 
-        if (pushJobId.equals(pushJob.pushJobId)) return false;
+        if (id.equals(pushJob.id)) return false;
         if (title != null ? !title.equals(pushJob.title) : pushJob.title != null) return false;
         if (content != null ? !content.equals(pushJob.content) : pushJob.content != null) return false;
         if (url != null ? !url.equals(pushJob.url) : pushJob.url != null) return false;
@@ -269,7 +269,7 @@ public class PushJob {
 
     @Override
     public int hashCode() {
-        int result = pushJobId != null ? pushJobId.hashCode() : 0;
+        int result = id != null ? id.hashCode() : 0;
         result = 31 * result + (title != null ? title.hashCode() : 0);
         result = 31 * result + (content != null ? content.hashCode() : 0);
         result = 31 * result + (url != null ? url.hashCode() : 0);

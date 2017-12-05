@@ -17,6 +17,9 @@ public interface PushJobService {
 
     List<PushJob> list(PushJob pushJob, Sort.Direction direction, String... properties);
 
+    List<PushJob> list(PushJob pushJob, Integer page, Integer pageSize, Sort.Direction direction, String... properties);
+
+
     PushJob findById(Long pushJobId);
 
     PushJob save(PushJob pushJob);
@@ -38,6 +41,8 @@ public interface PushJobService {
      * @return 已撤回的PushJob
      */
     PushJob withdrawPushJob(PushJob pushJob);
+
+    public Long getCount(PushJob pushJob);
 
 
 }
