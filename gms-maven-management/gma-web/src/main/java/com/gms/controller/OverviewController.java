@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.gms.conf.ImageServerProperties;
 import com.gms.entity.jxc.CouponCode;
 import com.gms.entity.jxc.Shop;
 import com.gms.entity.jxc.User;
@@ -41,6 +42,9 @@ public class OverviewController extends BaseController {
 	private DamageListService damageListService;
 	@Autowired
 	private SaleListService saleListService;
+	
+	@Autowired
+	private ImageServerProperties imageServerProperties;
 
 	@Autowired
 	private CouponCodeService couponCodeService;
@@ -50,6 +54,8 @@ public class OverviewController extends BaseController {
 			throws ParseException {
 		/* 当前登录的店铺 */
 		Shop shop = getCurrentShop(request);
+		String url = imageServerProperties.getUrl() + shop.getPictureAddress();
+		shop.setPictureAddress(url);
 		
 		/* 查询当前店铺优惠券量 */
 		int totalCount = couponService.findCouponAll(shop.getId()).size();

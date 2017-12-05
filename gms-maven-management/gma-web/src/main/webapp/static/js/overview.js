@@ -14,13 +14,14 @@ function queryContent(){
 			$("#between_date_count").html(data.between_date_count);
 			$("#out_date_count").html(data.out_date_count);
 			
-			$(".shop_name").html(data.shop.contactName);
+			$(".shop_name").html(data.shop.shopName);
 			$(".shop_business").html(data.shop.business);
 			$(".shop_contactName").html(data.shop.contactName);
 			$(".shop_contactCode").html(data.shop.contactCode);
 			$(".shop_phone").html(data.shop.phoneNum);
 			$(".shop_address").html(data.shop.shopAddress);
 			$(".shop_createTime").html(data.shop.createTime);
+			$('#shopPic').attr('src',data.shop.pictureAddress);
 			
 			$("#jin_num1").html("("+data.jin_num1+")");
 			$("#jin_num2").html("("+data.jin_num2+")");
