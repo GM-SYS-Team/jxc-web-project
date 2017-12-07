@@ -65,7 +65,9 @@ public class PushJobServiceImpl implements PushJobService {
 
     @Override
     public PushJob save(PushJob pushJob) {
-        return null;
+
+        ;
+        return pushJobRepository.save(pushJob);
     }
 
     @Override

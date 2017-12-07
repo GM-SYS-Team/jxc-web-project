@@ -46,4 +46,25 @@ public class PushJobController {
         logService.save(new Log(Log.SEARCH_ACTION, "查询推送信息")); // 写入日志
         return resultMap;
     }
+
+    /**
+     * 添加或者修改推送信息
+     *
+     * @param pushJob
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping("/save")
+    @RequiresPermissions(value = {"推送管理"})
+    public Map<String, Object> save(PushJob pushJob) throws Exception {
+        if (pushJob.getId() != null) { // 写入日志
+            logService.save(new Log(Log.UPDATE_ACTION, "更新推送信息" + pushJob));
+        } else {
+            logService.save(new Log(Log.ADD_ACTION, "添加推送信息" + pushJob));
+        }
+        Map<String, Object> resultMap = new HashMap<>();
+        pushJobService.save(pushJob);
+        resultMap.put("success", true);
+        return resultMap;
+    }
 }

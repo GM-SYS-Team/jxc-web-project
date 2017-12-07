@@ -16,6 +16,7 @@ import java.sql.Timestamp;
 public class PushJob {
 
     @Id
+    @GeneratedValue
     @Column(name = "push_job_id")
     private Long id;
 
