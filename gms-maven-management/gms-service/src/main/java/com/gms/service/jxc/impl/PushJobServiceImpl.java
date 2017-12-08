@@ -68,11 +68,18 @@ public class PushJobServiceImpl implements PushJobService {
     public PushJob save(PushJob pushJob) {
         if (pushJob.getId() == null) {
             pushJob.setCreateTime(new Timestamp(System.currentTimeMillis()));
-            pushJob.setPushPlatform("MI_PUSH");
+            pushJob.setPushPlatform("XIAOMI");
             pushJob.setPushStatus("N");
             pushJob.setOpenType("webview");
             pushJob.setPushType("ALL");
             pushJob.setValid("Y");
+        } else {
+            PushJob storedPushJob = pushJobRepository.getOne(pushJob.getId());
+            storedPushJob.setTitle(pushJob.getTitle());
+            storedPushJob.setContent(pushJob.getContent());
+            storedPushJob.setUrl(pushJob.getUrl());
+            storedPushJob.setPushTime(pushJob.getPushTime());
+            pushJob = storedPushJob;
         }
         pushJob.setModifyTime(new Timestamp(System.currentTimeMillis()));
         return pushJobRepository.save(pushJob);

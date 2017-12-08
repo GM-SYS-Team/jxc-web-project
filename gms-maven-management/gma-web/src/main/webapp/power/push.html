@@ -16,84 +16,35 @@
             return "<a href=\"javascript:openMenuSetDialog(" + row.id + ")\"><img style='margin-top: 4px' src='/static/images/edit.gif' /></a>";
         }
 
-        function openMenuSetDialog(roleId) {
-            $("#menuSetDialog").dialog("open").dialog("setTitle", "权限菜单设置");
-            $("#menuTree").tree({
-                lines: true,
-                url: '/admin/role/loadCheckMenuInfo?parentId=-1&roleId=' + roleId,
-                checkbox: true,
-                cascadeCheck: false,
-                onLoadSuccess: function () {
-                    $("#menuTree").tree('expandAll');
-                },
-                onCheck: function (node, checked) {
-                    if (checked) {
-                        checkNode($('#menuTree').tree('getParent', node.target));
-                    }
-                }
-            });
-            $("#roleId").val(roleId);
-        }
 
-        function checkNode(node) {
-            if (!node) {
-                return;
-            } else {
-                checkNode($('#menuTree').tree('getParent', node.target));
-                $('#menuTree').tree('check', node.target);
-            }
-        }
-
-        function saveMenuSet() {
-//            var roleId = $("#roleId").val();
-//            var nodes = $('#menuTree').tree('getChecked');
-//            var menuArrIds = [];
-//            for (var i = 0; i < nodes.length; i++) {
-//                menuArrIds.push(nodes[i].id);
-//            }
-//            var menuIds = menuArrIds.join(",");
-            $.post("/admin/role/saveMenuSet", {menuIds: menuIds, roleId: roleId}, function (result) {
-                if (result.success) {
-                    closeMenuSetDialog();
-                } else {
-                    $.messager.alert("系统提示", "提交失败，请联系管理员！");
-                }
-            }, "json");
-        }
-
-        function closeMenuSetDialog() {
-            $("#menuSetDialog").dialog("close");
-        }
+        //        function deleteRole() {
+        //            var selectedRows = $("#dg").datagrid("getSelections");
+        //            if (selectedRows.length != 1) {
+        //                $.messager.alert("系统提示", "请选择要删除的数据！");
+        //                return;
+        //            }
+        //            var id = selectedRows[0].id;
+        //            $.messager.confirm("系统提示", "您确定要删除这条数据吗？", function (r) {
+        //                if (r) {
+        //                    $.post("/admin/role/delete", {id: id}, function (result) {
+        //                        if (result.success) {
+        //                            $.messager.alert("系统提示", "数据已成功删除！");
+        //                            $("#dg").datagrid("reload");
+        //                        } else {
+        //                            $.messager.alert("系统提示", result.errorInfo);
+        //                        }
+        //                    }, "json");
+        //                }
+        //            });
+        //        }
 
 
-        function deleteRole() {
-            var selectedRows = $("#dg").datagrid("getSelections");
-            if (selectedRows.length != 1) {
-                $.messager.alert("系统提示", "请选择要删除的数据！");
-                return;
-            }
-            var id = selectedRows[0].id;
-            $.messager.confirm("系统提示", "您确定要删除这条数据吗？", function (r) {
-                if (r) {
-                    $.post("/admin/role/delete", {id: id}, function (result) {
-                        if (result.success) {
-                            $.messager.alert("系统提示", "数据已成功删除！");
-                            $("#dg").datagrid("reload");
-                        } else {
-                            $.messager.alert("系统提示", result.errorInfo);
-                        }
-                    }, "json");
-                }
-            });
-        }
-
-
-        function openRoleAddDialog() {
+        function openPushJobAddDialog() {
             $("#dlg").dialog("open").dialog("setTitle", "添加推送信息");
             url = "/admin/push/save";
         }
 
-        function openRoleModifyDialog() {
+        function openPushJobModifyDialog() {
             var selectedRows = $("#dg").datagrid("getSelections");
             if (selectedRows.length != 1) {
                 $.messager.alert("系统提示", "请选择一条要修改的数据！");
@@ -101,17 +52,21 @@
             }
             var row = selectedRows[0];
             $("#dlg").dialog("open").dialog("setTitle", "修改推送信息");
-            $("#fm").form("load", row);
-            url = "/admin/role/save?id=" + row.id;
+            $("#fm").form("load", {
+                "id": row.id,
+                "title": row.title,
+                "content": row.content,
+                "url": row.url,
+                "pushTime": new Date(row.pushTime).format("yyyy-mm-dd HH:MM:SS")
+            });
+            url = "/admin/push/save?id=" + row.id;
         }
 
 
-        function saveRole() {
-            console.log("dfdfdf")
+        function savePushJob() {
             $("#fm").form("submit", {
                 url: url,
                 onSubmit: function () {
-                    console.log($(this).form("validate"))
                     return $(this).form("validate");
                 },
                 success: function (result) {
@@ -130,8 +85,10 @@
 
 
         function resetValue() {
-            $("#name").val("");
-            $("#remarks").val("");
+            $("#title").val("");
+            $("#content").val("");
+            $("#url").val("");
+            $("#pushTime").datetimebox("setValue", "")
         }
 
         function closeRoleDialog() {
@@ -252,15 +209,15 @@
         <th field="pushStatus" width="30" align="center">推送状态</th>
         <th field="pushTime" width="60" align="center" formatter="Common.DateTimeFormatter">推送时间</th>
         <th field="createTime" width="60" align="center" formatter="Common.DateTimeFormatter">创建时间</th>
-        <th field="aa" width="50" align="center" formatter="formatEdit">权限菜单设置</th>
+        <!--<th field="aa" width="50" align="center" formatter="formatEdit">权限菜单设置</th>-->
     </tr>
     </thead>
 </table>
 
 <div id="tb">
     <div>
-        <a href="javascript:openRoleAddDialog()" class="easyui-linkbutton" iconCls="icon-add" plain="true">添加</a>
-        <a href="javascript:openRoleModifyDialog()" class="easyui-linkbutton" iconCls="icon-edit" plain="true">修改</a>
+        <a href="javascript:openPushJobAddDialog()" class="easyui-linkbutton" iconCls="icon-add" plain="true">添加</a>
+        <a href="javascript:openPushJobModifyDialog()" class="easyui-linkbutton" iconCls="icon-edit" plain="true">修改</a>
         <a href="javascript:deleteRole()" class="easyui-linkbutton" iconCls="icon-remove" plain="true">删除</a>
     </div>
     <div>
@@ -312,7 +269,7 @@
 </div>
 
 <div id="dlg-buttons">
-    <a href="javascript:saveRole()" class="easyui-linkbutton" iconCls="icon-ok">保存</a>
+    <a href="javascript:savePushJob()" class="easyui-linkbutton" iconCls="icon-ok">保存</a>
     <a href="javascript:closeRoleDialog()" class="easyui-linkbutton" iconCls="icon-cancel">关闭</a>
 </div>
 
