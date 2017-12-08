@@ -17,6 +17,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.transaction.Transactional;
+import java.sql.Timestamp;
 import java.util.List;
 
 /**
@@ -65,8 +66,15 @@ public class PushJobServiceImpl implements PushJobService {
 
     @Override
     public PushJob save(PushJob pushJob) {
-
-        ;
+        if (pushJob.getId() == null) {
+            pushJob.setCreateTime(new Timestamp(System.currentTimeMillis()));
+            pushJob.setPushPlatform("MI_PUSH");
+            pushJob.setPushStatus("N");
+            pushJob.setOpenType("webview");
+            pushJob.setPushType("ALL");
+            pushJob.setValid("Y");
+        }
+        pushJob.setModifyTime(new Timestamp(System.currentTimeMillis()));
         return pushJobRepository.save(pushJob);
     }
 

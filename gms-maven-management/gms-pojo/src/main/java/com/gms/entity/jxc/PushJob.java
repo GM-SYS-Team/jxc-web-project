@@ -51,6 +51,7 @@ public class PushJob {
     @Column(name = "push_platform")
     private String pushPlatform;
 
+    //Y：已推送，N：未推送，R：推送已撤回
     @Basic
     @Column(name = "push_status")
     private String pushStatus;
