@@ -12,10 +12,6 @@
 
         var url;
 
-        function formatEdit(val, row) {
-            return "<a href=\"javascript:openMenuSetDialog(" + row.id + ")\"><img style='margin-top: 4px' src='/static/images/edit.gif' /></a>";
-        }
-
 
         //        function deleteRole() {
         //            var selectedRows = $("#dg").datagrid("getSelections");
@@ -117,6 +113,80 @@
 
         });
 
+        //状态，0：已删除；1：已保存；2：已提交推送任务；3：已撤回
+        function formatStatus(value, rec, index) {
+            if (value == '0') {
+                return "已删除"
+            } else if (value == '1') {
+                return "已保存"
+            } else if (value == '2') {
+                return "推送已提交"
+            } else if (value == '3') {
+                return "已撤回"
+            } else {
+                return "未知状态"
+            }
+        }
+
+        //格式化操作单元格
+        function formatEdit(val, row) {
+            var htmlStr = "";
+            if (row.pushStatus == "1") {
+                htmlStr += "<a href=\"javascript:deletePushJob(" + row.id + ")\">删除</a>";
+                htmlStr += "&nbsp;&nbsp;&nbsp;&nbsp;<a href=\"javascript:submitPushJob(" + row.id + ")\">推送</a>";
+            } else if (row.pushStatus == "2") {
+                htmlStr += "<a href=\"javascript:withdrawPushJob(" + row.id + ")\">撤回</a>";
+            }
+            return htmlStr;
+        }
+        //删除推送任务
+        function deletePushJob(pushJobId) {
+            $.messager.confirm("系统提示", "您确定要删除这条数据吗？", function (r) {
+                if (r) {
+                    $.post("/admin/push/delete", {id: pushJobId}, function (result) {
+                        if (result.success) {
+                            $.messager.alert("系统提示", "数据已成功删除！");
+                            $("#dg").datagrid("reload");
+                        } else {
+                            $.messager.alert("系统提示", result.errorInfo);
+                        }
+                    }, "json");
+                }
+            });
+        }
+
+        //提交推送任务
+        function submitPushJob(pushJobId) {
+            $.messager.confirm("系统提示", "您确定要提交这条数据吗？", function (r) {
+                if (r) {
+                    $.post("/admin/push/submit", {id: pushJobId}, function (result) {
+                        if (result.success) {
+                            $.messager.alert("系统提示", "数据已成功提交！");
+                            $("#dg").datagrid("reload");
+                        } else {
+                            $.messager.alert("系统提示", result.errorInfo);
+                        }
+                    }, "json");
+                }
+            });
+        }
+
+        //撤回推送任务
+        function withdrawPushJob(pushJobId) {
+            $.messager.confirm("系统提示", "您确定要撤回这条数据吗？", function (r) {
+                if (r) {
+                    $.post("/admin/push/withdraw", {id: pushJobId}, function (result) {
+                        if (result.success) {
+                            $.messager.alert("系统提示", "数据已成功撤回！");
+                            $("#dg").datagrid("reload");
+                        } else {
+                            $.messager.alert("系统提示", result.errorInfo);
+                        }
+                    }, "json");
+                }
+            });
+        }
+
 
         // 对Date的扩展，将 Date 转化为指定格式的String
         // 月(M)、日(d)、小时(H)、分(M)、秒(S)、季度(q) 可以用 1-2 个占位符，
@@ -205,11 +275,11 @@
         <th field="title" width="100" align="center">消息标题</th>
         <th field="content" width="200" align="center">消息内容</th>
         <th field="devicePlatform" width="50" align="center">设备平台</th>
-        <th field="valid" width="30" align="center">是否有效</th>
-        <th field="pushStatus" width="30" align="center">推送状态</th>
+        <!--<th field="valid" width="30" align="center">是否有效</th>-->
+        <th field="pushStatus" width="30" align="center" formatter="formatStatus">状态</th>
         <th field="pushTime" width="60" align="center" formatter="Common.DateTimeFormatter">推送时间</th>
         <th field="createTime" width="60" align="center" formatter="Common.DateTimeFormatter">创建时间</th>
-        <!--<th field="aa" width="50" align="center" formatter="formatEdit">权限菜单设置</th>-->
+        <th field="aa" width="50" align="center" formatter="formatEdit">操作</th>
     </tr>
     </thead>
 </table>
@@ -218,7 +288,6 @@
     <div>
         <a href="javascript:openPushJobAddDialog()" class="easyui-linkbutton" iconCls="icon-add" plain="true">添加</a>
         <a href="javascript:openPushJobModifyDialog()" class="easyui-linkbutton" iconCls="icon-edit" plain="true">修改</a>
-        <a href="javascript:deleteRole()" class="easyui-linkbutton" iconCls="icon-remove" plain="true">删除</a>
     </div>
     <div>
         &nbsp;推送名称：&nbsp;<input type="text" id="s_name" size="20" onkeydown="if(event.keyCode==13) searchRole()"/>

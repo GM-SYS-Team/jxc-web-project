@@ -69,7 +69,7 @@ public class PushJobServiceImpl implements PushJobService {
         if (pushJob.getId() == null) {
             pushJob.setCreateTime(new Timestamp(System.currentTimeMillis()));
             pushJob.setPushPlatform("XIAOMI");
-            pushJob.setPushStatus("N");
+            pushJob.setPushStatus("1");
             pushJob.setOpenType("webview");
             pushJob.setPushType("ALL");
             pushJob.setValid("Y");
@@ -86,13 +86,32 @@ public class PushJobServiceImpl implements PushJobService {
     }
 
     @Override
-    public PushJob submitPushJob(PushJob pushJob) {
-        return null;
+    public void delete(Long pushJobId) {
+        PushJob storedPushJob = pushJobRepository.getOne(pushJobId);
+        if (storedPushJob != null) {
+            storedPushJob.setPushStatus("0");
+            pushJobRepository.save(storedPushJob);
+        }
     }
 
     @Override
-    public PushJob withdrawPushJob(PushJob pushJob) {
-        return null;
+    public PushJob submitPushJob(Long pushJobId) {
+        PushJob storedPushJob = pushJobRepository.getOne(pushJobId);
+        if (storedPushJob != null) {
+            storedPushJob.setPushStatus("2");
+            pushJobRepository.save(storedPushJob);
+        }
+        return storedPushJob;
+    }
+
+    @Override
+    public PushJob withdrawPushJob(Long pushJobId) {
+        PushJob storedPushJob = pushJobRepository.getOne(pushJobId);
+        if (storedPushJob != null) {
+            storedPushJob.setPushStatus("3");
+            pushJobRepository.save(storedPushJob);
+        }
+        return storedPushJob;
     }
 
     @Override

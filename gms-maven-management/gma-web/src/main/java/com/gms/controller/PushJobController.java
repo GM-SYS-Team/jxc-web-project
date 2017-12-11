@@ -50,9 +50,9 @@ public class PushJobController {
     /**
      * 添加或者修改推送信息
      *
-     * @param pushJob
-     * @return
-     * @throws Exception
+     * @param pushJob 推送信息
+     * @return 提示信息
+     * @throws Exception 异常信息
      */
     @RequestMapping("/save")
     @RequiresPermissions(value = {"推送管理"})
@@ -64,6 +64,58 @@ public class PushJobController {
         }
         Map<String, Object> resultMap = new HashMap<>();
         pushJobService.save(pushJob);
+        resultMap.put("success", true);
+        return resultMap;
+    }
+
+    /**
+     * 删除角色信息
+     *
+     * @param id 推送ID
+     * @return 提示信息
+     * @throws Exception 异常信息
+     */
+    @RequestMapping("/delete")
+    @RequiresPermissions(value = {"推送管理"})
+    public Map<String, Object> delete(Long id) throws Exception {
+        logService.save(new Log(Log.DELETE_ACTION, "删除推送信息" + pushJobService.findById(id)));  // 写入日志
+        Map<String, Object> resultMap = new HashMap<>();
+        pushJobService.delete(id);
+        resultMap.put("success", true);
+        return resultMap;
+    }
+
+    /**
+     * 删除角色信息
+     *
+     * @param id 推送ID
+     * @return 提示信息
+     * @throws Exception 异常信息
+     */
+    @RequestMapping("/submit")
+    @RequiresPermissions(value = {"推送管理"})
+    public Map<String, Object> submit(Long id) throws Exception {
+        logService.save(new Log(Log.DELETE_ACTION, "提交推送信息" + pushJobService.findById(id)));  // 写入日志
+        Map<String, Object> resultMap = new HashMap<>();
+        pushJobService.submitPushJob(id);
+        resultMap.put("success", true);
+        return resultMap;
+    }
+
+
+    /**
+     * 删除角色信息
+     *
+     * @param id 推送ID
+     * @return 提示信息
+     * @throws Exception 异常信息
+     */
+    @RequestMapping("/withdraw")
+    @RequiresPermissions(value = {"推送管理"})
+    public Map<String, Object> withdraw(Long id) throws Exception {
+        logService.save(new Log(Log.DELETE_ACTION, "撤回推送信息" + pushJobService.findById(id)));  // 写入日志
+        Map<String, Object> resultMap = new HashMap<>();
+        pushJobService.withdrawPushJob(id);
         resultMap.put("success", true);
         return resultMap;
     }

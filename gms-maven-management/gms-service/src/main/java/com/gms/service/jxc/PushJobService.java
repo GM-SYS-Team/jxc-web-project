@@ -24,23 +24,25 @@ public interface PushJobService {
 
     PushJob save(PushJob pushJob);
 
+    void delete(Long pushJobId);
+
 
     /**
      * 提交推送任务至第三方推送平台上
      *
-     * @param pushJob 确认的推送任务
+     * @param pushJobId 确认的推送任务
      * @return 已推送的PushJob
      */
-    PushJob submitPushJob(PushJob pushJob);
+    PushJob submitPushJob(Long pushJobId);
 
 
     /**
      * 根据第三方推送平台的任务ID撤回任务
      *
-     * @param pushJob 已提交的推送任务
+     * @param pushJobId 已提交的推送任务
      * @return 已撤回的PushJob
      */
-    PushJob withdrawPushJob(PushJob pushJob);
+    PushJob withdrawPushJob(Long pushJobId);
 
     public Long getCount(PushJob pushJob);
 
