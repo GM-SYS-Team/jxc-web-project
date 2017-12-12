@@ -106,7 +106,7 @@ public class SmsUtil {
     public static void main(String[] args) throws ClientException, InterruptedException {
 
         //发短信
-        SendSmsResponse response = sendSms("18795959446" , "123456");
+        SendSmsResponse response = sendSms("1300000000" , "123456");
         System.out.println("短信接口返回的数据----------------");
         System.out.println("Code=" + response.getCode());
         System.out.println("Message=" + response.getMessage());
