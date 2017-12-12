@@ -256,6 +256,9 @@ public class UserController extends BaseAppController {
         	cacheSmsCode(telephone, smsCode);
         	return success("验证码发送成功");
     	}
+    	else if ("isv.BUSINESS_LIMIT_CONTROL".equals(response.getCode())) {
+    		return error("请不要频繁发送验证码");
+    	}
     	else {
     		return error("验证码发送失败，请稍后重试");
     	}
