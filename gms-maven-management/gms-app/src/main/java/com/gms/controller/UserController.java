@@ -4,10 +4,12 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Date;
 import java.util.Map;
+import java.util.RandomAccess;
 
 import javax.annotation.Resource;
 
 import org.apache.log4j.Logger;
+import org.junit.Test;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
@@ -16,11 +18,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.aliyuncs.dysmsapi.model.v20170525.SendSmsResponse;
+import com.aliyuncs.exceptions.ClientException;
 import com.gms.annoation.NeedAuth;
 import com.gms.entity.jxc.User;
 import com.gms.service.jxc.UserService;
 import com.gms.util.EmojiUtils;
 import com.gms.util.MD5Util;
+import com.gms.util.PhoneUtil;
+import com.gms.util.SmsUtil;
 import com.gms.util.StringUtil;
 
 /**
@@ -234,13 +240,25 @@ public class UserController extends BaseAppController {
      * @param telephone
      * @param user
      * @return
+     * @throws ClientException 
      */
     @ResponseBody
     @RequestMapping("/sendSmsCode")
-    public Map<String,Object> sendSmsCode(String telephone){
+    public Map<String,Object> sendSmsCode(String telephone) throws ClientException{
     	telephone = telephone.replaceAll(" ", "");
-    	cacheSmsCode(telephone, "123456");
-    	return success("验证码发送成功");
+    	if (!PhoneUtil.isPhoneNum(telephone)) {
+    		return error("手机号码不正确");
+    	}
+    	SmsUtil smsUtil = new SmsUtil();
+    	String smsCode = (int) (Math.random() * 999999) + "";
+    	SendSmsResponse response = smsUtil.sendSms(telephone, smsCode);
+    	if ("OK".equals(response.getCode())) {
+        	cacheSmsCode(telephone, smsCode);
+        	return success("验证码发送成功");
+    	}
+    	else {
+    		return error("验证码发送失败，请稍后重试");
+    	}
     }
     
     @ResponseBody
