@@ -58,7 +58,7 @@ public class CouponController extends BaseController {
 		coupon.setRemainCount(Integer.parseInt(request
 				.getParameter("totalCount")));
 		coupon.setCouponInfo(request.getParameter("couponIntro"));
-		coupon.setCouponCount(request.getParameter("couponCount"));
+		/*coupon.setCouponCount(request.getParameter("couponCount"));*/
 		coupon.setMinAmount(Double.parseDouble(request
 				.getParameter("minAmount")));
 		coupon.setMaxAmount(Double.parseDouble(request

@@ -46,4 +46,7 @@ public interface SaleListRepository extends JpaRepository<SaleList, Integer>,Jpa
 	 */
 	@Query(value="SELECT count(*) FROM t_sale_list WHERE shop_id=?1 and state=?2",nativeQuery=true)
 	public int getSaleOrderPayedListCount(Integer shopId,Integer state);
+	
+	@Query(value="SELECT count(*) FROM t_sale_list WHERE state=?1",nativeQuery=true)
+	public int getSaleOrderPayedListCountAdmin(Integer state);
 }

@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.gms.dao.repository.CouponCodeRepository;
 import com.gms.entity.jxc.CouponCode;
+import com.gms.entity.jxc.Shop;
 import com.gms.service.jxc.CouponCodeService;
 
 /**
@@ -24,8 +25,12 @@ public class CouponCodeServiceImpl implements CouponCodeService {
 	private CouponCodeRepository couponCodeRepository;
 
 	@Override
-	public List<CouponCode> queryCouponCodeList(Integer shopId, Date receiveDate) {
-		return couponCodeRepository.queryCouponCodeByReTime(shopId, receiveDate);
+	public List<CouponCode> queryCouponCodeList(Shop shop, Date receiveDate) {
+		if(shop!= null){
+			return couponCodeRepository.queryCouponCodeByReTime(shop.getId(), receiveDate);
+		}else{
+			return couponCodeRepository.queryCouponCodeByReTimeAdmin(receiveDate);
+		}
 	}
 
 

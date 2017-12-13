@@ -261,7 +261,7 @@ public class CouponController extends BaseAppController {
 		}
 		List<Coupon> couponList = new ArrayList<Coupon>();
 		/* 当前登录的店铺 */
-		couponList = couponService.findCouponByStatus(status, shopId);
+		couponList = couponService.findCouponByStatus(status, shop);
 		Map<String, Object> resultMap = new HashMap<>();
 		resultMap.put("couponList", couponList);
 		resultMap.put("size", couponList == null ? 0 : couponList.size());

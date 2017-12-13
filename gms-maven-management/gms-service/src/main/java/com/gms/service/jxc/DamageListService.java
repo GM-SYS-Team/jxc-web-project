@@ -6,6 +6,7 @@ import org.springframework.data.domain.Sort.Direction;
 
 import com.gms.entity.jxc.DamageList;
 import com.gms.entity.jxc.DamageListGoods;
+import com.gms.entity.jxc.Shop;
 
 /**
  * 报损单Service接口
@@ -55,6 +56,6 @@ public interface DamageListService {
 	 * 报损订单总数
 	 * @return
 	 */
-	public int getDamageOrderListCount(Integer shopId);
+	public int getDamageOrderListCount(Shop shop);
 
 }

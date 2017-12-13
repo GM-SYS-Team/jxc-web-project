@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.gms.entity.jxc.CouponCode;
+import com.gms.entity.jxc.Shop;
 
 /**
  * @ClassName: CouponCodeService
@@ -14,7 +15,7 @@ import com.gms.entity.jxc.CouponCode;
 public interface CouponCodeService {
 
 	
-	public List<CouponCode> queryCouponCodeList(Integer shopId,Date receiveDate);
+	public List<CouponCode> queryCouponCodeList(Shop shop,Date receiveDate);
 
 
 }

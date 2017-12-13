@@ -26,4 +26,7 @@ public interface DamageListRepository extends JpaRepository<DamageList, Integer>
 	 */
 	@Query(value="SELECT count(*) FROM t_damage_list WHERE shop_id=?1",nativeQuery=true)
 	public int getDamageOrderListCount(Integer shopId);
+	
+	@Query(value="SELECT count(*) FROM t_damage_list",nativeQuery=true)
+	public int getDamageOrderListCountAdmin();
 }

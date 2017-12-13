@@ -24,4 +24,7 @@ public interface CouponCodeRepository extends JpaRepository<CouponCode, Integer>
 	@Query(value="select count(*) as amount,receive_time from t_coupon_code  where coupon_id in(select id from t_coupon where shop_id=?1) and receive_time>=?2 group by receive_time",nativeQuery=true)
 	public List<CouponCode> queryCouponCodeByReTime(Integer shopId,Date receiveDate); 
 	
+	@Query(value="select count(*) as amount,receive_time from t_coupon_code  where receive_time>=?1 group by receive_time",nativeQuery=true)
+	public List<CouponCode> queryCouponCodeByReTimeAdmin(Date receiveDate); 
+	
 }

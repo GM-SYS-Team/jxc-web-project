@@ -6,6 +6,7 @@ import org.springframework.data.domain.Sort.Direction;
 
 import com.gms.entity.jxc.SaleList;
 import com.gms.entity.jxc.SaleListGoods;
+import com.gms.entity.jxc.Shop;
 
 /**
  * 销售单Service接口
@@ -77,5 +78,5 @@ public interface SaleListService {
 	 * 统计收货单各状态订单总数
 	 * @return
 	 */
-	public int getSaleOrderPayedListCount(Integer shopId,Integer state);
+	public int getSaleOrderPayedListCount(Shop shop,Integer state);
 }

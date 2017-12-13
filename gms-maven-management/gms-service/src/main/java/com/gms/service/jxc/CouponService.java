@@ -7,6 +7,7 @@ import org.springframework.data.domain.Sort.Direction;
 import com.gms.entity.jxc.Coupon;
 import com.gms.entity.jxc.CouponCode;
 import com.gms.entity.jxc.CouponGoods;
+import com.gms.entity.jxc.Shop;
 
 /**
  * @ClassName: CouponService
@@ -32,7 +33,7 @@ public interface CouponService {
 	* @return List<Coupon>    返回类型 
 	* @throws 
 	*/
-	public List<Coupon> findCouponAll(Integer shopId);
+	public List<Coupon> findCouponAll(Shop shop);
 
 	/** 
 	* @Title: findCouponByStatus 
@@ -41,7 +42,7 @@ public interface CouponService {
 	* @return List<Coupon>    返回类型 
 	* @throws 
 	*/
-	public List<Coupon> findCouponByStatus(Integer status,Integer shopId);
+	public List<Coupon> findCouponByStatus(Integer status,Shop shop);
 	
 	/** 
 	* @Title: saveCouponGoods 

@@ -6,6 +6,7 @@ import org.springframework.data.domain.Sort.Direction;
 
 import com.gms.entity.jxc.PurchaseList;
 import com.gms.entity.jxc.PurchaseListGoods;
+import com.gms.entity.jxc.Shop;
 
 /**
  * 进货单Service接口
@@ -60,5 +61,5 @@ public interface PurchaseListService {
 	 * 获取已支付的进货单数
 	 * @param shopId
 	 */
-	public int getPurchasePayedListCount(Integer shopId,Integer state);
+	public int getPurchasePayedListCount(Shop shop,Integer state);
 }
