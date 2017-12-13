@@ -7,7 +7,7 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 @Configuration
-@EnableConfigurationProperties({ImageServerProperties.class})
+@EnableConfigurationProperties({ImageServerProperties.class,QuickMarkProperties.class})
 public class WebMvcConfig extends WebMvcConfigurerAdapter
 {
   public void addResourceHandlers(ResourceHandlerRegistry registry)

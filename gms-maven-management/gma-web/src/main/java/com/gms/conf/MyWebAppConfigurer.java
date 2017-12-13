@@ -9,7 +9,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 
 
 @Configuration
-@EnableConfigurationProperties(ImageServerProperties.class)
+@EnableConfigurationProperties({ImageServerProperties.class})
 public class MyWebAppConfigurer extends WebMvcConfigurerAdapter {
 
 	@Override
