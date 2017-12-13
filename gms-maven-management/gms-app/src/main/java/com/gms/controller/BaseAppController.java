@@ -1,64 +1,68 @@
 package com.gms.controller;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.json.JSONObject;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
 import com.gms.entity.jxc.User;
 import com.gms.util.CacheUtil;
 import com.gms.util.Constant;
+import com.google.gson.JsonObject;
 
 public class BaseAppController {
-	
+
 	/**
 	 * request对象
 	 */
-	protected ThreadLocal<HttpServletRequest> requestThreadLocal = new ThreadLocal<HttpServletRequest>();  
-	
-	
+	protected ThreadLocal<HttpServletRequest> requestThreadLocal = new ThreadLocal<HttpServletRequest>();
+
 	/**
 	 * response对象
 	 */
 	protected ThreadLocal<HttpServletResponse> responseThreadLocal = new ThreadLocal<HttpServletResponse>();
-	
-	
+
 	/**
 	 * 获取request对象
+	 * 
 	 * @return
 	 */
-	public HttpServletRequest getRequest(){
+	public HttpServletRequest getRequest() {
 		return requestThreadLocal.get();
 	}
-	
-	   /**
-     * 获取response对象
-     * @return
-     */
-    public HttpServletResponse getResponse(){
-        return responseThreadLocal.get();
-    }
-    
-	@ModelAttribute  
-    public void setReqAndRes(HttpServletRequest request, HttpServletResponse response){  
-	    requestThreadLocal.set(request);
-	    responseThreadLocal.set(response);
-    }
-    
-    /**
-     * 获取当前用户
-     * @return
-     */
-    User getUser() {
-    	User user = (User) getUserCache(getRequest().getParameter("access_token"));
-    	return user;
-    	
-    }
 
-    
+	/**
+	 * 获取response对象
+	 * 
+	 * @return
+	 */
+	public HttpServletResponse getResponse() {
+		return responseThreadLocal.get();
+	}
+
+	@ModelAttribute
+	public void setReqAndRes(HttpServletRequest request, HttpServletResponse response) {
+		requestThreadLocal.set(request);
+		responseThreadLocal.set(response);
+	}
+
+	/**
+	 * 获取当前用户
+	 * 
+	 * @return
+	 */
+	User getUser() {
+		User user = (User) getUserCache(getRequest().getParameter("access_token"));
+		return user;
+
+	}
+	
 	void cacheUser(User user) {
 		CacheUtil.put(CacheUtil.USER, user.getUuid(), new User(user));
 	}
@@ -77,6 +81,7 @@ public class BaseAppController {
 
 	/**
 	 * 返回成功的说明
+	 * 
 	 * @param data
 	 * @param message
 	 * @return
@@ -88,9 +93,10 @@ public class BaseAppController {
 		map.put("msg", message);
 		return map;
 	}
-	
+
 	/**
 	 * 返回成功的说明
+	 * 
 	 * @param data
 	 * @param message
 	 * @return
@@ -130,4 +136,7 @@ public class BaseAppController {
 		map.put("msg", "操作失败");
 		return map;
 	}
+	
+	
+	
 }

@@ -60,6 +60,10 @@ public class GoodsController extends BaseAppController {
 		if (shop == null) {
 			return error("店铺不存在");
 		}
+		if (page == null) {
+			page = 1;
+			rows = 10;
+		}
 		Goods goods = new Goods();
 		goods.setShopId(shopId);
 		Map<String, Object> resultMap = new HashMap<>();
@@ -87,15 +91,18 @@ public class GoodsController extends BaseAppController {
 		if (StringUtil.isEmpty(goodsName)) {
 			return error("商品名称不能为空");
 		}
+		if (goodsName.length() > 50) {
+			return error("商品名称太长");
+		}
 		if (shopId <= 0) {
 			return error("店铺ID不能为空");
 		}
 		if (StringUtil.isEmpty(pictureAddress)) {
 			return error("图片地址不能为空");
 		}
-		if (!pictureAddress.startsWith(picPath)) {
-			return error("图片地址错误");
-		}
+//		if (!pictureAddress.startsWith(picPath)) {
+//			return error("图片地址错误");
+//		}
 		Shop shop = shopService.queryShopByShopIdAndUserId(shopId, user.getId());
 		if (shop == null) {
 			return error("店铺不存在");
@@ -105,7 +112,7 @@ public class GoodsController extends BaseAppController {
 	}
 	
 	/**
-	 * 添加商品
+	 * 修改商品
 	 * @param goods
 	 * @return
 	 * @throws Exception
@@ -124,15 +131,18 @@ public class GoodsController extends BaseAppController {
 		if (StringUtil.isEmpty(goodsName)) {
 			return error("商品名称不能为空");
 		}
+		if (goodsName.length() > 50) {
+			return error("商品名称太长");
+		}
 		if (shopId <= 0) {
 			return error("店铺ID不能为空");
 		}
 		if (StringUtil.isEmpty(pictureAddress)) {
 			return error("图片地址不能为空");
 		}
-		if (!pictureAddress.startsWith("picturePath")) {
-			return error("图片地址错误");
-		}
+//		if (!pictureAddress.startsWith("picturePath")) {
+//			return error("图片地址错误");
+//		}
 		Shop shop = shopService.queryShopByShopIdAndUserId(shopId, user.getId());
 		if (shop == null) {
 			return error("店铺不存在");

@@ -36,10 +36,12 @@ public class CouponController extends BaseAppController {
 	private ShopService shopService;
 
 	/**
-	 * @throws ParseException @Title: save @Description:
-	 * TODO(这里用一句话描述这个方法的作用) @param @param coupon @param @param
-	 * request @param @return @param @throws Exception 设定文件 @return
-	 * Map<String,Object> 返回类型 @throws
+	 * 
+	 * @Title: save
+	 * @Description: TODO(这里用一句话描述这个方法的作用)
+	 * @param request
+	 * @throws Exception
+	 * @return Map<String,Object> 返回类型
 	 */
 	@RequestMapping("/save")
 	@ResponseBody
@@ -82,7 +84,7 @@ public class CouponController extends BaseAppController {
 		if (StringUtil.isEmpty(expiryDateStop)) {
 			return error("优惠券结束时间不能为空");
 		}
-		SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm");
 		Coupon coupon = new Coupon();
 		coupon.setCouponName(couponName);
 		coupon.setTotalCount(totalCount);
@@ -106,14 +108,14 @@ public class CouponController extends BaseAppController {
 		couponGoods.setShopId(shop.getId());
 		couponGoods.setGoodId(goodsId);
 		couponService.saveCouponGoods(couponGoods);
-		return success();
+		return success(coupon);
 	}
-
+	
 	/**
-	 * @throws ParseException @Title: save @Description:
-	 * TODO(这里用一句话描述这个方法的作用) @param @param coupon @param @param
-	 * request @param @return @param @throws Exception 设定文件 @return
-	 * Map<String,Object> 返回类型 @throws
+	 * 修改优惠券信息
+	 * @param request
+	 * @return
+	 * @throws ParseException
 	 */
 	@RequestMapping("/modify")
 	@ResponseBody
@@ -136,11 +138,17 @@ public class CouponController extends BaseAppController {
 		if (StringUtil.isEmpty(couponName)) {
 			return error("请设置优惠券名称");
 		}
+		if (couponName.length() > 50) {
+			return error("优惠券名称长度不能超过50");
+		}
 		if (totalCount <= 0) {
 			return error("请设置优惠券数量");
 		}
 		if (StringUtil.isEmpty(couponInfo)) {
 			return error("请设置优惠券描述");
+		}
+		if (couponInfo.length() > 500) {
+			return error("优惠券描述的长度不能超过500");
 		}
 		if (maxAmount <= 0 || minAmount <= 0) {
 			return error("请设置优惠券金额");
@@ -159,14 +167,14 @@ public class CouponController extends BaseAppController {
 		}
 		Date startTime = null;
 		Date endTime = null;
-		SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm");
 		try {
 			startTime = sdf.parse(expiryDateStart);
 			endTime = sdf.parse(expiryDateStop);
 		} catch (Exception e) {
 			return error("优惠券开始时间和结束时间参数错误");
 		}
-		
+
 		Shop shop = shopService.queryShopByShopIdAndUserId(shopId, user.getId());
 		if (shop == null) {
 			return error("店铺不存在");
@@ -187,12 +195,7 @@ public class CouponController extends BaseAppController {
 		coupon.setExpiryDateStop(endTime);
 		coupon.setShopId(shopId);
 		couponService.save(coupon);
-		CouponGoods couponGoods = new CouponGoods();
-		couponGoods.setCouponId(coupon.getId());
-		couponGoods.setShopId(shop.getId());
-		couponGoods.setGoodId(goodsId);
-		couponService.saveCouponGoods(couponGoods);
-		return success();
+		return success(coupon);
 	}
 
 	/**

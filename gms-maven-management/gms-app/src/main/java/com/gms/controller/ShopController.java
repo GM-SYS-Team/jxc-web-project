@@ -75,6 +75,9 @@ public class ShopController extends BaseAppController {
 		if (StringUtil.isEmpty(shop.getShopName())) {
 			return error("店铺名称不能为空");
 		}
+		if (shop.getShopName().length() > 60) {
+			return error("店铺名称太长");
+		}
 		if (!User.SHOPER.equals(user.getUserType())) {
 			return error("该用户不是商户");
 		}

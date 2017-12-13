@@ -44,7 +44,7 @@ public class Goods {
 	
 	private float sellingPrice; // 出售价格
 	
-	private int inventoryQuantity; // 库存数量
+	private int inventoryQuantity = 99999; // 库存数量
 	
 	private int minNum; // 库存下限
 	

@@ -4,12 +4,10 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Date;
 import java.util.Map;
-import java.util.RandomAccess;
 
 import javax.annotation.Resource;
 
 import org.apache.log4j.Logger;
-import org.junit.Test;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
@@ -22,6 +20,7 @@ import com.aliyuncs.dysmsapi.model.v20170525.SendSmsResponse;
 import com.aliyuncs.exceptions.ClientException;
 import com.gms.annoation.NeedAuth;
 import com.gms.entity.jxc.User;
+import com.gms.exception.MyException;
 import com.gms.service.jxc.UserService;
 import com.gms.util.EmojiUtils;
 import com.gms.util.MD5Util;
@@ -49,17 +48,13 @@ public class UserController extends BaseAppController {
      * 用户登录请求
      * @param user
      * @return
+	 * @throws MyException 
      */
     @ResponseBody
     @RequestMapping("/login")
-    public Map<String,Object> shoperLogin(String password, String telephone){
-    	if (StringUtils.isEmpty(telephone)) {
-    		return error("手机号不能为空");
-    	}
-    	if (StringUtils.isEmpty(password)) {
-    		return error("密码不能为空");
-    	}
-    	telephone = telephone.replaceAll(" ", "");
+    public Map<String,Object> shoperLogin(String password, String telephone) throws MyException{
+    	telephone = validatePhoneNum(telephone);
+    	validatePassword(password);
     	User user = userService.findUserByTelephone(telephone, User.SHOPER);
     	if (user == null) {
 			return error("用户名或者密码错误");
@@ -73,7 +68,7 @@ public class UserController extends BaseAppController {
     	map.put("data", user);
     	return map;
     }
-    
+
 	/**
      * 用户登录请求
      * @param user
@@ -83,14 +78,8 @@ public class UserController extends BaseAppController {
     @ResponseBody
     @RequestMapping("/customer/login")
     public Map<String,Object> login(String password, String telephone) throws Exception{
-    	password.getBytes();
-    	if (StringUtils.isEmpty(telephone)) {
-    		return error("手机号不能为空");
-    	}
-    	if (StringUtils.isEmpty(password)) {
-    		return error("密码不能为空");
-    	}
-    	telephone = telephone.replaceAll(" ", "");
+    	telephone = validatePhoneNum(telephone);
+    	validatePassword(password);
     	User user = userService.findUserByTelephone(telephone, User.CUSTOMER);
     	if (user == null) {
 			return error("用户名或者密码错误");
@@ -109,24 +98,14 @@ public class UserController extends BaseAppController {
      * 用户忘记密码
      * @param user
      * @return
+     * @throws MyException 
      */
     @ResponseBody
     @RequestMapping("/forgetPassword")
-    public Map<String,Object> forgetPassword(String smsCode, String telephone, String password, String userType){
-    	if (StringUtils.isEmpty(telephone)) {
-    		return error("手机号不能为空");
-    	}
-    	if (StringUtils.isEmpty(smsCode)) {
-    		return error("验证码不能为空");
-    	}
-    	telephone = telephone.replaceAll(" ", "");
-    	Object cache = getSmsCodeCache(telephone);
-    	if (cache == null) {
-    		return error("验证码错误");
-    	}
-    	if (!((String)cache) .equals(smsCode)) {
-    		return error("验证码错误");
-    	}
+    public Map<String,Object> forgetPassword(String smsCode, String telephone, String password, String userType) throws MyException{
+    	//手机号校验
+    	telephone = validatePhoneNum(telephone);
+    	validateSmsCode(telephone, smsCode);
     	if (userType == null) {
     		return error("用户类型不能为空");
     	}
@@ -143,35 +122,23 @@ public class UserController extends BaseAppController {
     	cacheUser(user);
     	return success("密码修改成功");
     }
-    
-    /**
+
+	/**
      * 用户注册
      * @param smsCode
      * @param user
      * @return
+	 * @throws MyException 
      */
     @ResponseBody
     @RequestMapping("/customer/register")
-    public Map<String,Object> customerRegister(String smsCode, User user){
+    public Map<String,Object> customerRegister(String smsCode, User user) throws MyException{
     	String telePhone = user.getPhoneNum();
-    	if (StringUtils.isEmpty(telePhone)) {
-    		return error("手机号不能为空");
-    	}
-    	if (StringUtils.isEmpty(smsCode)) {
-    		return error("验证码不能为空");
-    	}
-    	telePhone = telePhone.replaceAll(" ", "");
-    	Object cache = getSmsCodeCache(telePhone);
-    	if (cache == null) {
-    		return error("验证码错误");
-    	}
-    	if (!((String)cache) .equals(smsCode)) {
-    		return error("验证码错误");
-    	}
+    	telePhone = validatePhoneNum(telePhone);
+    	validateSmsCode(telePhone, smsCode);
     	String password = user.getPassword();
-    	if (StringUtil.isEmpty(password)) {
-    		return error("密码不能为空");
-    	}
+    	validatePassword(password);
+    	
     	user.setUserName(telePhone);
     	user.setPhoneNum(telePhone);
     	user.setUserType(User.CUSTOMER);
@@ -190,37 +157,33 @@ public class UserController extends BaseAppController {
      * @param smsCode
      * @param user
      * @return
+     * @throws MyException 
      */
     @ResponseBody
     @RequestMapping("/shoper/register")
-    public Map<String,Object> shoperRegister(String smsCode, User user){
+    public Map<String,Object> shoperRegister(String smsCode, User user) throws MyException{
     	String telePhone = user.getPhoneNum();
-    	if (StringUtils.isEmpty(telePhone)) {
-    		return error("手机号不能为空");
-    	}
-    	if (StringUtils.isEmpty(smsCode)) {
-    		return error("验证码不能为空");
-    	}
-    	telePhone = telePhone.replaceAll(" ", "");
-    	Object cache = getSmsCodeCache(telePhone);
-    	if (cache == null) {
-    		return error("验证码错误");
-    	}
-    	if (!((String)cache).equals(smsCode)) {
-    		return error("验证码错误");
-    	}
+    	telePhone = validatePhoneNum(telePhone);
+    	validateSmsCode(telePhone, smsCode);
     	String password = user.getPassword();
-    	if (StringUtil.isEmpty(password)) {
-    		return error("密码不能为空");
-    	}
+    	validatePassword(password);
     	if (StringUtil.isEmpty(user.getTrueName())) {
     		return error("联系人不能为空");
+    	}
+    	if (user.getTrueName().length() > 5) {
+    		return error("联系人姓名太长");
     	}
     	if (StringUtil.isEmpty(user.getAddress())) {
     		return error("详细地址不能为空");
     	}
+    	if (user.getTrueName().length() > 500) {
+    		return error("详细地址太长");
+    	}
     	if (StringUtil.isEmpty(user.getDistrict())) {
     		return error("省区不能为空");
+    	}
+    	if (user.getDistrict().indexOf("|") == -1) {
+    		return error("省区参数不正确");
     	}
     	user.setUserName(telePhone);
     	user.setPhoneNum(telePhone);
@@ -246,9 +209,6 @@ public class UserController extends BaseAppController {
     @RequestMapping("/sendSmsCode")
     public Map<String,Object> sendSmsCode(String telephone) throws ClientException{
     	telephone = telephone.replaceAll(" ", "");
-    	if (!PhoneUtil.isPhoneNum(telephone)) {
-    		return error("手机号码不正确");
-    	}
     	SmsUtil smsUtil = new SmsUtil();
     	String smsCode = (int) (Math.random() * 999999) + "";
     	SendSmsResponse response = smsUtil.sendSms(telephone, smsCode);
@@ -311,5 +271,37 @@ public class UserController extends BaseAppController {
         }
         return error("服务器请假了，请稍后再试");
     }
+    
+    
+    public String validatePhoneNum(String telephone) throws MyException {
+    	if (StringUtils.isEmpty(telephone)) {
+    		throw new MyException("手机号不能为空");
+    	}
+    	telephone = telephone.replaceAll(" ", "");
+    	if (!PhoneUtil.isPhoneNum(telephone)) {
+    		throw new MyException("手机号码不正确");
+    	}
+    	return telephone;
+	}
+    
+	private void validateSmsCode(String telephone, String smsCode) throws MyException {
+		Object cache = getSmsCodeCache(telephone);
+    	if (cache == null) {
+    		throw new MyException("验证码错误");
+    	}
+    	if (!((String)cache) .equals(smsCode)) {
+    		cacheSmsCode(telephone, (String)cache);
+    		throw new MyException("验证码错误");
+    	}
+	}
+	
+	private void validatePassword(String password) throws MyException {
+    	if (StringUtils.isEmpty(password)) {
+    		throw new MyException("密码不能为空");
+    	}
+    	if (password.length() > 20 || password.length() <6) {
+    		throw new MyException("密码长度必须为6-20位");
+    	}
+	}
 
 }
