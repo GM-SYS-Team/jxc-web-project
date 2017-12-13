@@ -40,10 +40,14 @@ spring:
         request-context-attribute: request
 picuploadPath: //src//main//resources//static//imagePath//
 quickuploadPath: //src//main//resources//static//quickMark//
+couponuploadPath: //src//main//resources//static//quickMark//
+customeruploadPath: //src//main//resources//static//quickMark//
 image: 
     server: 
         sourcePath: /static/imagePath/
         quickMark: /static/quickMark/
+        couponMark: /static/couponMark/
+        customerMark: /static/customerMark/
     quickmark:
         rows: 25
         cols: 25

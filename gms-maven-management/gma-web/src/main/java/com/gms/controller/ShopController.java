@@ -179,7 +179,8 @@ public class ShopController extends BaseController {
 	public Map<String, Object> createAndUpdateQuickMark(Integer id) throws Exception {
 		Map<String, Object> resultMap = new HashMap<>();
 		String result = HttpsUtil.getInstance().sendHttpPost(imageServerProperties.getUrl()+"/"+
-				imageServerProperties.getQuickMarkAction(),"quickMarkStr="+String.valueOf(id.intValue()));
+				imageServerProperties.getQuickMarkAction(),"quickMarkStr="+String.valueOf(id.intValue()
+						+"&markType="+Constant.QUICK_MARK_SHOP_TYPE));
 		Shop shop = shopService.findById(id);
 		if(result!=null){
 			String quickMarkImageName = null;
