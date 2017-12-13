@@ -57,6 +57,18 @@ public class CouponCode {
     @Temporal(TemporalType.TIMESTAMP)
     private Date usedTime;
     
+
+	/**
+	 * 有效开始时间
+	 */
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date expiryDateStart;
+
+	/**
+	 * 有效结束时间
+	 */
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date expiryDateStop;
     
     /**
      * @return id
@@ -139,5 +151,21 @@ public class CouponCode {
 
 	public void setReceiveTime(Date receiveTime) {
 		this.receiveTime = receiveTime;
+	}
+
+	public Date getExpiryDateStart() {
+		return expiryDateStart;
+	}
+
+	public void setExpiryDateStart(Date expiryDateStart) {
+		this.expiryDateStart = expiryDateStart;
+	}
+
+	public Date getExpiryDateStop() {
+		return expiryDateStop;
+	}
+
+	public void setExpiryDateStop(Date expiryDateStop) {
+		this.expiryDateStop = expiryDateStop;
 	}
 }

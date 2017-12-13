@@ -1,5 +1,6 @@
 package com.gms.service.jxc;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.data.domain.Sort.Direction;
@@ -93,6 +94,16 @@ public interface CouponService {
 	 * @return
 	 */
 	public List<Coupon> list(Coupon coupon,Integer page,Integer pageSize,Direction direction,Integer state, String... properties);
+	
 	public Long listCount(Coupon coupon,Integer state);
+
+	/**
+	 * 随机获取一个共享优惠券
+	 * @param now
+	 * @param id
+	 * @return
+	 */
+	public Coupon findRandomCoupon(Date now, Integer id);
+	
 
 }

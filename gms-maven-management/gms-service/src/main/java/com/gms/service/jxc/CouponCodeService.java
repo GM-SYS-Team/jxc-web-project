@@ -17,5 +17,11 @@ public interface CouponCodeService {
 	
 	public List<CouponCode> queryCouponCodeList(Shop shop,Date receiveDate);
 
+	public List<CouponCode> findListByUserId(Integer id, Integer status);
+
+	public void save(CouponCode couponCode);
+
+	public CouponCode findCouponCodeById(Integer couponCodeId, Integer ownerId);
+
 
 }

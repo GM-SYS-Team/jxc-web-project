@@ -194,4 +194,9 @@ public class CouponServiceImpl implements CouponService {
 		return count;
 	}
 
+	@Override
+	public Coupon findRandomCoupon(Date now, Integer id) {
+		return couponRepository.findRandomCoupon(now, id);
+	}
+
 }
