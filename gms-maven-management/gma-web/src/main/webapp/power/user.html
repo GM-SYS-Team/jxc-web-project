@@ -17,7 +17,7 @@
 	}
 	
 	function formatShopStatus(val,row){
-		if(val!=null && val.indexOf('/')>=0){
+		if(row.quickMark!=null && row.quickMark.indexOf('/')>=0){
 			return '已生成';
 		}
 		return "<a href=\"javascript:createQuickMarkForShop("+row.id+")\"><img style='margin-top: 4px' src='/static/images/create.png' /></a>";
