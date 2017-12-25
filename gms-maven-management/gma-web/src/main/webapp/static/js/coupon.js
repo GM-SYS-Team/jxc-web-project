@@ -115,7 +115,7 @@ function emptyText(){
 	$("#totalCount").val("");
 	$("#min_amount").val("");
 	$("#max_amount").val("");
-	$("#couponCount").val("");
+	/*$("#couponCount").val("");*/
 	$("#goodsIds").html("");
 	$("#couponIntro").val("");
 }
@@ -153,11 +153,11 @@ function saveCoupon() {
 		}
 		max_amount = min_amount;
 	}
-	var couponCount = $("#couponCount").val();
+	/*var couponCount = $("#couponCount").val();
 	if(isEmpty(couponCount)){
 		alert("优惠券每人限领数量不能为空！");
 		return false;
-	}
+	}*/
 	var startExpiryDate = $("#startExpiryDate").val();
 	if(isEmpty(startExpiryDate)){
 		alert("优惠券使用起始日期不能为空！");
@@ -182,7 +182,7 @@ function saveCoupon() {
 			totalCount : totalCount,
 			minAmount : min_amount,
 			maxAmount : max_amount,
-			couponCount : couponCount,
+			/*couponCount : couponCount,*/
 			startExpiryDate : startExpiryDate,
 			stopExpiryDate : stopExpiryDate,
 			couponIntro : couponIntro,
@@ -254,7 +254,7 @@ function couponAjax(num,currentPage,page_size){
 							     +"<td>"+ value +"</td>"
 							     +"<td>"+ item.totalCount +"</td>"
 							     +"<td>"+ item.remainCount +"</td>"
-							     +"<td>"+ item.couponCount +"</td>"
+							   /*  +"<td>"+ item.couponCount +"</td>"*/
 							     +"<td>"+ new Date(item.expiryDateStart).format("yyyy-MM-dd hh:mm") +"</td>"
 							     +"<td>"+ new Date(item.expiryDateStop).format("yyyy-MM-dd hh:mm") +"</td>";
 					if(num == 1){
@@ -325,6 +325,10 @@ function coupon_del(obj,id){
 			success : function(data) {
 				if(data.success){
 					layer.msg('已删除!',{icon:1,time:1000});
+					if($("#coupon_tbody").html()==""){
+						$(".js-list-empty-region").show();
+						$("#table_list").hide();
+					}
 				}
 			}
 		});
@@ -399,7 +403,7 @@ function goodsAjax(currentPage,page_size){
 							     +"<td>"+ item.model +"</td>"
 							     +"<td>"+ item.unit +"</td>"
 							     +"<td>"+ item.sellingPrice +"</td>"
-							     +"<td>"+ item.inventoryQuantity +"</td>"
+							    /* +"<td>"+ item.inventoryQuantity +"</td>"*/
 							     +"</tr>";
 				})
 				$("#goods_tbody").html(html);

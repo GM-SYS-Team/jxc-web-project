@@ -22,4 +22,7 @@ public interface PurchaseListRepository extends JpaRepository<PurchaseList, Inte
 	
 	@Query(value="SELECT count(*) FROM t_purchase_list WHERE shop_id=?1 and state=?2",nativeQuery=true)
 	public int getPurchasePayedListCount(Integer shopId,Integer state);
+	
+	@Query(value="SELECT count(*) FROM t_purchase_list WHERE state=?1",nativeQuery=true)
+	public int getPurchasePayedListCountAdmin(Integer state);
 }

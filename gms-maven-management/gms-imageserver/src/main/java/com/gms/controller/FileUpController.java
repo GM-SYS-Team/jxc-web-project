@@ -1,20 +1,18 @@
 package com.gms.controller;
 
-import com.gms.conf.ImageServerProperties;
-import com.gms.conf.ResultData;
-import com.gms.util.DateUtil;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.io.PrintStream;
 import java.util.List;
-import javax.servlet.ServletContext;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,21 +24,38 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import com.gms.common.EncodeUtil;
+import com.gms.conf.ImageServerProperties;
+import com.gms.conf.QuickMarkProperties;
+import com.gms.conf.ResultData;
+import com.gms.util.Constant;
+import com.gms.util.DateUtil;
+import com.gms.util.StringUtil;
+
 @Controller
 public class FileUpController
 {
 
   @Value("${picuploadPath}")
   private String picturePath;
+  @Value("${quickuploadPath}")
+  private String quickuploadPath;
+  @Value("${couponuploadPath}")
+  private String couponuploadPath;
+  @Value("${customeruploadPath}")
+  private String customeruploadPath;
+  private String systemPath = System.getProperty("user.dir");
 
   @Autowired
   private ImageServerProperties imageServerProperties;
+  @Autowired
+  private QuickMarkProperties quickMarkProperties;
   private static final Logger logger = LoggerFactory.getLogger(FileUpController.class);
 
   @ResponseBody
   @RequestMapping(value={"picture/upload"}, method={org.springframework.web.bind.annotation.RequestMethod.POST})
   public ResultData upload(@RequestParam("pictureFile") MultipartFile pictureFile) { if (pictureFile.isEmpty()) {
-      return ResultData.forbidden().putDataValue("message", "文件不能为空");
+      return ResultData.forbidden().putDataValue("messageInfo", "文件不能为空");
     }
 
     String fileName = pictureFile.getOriginalFilename();
@@ -50,7 +65,8 @@ public class FileUpController
     logger.info("上传的后缀名为：" + suffixName);
 
     fileName = DateUtil.getCurrentTime() + suffixName;
-    File dest = new File(this.picturePath + fileName);
+    String realPath = systemPath.replaceAll("\\\\", "//");
+    File dest = new File(realPath+this.picturePath + fileName);
 
     if (!dest.getParentFile().exists())
       dest.getParentFile().mkdirs();
@@ -58,13 +74,59 @@ public class FileUpController
     {
       pictureFile.transferTo(dest);
       ResultData resultData = ResultData.ok().putDataValue("imageName", this.imageServerProperties.getSourcePath() + fileName);
-      return resultData.putDataValue("message", "头像上传成功");
+      return resultData.putDataValue("messageInfo", "头像上传成功");
     } catch (IllegalStateException e) {
       e.printStackTrace();
     } catch (IOException e) {
       e.printStackTrace();
     }
-    return ResultData.serverInternalError().putDataValue("message", "服务器请假了，请稍后再试"); }
+    return ResultData.serverInternalError().putDataValue("messageInfo", "服务器请假了，请稍后再试"); 
+}
+  
+  @ResponseBody
+  @RequestMapping(value={"quickMark/upload"}, method={org.springframework.web.bind.annotation.RequestMethod.POST})
+  public ResultData quickMarkUpload(@RequestParam("quickMarkStr") String quickMarkStr,@RequestParam("markType") String markType) { if (!StringUtil.isValid(quickMarkStr)) {
+      return ResultData.forbidden().putDataValue("messageInfo", "商铺ID不能为空");
+    }
+	String realPath = systemPath.replaceAll("\\\\", "//");
+    String fileName = DateUtil.getCurrentTime() + quickMarkProperties.getType();
+    byte[] quickMarkImage = EncodeUtil.encodeShop(quickMarkProperties.getRows(), quickMarkProperties.getCols(),
+			quickMarkProperties.getModelSize(), quickMarkProperties.getQzsize(), quickMarkStr);
+    String markRealFileName = null;
+    File dest = null;
+    if(markType.equals(Constant.QUICK_MARK_SHOP_TYPE)){
+    	markRealFileName = realPath+this.quickuploadPath + fileName;
+    }else if(markType.equals(Constant.QUICK_MARK_COUPON_TYPE)){
+    	markRealFileName = realPath+this.couponuploadPath + fileName;
+    }else if(markType.equals(Constant.QUICK_MARK_CUSTOMER_TYPE)){
+    	markRealFileName = realPath+this.customeruploadPath + fileName;
+    }
+    dest = new File(markRealFileName);
+
+    if (!dest.getParentFile().exists())
+      dest.getParentFile().mkdirs();
+    FileOutputStream out=null;
+    try
+    {
+    	out = new FileOutputStream(dest,false);
+		out.write(quickMarkImage);
+		ResultData resultData = ResultData.ok().putDataValue("quickMark", this.imageServerProperties.getQuickMark() + fileName);
+		return resultData.putDataValue("messageInfo", "二维码上传成功");
+    }catch (FileNotFoundException e1) {
+		e1.printStackTrace();
+	} catch (IOException e) {
+		e.printStackTrace();
+	} catch (IllegalStateException e) {
+      e.printStackTrace();
+    }finally{
+    	try {
+			out.close();
+		} catch (IOException e) {
+			logger.info("商铺二维码生成数据流关闭异常，商铺ID为：" + quickMarkStr);
+		}
+    }
+    return ResultData.serverInternalError().putDataValue("messageInfo", "服务器请假了，请稍后再试"); 
+}
 
   @RequestMapping({"/download"})
   public String downloadFile(HttpServletRequest request, HttpServletResponse response)

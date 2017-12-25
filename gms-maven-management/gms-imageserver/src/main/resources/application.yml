@@ -38,9 +38,19 @@ spring:
         suffix: .html
         template-loader-path: classpath:/templates/
         request-context-attribute: request
-picuploadPath: E://GitHub//jxc-organization//jxc-web-project//gms-maven-management//gms-imageserver//src//main//resources//static//imagePath//
+picuploadPath: //src//main//resources//static//imagePath//
+quickuploadPath: //src//main//resources//static//quickMark//
+couponuploadPath: //src//main//resources//static//quickMark//
+customeruploadPath: //src//main//resources//static//quickMark//
 image: 
     server: 
-        url: http://localhost:7000
-        action: picture/upload
         sourcePath: /static/imagePath/
+        quickMark: /static/quickMark/
+        couponMark: /static/couponMark/
+        customerMark: /static/customerMark/
+    quickmark:
+        rows: 25
+        cols: 25
+        modelSize: 5
+        qzsize: 16
+        type: .png

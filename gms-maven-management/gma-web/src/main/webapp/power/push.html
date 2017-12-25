@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>推送管理</title>
+    <link rel="stylesheet" type="text/css" href="/static/jquery-easyui-1.3.3/themes/default/easyui.css"></link>
+    <link rel="stylesheet" type="text/css" href="/static/jquery-easyui-1.3.3/themes/icon.css"></link>
+    <script type="text/javascript" src="/static/jquery-easyui-1.3.3/jquery.min.js"></script>
+    <script type="text/javascript" src="/static/jquery-easyui-1.3.3/jquery.easyui.min.js"></script>
+    <script type="text/javascript" src="/static/jquery-easyui-1.3.3/locale/easyui-lang-zh_CN.js"></script>
+    <script type="text/javascript">
+
+        var url;
+
+
+        //        function deleteRole() {
+        //            var selectedRows = $("#dg").datagrid("getSelections");
+        //            if (selectedRows.length != 1) {
+        //                $.messager.alert("系统提示", "请选择要删除的数据！");
+        //                return;
+        //            }
+        //            var id = selectedRows[0].id;
+        //            $.messager.confirm("系统提示", "您确定要删除这条数据吗？", function (r) {
+        //                if (r) {
+        //                    $.post("/admin/role/delete", {id: id}, function (result) {
+        //                        if (result.success) {
+        //                            $.messager.alert("系统提示", "数据已成功删除！");
+        //                            $("#dg").datagrid("reload");
+        //                        } else {
+        //                            $.messager.alert("系统提示", result.errorInfo);
+        //                        }
+        //                    }, "json");
+        //                }
+        //            });
+        //        }
+
+
+        function openPushJobAddDialog() {
+            $("#dlg").dialog("open").dialog("setTitle", "添加推送信息");
+            url = "/admin/push/save";
+        }
+
+        function openPushJobModifyDialog() {
+            var selectedRows = $("#dg").datagrid("getSelections");
+            if (selectedRows.length != 1) {
+                $.messager.alert("系统提示", "请选择一条要修改的数据！");
+                return;
+            }
+            var row = selectedRows[0];
+            $("#dlg").dialog("open").dialog("setTitle", "修改推送信息");
+            $("#fm").form("load", {
+                "id": row.id,
+                "title": row.title,
+                "content": row.content,
+                "url": row.url,
+                "pushTime": new Date(row.pushTime).format("yyyy-mm-dd HH:MM:SS")
+            });
+            url = "/admin/push/save?id=" + row.id;
+        }
+
+
+        function savePushJob() {
+            $("#fm").form("submit", {
+                url: url,
+                onSubmit: function () {
+                    return $(this).form("validate");
+                },
+                success: function (result) {
+                    var result = eval('(' + result + ')');
+                    if (result.success) {
+                        $.messager.alert("系统提示", "保存成功！");
+                        resetValue();
+                        $("#dlg").dialog("close");
+                        $("#dg").datagrid("reload");
+                    } else {
+                        $.messager.alert("系统提示", result.errorInfo);
+                    }
+                }
+            });
+        }
+
+
+        function resetValue() {
+            $("#title").val("");
+            $("#content").val("");
+            $("#url").val("");
+            $("#pushTime").datetimebox("setValue", "")
+        }
+
+        function closeRoleDialog() {
+            $("#dlg").dialog("close");
+            resetValue();
+        }
+
+        function searchRole() {
+            $("#dg").datagrid('load', {
+                "name": $("#s_name").val()
+            });
+        }
+
+
+        $(function () {
+
+            $("#dg").datagrid({
+                //双击事件
+                onDblClickRow: function (index, row) {
+                    $("#dlg").dialog("open").dialog("setTitle", "修改推送信息");
+                    $("#fm").form("load", row);
+                    url = "/admin/role/save?id=" + row.id;
+                }
+            });
+
+
+        });
+
+        //状态，0：已删除；1：已保存；2：已提交推送任务；3：已撤回
+        function formatStatus(value, rec, index) {
+            if (value == '0') {
+                return "已删除"
+            } else if (value == '1') {
+                return "已保存"
+            } else if (value == '2') {
+                return "推送已提交"
+            } else if (value == '3') {
+                return "已撤回"
+            } else {
+                return "未知状态"
+            }
+        }
+
+        //格式化操作单元格
+        function formatEdit(val, row) {
+            var htmlStr = "";
+            if (row.pushStatus == "1") {
+                htmlStr += "<a href=\"javascript:deletePushJob(" + row.id + ")\">删除</a>";
+                htmlStr += "&nbsp;&nbsp;&nbsp;&nbsp;<a href=\"javascript:submitPushJob(" + row.id + ")\">推送</a>";
+            } else if (row.pushStatus == "2") {
+                htmlStr += "<a href=\"javascript:withdrawPushJob(" + row.id + ")\">撤回</a>";
+            }
+            return htmlStr;
+        }
+        //删除推送任务
+        function deletePushJob(pushJobId) {
+            $.messager.confirm("系统提示", "您确定要删除这条数据吗？", function (r) {
+                if (r) {
+                    $.post("/admin/push/delete", {id: pushJobId}, function (result) {
+                        if (result.success) {
+                            $.messager.alert("系统提示", "数据已成功删除！");
+                            $("#dg").datagrid("reload");
+                        } else {
+                            $.messager.alert("系统提示", result.errorInfo);
+                        }
+                    }, "json");
+                }
+            });
+        }
+
+        //提交推送任务
+        function submitPushJob(pushJobId) {
+            $.messager.confirm("系统提示", "您确定要提交这条数据吗？", function (r) {
+                if (r) {
+                    $.post("/admin/push/submit", {id: pushJobId}, function (result) {
+                        if (result.success) {
+                            $.messager.alert("系统提示", "数据已成功提交！");
+                            $("#dg").datagrid("reload");
+                        } else {
+                            $.messager.alert("系统提示", result.errorInfo);
+                        }
+                    }, "json");
+                }
+            });
+        }
+
+        //撤回推送任务
+        function withdrawPushJob(pushJobId) {
+            $.messager.confirm("系统提示", "您确定要撤回这条数据吗？", function (r) {
+                if (r) {
+                    $.post("/admin/push/withdraw", {id: pushJobId}, function (result) {
+                        if (result.success) {
+                            $.messager.alert("系统提示", "数据已成功撤回！");
+                            $("#dg").datagrid("reload");
+                        } else {
+                            $.messager.alert("系统提示", result.errorInfo);
+                        }
+                    }, "json");
+                }
+            });
+        }
+
+
+        // 对Date的扩展，将 Date 转化为指定格式的String
+        // 月(M)、日(d)、小时(H)、分(M)、秒(S)、季度(q) 可以用 1-2 个占位符，
+        // 年(y)可以用 1-4 个占位符，毫秒(s)只能用 1 个占位符(是 1-3 位的数字)
+        // 例子：
+        // (new Date()).Format("yyyy-mm-dd HH:MM:SS.s") ==> 2015-07-02 08:09:04.423
+        // (new Date()).Format("yyyy-m-d H:M:S.s")      ==> 2015-7-2 8:9:4.18
+        Date.prototype.format = function (fmt) { //author: meizz
+            var o = {
+                "m+": this.getMonth() + 1, //月份
+                "d+": this.getDate(), //日
+                "H+": this.getHours(), //小时
+                "M+": this.getMinutes(), //分
+                "S+": this.getSeconds(), //秒
+                "q+": Math.floor((this.getMonth() + 3) / 3), //季度
+                "s": this.getMilliseconds() //毫秒
+            };
+            if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+            for (var k in o)
+                if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+            return fmt;
+        }
+
+        var Common = {
+            //EasyUI用DataGrid用日期格式化
+            TimeFormatter: function (value, rec, index) {
+                if (value == undefined) {
+                    return "";
+                }
+                /*json格式时间转js时间格式*/
+                value = value.substr(1, value.length - 2);
+                var obj = eval('(' + "{Date: new " + value + "}" + ')');
+                var dateValue = obj["Date"];
+                if (dateValue.getFullYear() < 1900) {
+                    return "";
+                }
+                var val = dateValue.format("yyyy-mm-dd HH:MM");
+                return val.substr(11, 5);
+            },
+            DateTimeFormatter: function (value, rec, index) {
+                if (value == undefined) {
+                    return "";
+                }
+                var dateValue = new Date(value);
+                if (dateValue.getFullYear() < 1900) {
+                    return "";
+                }
+
+                return dateValue.format("yyyy-mm-dd HH:MM");
+            },
+
+            //EasyUI用DataGrid用日期格式化
+            DateFormatter: function (value, rec, index) {
+                if (value == undefined) {
+                    return "";
+                }
+                /*json格式时间转js时间格式*/
+                value = value.substr(1, value.length - 2);
+                var obj = eval('(' + "{Date: new " + value + "}" + ')');
+                var dateValue = obj["Date"];
+                if (dateValue.getFullYear() < 1900) {
+                    return "";
+                }
+
+                return dateValue.format("yyyy-mm-dd");
+            },
+            TitleFormatter: function (value, rec, index) {
+                if (value.length > 10) value = value.substr(0, 8) + "...";
+                return value;
+            },
+            LongTitleFormatter: function (value, rec, index) {
+                if (value.length > 15) value = value.substr(0, 12) + "...";
+                return value;
+            }
+        };
+
+    </script>
+</head>
+<body style="margin: 1px">
+<table id="dg" title="推送管理" class="easyui-datagrid"
+       fitColumns="true" pagination="true" rownumbers="true" singleSelect="true"
+       url="/admin/push/list" fit="true" toolbar="#tb">
+    <thead>
+    <tr>
+        <th field="id" width="20" align="center">编号</th>
+        <th field="title" width="100" align="center">消息标题</th>
+        <th field="content" width="200" align="center">消息内容</th>
+        <th field="devicePlatform" width="50" align="center">设备平台</th>
+        <!--<th field="valid" width="30" align="center">是否有效</th>-->
+        <th field="pushStatus" width="30" align="center" formatter="formatStatus">状态</th>
+        <th field="pushTime" width="60" align="center" formatter="Common.DateTimeFormatter">推送时间</th>
+        <th field="createTime" width="60" align="center" formatter="Common.DateTimeFormatter">创建时间</th>
+        <th field="aa" width="50" align="center" formatter="formatEdit">操作</th>
+    </tr>
+    </thead>
+</table>
+
+<div id="tb">
+    <div>
+        <a href="javascript:openPushJobAddDialog()" class="easyui-linkbutton" iconCls="icon-add" plain="true">添加</a>
+        <a href="javascript:openPushJobModifyDialog()" class="easyui-linkbutton" iconCls="icon-edit" plain="true">修改</a>
+    </div>
+    <div>
+        &nbsp;推送名称：&nbsp;<input type="text" id="s_name" size="20" onkeydown="if(event.keyCode==13) searchRole()"/>
+        <a href="javascript:searchRole()" class="easyui-linkbutton" iconCls="icon-search" plain="true">搜索</a>
+    </div>
+</div>
+
+<div id="dlg" class="easyui-dialog" style="width:500px;height:370px;padding: 10px 20px"
+     closed="true" buttons="#dlg-buttons" data-options="onClose:function(){resetValue()}">
+
+    <form id="fm" method="post">
+        <table cellspacing="8px">
+            <tr>
+                <td style="width: 20%">标题：</td>
+                <td style="width: 80%"><input type="text" id="title" name="title" class="easyui-validatebox"
+                                              style="width: 300px;" required="true"/></td>
+            </tr>
+            <tr>
+                <td valign="top">内容：</td>
+                <td>
+                    <textarea rows="5" cols="40" id="content" name="content" class="easyui-validatebox" required="true"
+                              style="width: 300px;"></textarea>
+                </td>
+            </tr>
+            <tr>
+                <td>URL：</td>
+                <td><input type="text" id="url" name="url" class="easyui-validatebox" required="true"
+                           style="width: 300px;"/></td>
+            </tr>
+            <tr>
+                <td>设备平台：</td>
+                <td>
+                    <!--<input type="text" id="devicePlatform" name="devicePlatform" class="easyui-validatebox" required="true"/>-->
+                    <select class="easyui-combobox" id="devicePlatform" name="devicePlatform" style="width: 154px;"
+                            editable="false" panelHeight="auto">
+                        <option value="ANDROID">安卓设备</option>
+                        <option value="IPHONE">苹果设备</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>推送时间：</td>
+                <td><input type="text" id="pushTime" name="pushTime" class="easyui-datetimebox"
+                           data-options="required:true"/></td>
+            </tr>
+        </table>
+    </form>
+</div>
+
+<div id="dlg-buttons">
+    <a href="javascript:savePushJob()" class="easyui-linkbutton" iconCls="icon-ok">保存</a>
+    <a href="javascript:closeRoleDialog()" class="easyui-linkbutton" iconCls="icon-cancel">关闭</a>
+</div>
+
+<div id="menuSetDialog" class="easyui-dialog" style="width:300px;height:500px;padding: 10px 20px"
+     closed="true" buttons="#dlg-buttons2">
+    <input type="hidden" id="roleId" name="roleId"/>
+    <ul id="menuTree" class="easyui-tree"></ul>
+</div>
+
+<div id="dlg-buttons2">
+    <a href="javascript:saveMenuSet()" class="easyui-linkbutton" iconCls="icon-ok">保存</a>
+    <a href="javascript:closeMenuSetDialog()" class="easyui-linkbutton" iconCls="icon-cancel">关闭</a>
+</div>
+
+</body>
+</html>

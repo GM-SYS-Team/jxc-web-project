@@ -5,23 +5,29 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties(prefix="image.server")
 public class ImageServerProperties
 {
-  private String url;
-  private String action;
   private String sourcePath;
+  private String quickMark;
+  private String couponMark;
+  private String customerMark;
 
-  public String getUrl()
-  {
-    return this.url;
-  }
-  public void setUrl(String url) {
-    this.url = url;
-  }
-  public String getAction() {
-    return this.action;
-  }
-  public void setAction(String action) {
-    this.action = action;
-  }
+  public String getCouponMark() {
+	return couponMark;
+}
+public void setCouponMark(String couponMark) {
+	this.couponMark = couponMark;
+}
+public String getCustomerMark() {
+	return customerMark;
+}
+public void setCustomerMark(String customerMark) {
+	this.customerMark = customerMark;
+}
+public String getQuickMark() {
+	return quickMark;
+}
+public void setQuickMark(String quickMark) {
+	this.quickMark = quickMark;
+}
   public String getSourcePath() {
     return this.sourcePath;
   }

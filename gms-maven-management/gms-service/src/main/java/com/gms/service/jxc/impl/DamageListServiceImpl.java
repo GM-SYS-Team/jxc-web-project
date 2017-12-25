@@ -14,13 +14,14 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import com.gms.entity.jxc.Goods;
-import com.gms.entity.jxc.DamageList;
-import com.gms.entity.jxc.DamageListGoods;
-import com.gms.dao.repository.GoodsRepository;
-import com.gms.dao.repository.GoodsTypeRepository;
 import com.gms.dao.repository.DamageListGoodsRepository;
 import com.gms.dao.repository.DamageListRepository;
+import com.gms.dao.repository.GoodsRepository;
+import com.gms.dao.repository.GoodsTypeRepository;
+import com.gms.entity.jxc.DamageList;
+import com.gms.entity.jxc.DamageListGoods;
+import com.gms.entity.jxc.Goods;
+import com.gms.entity.jxc.Shop;
 import com.gms.service.jxc.DamageListService;
 
 /**
@@ -101,8 +102,13 @@ public class DamageListServiceImpl implements DamageListService{
 	}
 
 	@Override
-	public int getDamageOrderListCount(Integer shopId) {
-		return damageListRepository.getDamageOrderListCount(shopId);
+	public int getDamageOrderListCount(Shop shop) {
+		if(shop != null){
+			return damageListRepository.getDamageOrderListCount(shop.getId());
+		}else{
+			return damageListRepository.getDamageOrderListCountAdmin();
+		}
+		
 	}
 
 }

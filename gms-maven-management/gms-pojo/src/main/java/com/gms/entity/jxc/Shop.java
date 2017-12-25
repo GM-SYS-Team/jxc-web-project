@@ -81,8 +81,22 @@ public class Shop {
     @Column(length=100)
     private String pictureAddress;
     
+    /**
+     * 二维码地址
+     */
+    @Column(length=100)
+    private String quickMark;
+    
 
-    @Column(length=11)
+    public String getQuickMark() {
+		return quickMark;
+	}
+
+	public void setQuickMark(String quickMark) {
+		this.quickMark = quickMark;
+	}
+
+	@Column(length=11)
     private Integer userId;
 
     public String getPictureAddress() {

@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.gms.conf.ImageServerProperties;
 import com.gms.entity.jxc.CouponCode;
 import com.gms.entity.jxc.Shop;
 import com.gms.entity.jxc.User;
@@ -43,34 +44,37 @@ public class OverviewController extends BaseController {
 	private SaleListService saleListService;
 
 	@Autowired
+	private ImageServerProperties imageServerProperties;
+
+	@Autowired
 	private CouponCodeService couponCodeService;
 
 	@PostMapping("/map")
-	public Map<String, Object> save(HttpServletRequest request)
+	public Map<String, Object> getContent(HttpServletRequest request)
 			throws ParseException {
 		/* 当前登录的店铺 */
 		Shop shop = getCurrentShop(request);
-		
+		String url = imageServerProperties.getUrl();
+
 		/* 查询当前店铺优惠券量 */
-		int totalCount = couponService.findCouponAll(shop.getId()).size();
-		int before_date_count = couponService.findCouponByStatus(1,
-				shop.getId()).size();
-		int between_date_count = couponService.findCouponByStatus(2,
-				shop.getId()).size();
-		int out_date_count = couponService.findCouponByStatus(3, shop.getId())
+		int totalCount = couponService.findCouponAll(shop).size();
+		int before_date_count = couponService.findCouponByStatus(1, shop)
 				.size();
+		int between_date_count = couponService.findCouponByStatus(2, shop)
+				.size();
+		int out_date_count = couponService.findCouponByStatus(3, shop).size();
 
 		// 已支付进货单数量
 		int jin_num1 = purchaseListService.getPurchasePayedListCount(
-				shop.getId(), Constant.ORDER_PAYED_STATE);
+				shop, Constant.ORDER_PAYED_STATE);
 		// 未支付进货单数量
 		int jin_num2 = purchaseListService.getPurchasePayedListCount(
-				shop.getId(), Constant.ORDER_NO_PAYED_STATE);
+				shop, Constant.ORDER_NO_PAYED_STATE);
 		int sale_num1 = saleListService.getSaleOrderPayedListCount(
-				shop.getId(), Constant.ORDER_PAYED_STATE);
+				shop, Constant.ORDER_PAYED_STATE);
 		int sale_num2 = saleListService.getSaleOrderPayedListCount(
-				shop.getId(), Constant.ORDER_NO_PAYED_STATE);
-		int kucun_num = damageListService.getDamageOrderListCount(shop.getId());
+				shop, Constant.ORDER_NO_PAYED_STATE);
+		int kucun_num = damageListService.getDamageOrderListCount(shop);
 
 		/* 优惠券领取状况 */
 		Date today = new Date();
@@ -79,7 +83,7 @@ public class OverviewController extends BaseController {
 		List<String> dateList = DateUtil.getTwoDay(sdf.format(today),
 				sdf.format(dayBeforeSeven), false);
 		List<CouponCode> codeList = couponCodeService.queryCouponCodeList(
-				shop.getId(), dayBeforeSeven);
+				shop, dayBeforeSeven);
 		int[] amountArr = new int[7];
 		String[] dateArr = new String[7];
 		for (int i = 0; i < dateList.size(); i++) {
@@ -90,6 +94,7 @@ public class OverviewController extends BaseController {
 		}
 		Map<String, Object> resultMap = new HashMap<>();
 		resultMap.put("shop", shop);
+		resultMap.put("url", url);
 		resultMap.put("totalCount", totalCount + "张");
 		resultMap.put("before_date_count", before_date_count + "张");
 		resultMap.put("between_date_count", between_date_count + "张");
@@ -105,9 +110,9 @@ public class OverviewController extends BaseController {
 		resultMap.put("kucun_num", kucun_num);
 		return resultMap;
 	}
+
 	@PostMapping("/user")
-	public String getUser(HttpServletRequest request)
-			throws ParseException {
+	public String getUser(HttpServletRequest request) throws ParseException {
 		User user = getCurrentUser(request);
 		return user.getUserName();
 	}

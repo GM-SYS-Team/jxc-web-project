@@ -14,13 +14,24 @@ function queryContent(){
 			$("#between_date_count").html(data.between_date_count);
 			$("#out_date_count").html(data.out_date_count);
 			
-			$(".shop_name").html(data.shop.contactName);
-			$(".shop_business").html(data.shop.business);
-			$(".shop_contactName").html(data.shop.contactName);
-			$(".shop_contactCode").html(data.shop.contactCode);
-			$(".shop_phone").html(data.shop.phoneNum);
-			$(".shop_address").html(data.shop.shopAddress);
-			$(".shop_createTime").html(data.shop.createTime);
+			if(data.shop == null){
+				$("#shop_info").hide();
+			}else{
+				$("#shop_info").show();
+				$(".shop_name").html(data.shop.shopName);
+				$(".shop_business").html(data.shop.business);
+				$(".shop_contactName").html(data.shop.contactName);
+				$(".shop_contactCode").html(data.shop.contactCode);
+				$(".shop_phone").html(data.shop.phoneNum);
+				$(".shop_address").html(data.shop.shopAddress);
+				$(".shop_createTime").html(data.shop.createTime);
+				
+				if(data.shop.pictureAddress != "" && data.shop.pictureAddress!=null){
+					$('#shopPic').attr('src',data.url + data.shop.pictureAddress);
+				}else{
+					$('#shopPic').attr('src',"../static/images/nopic.jpg");
+				}
+			}
 			
 			$("#jin_num1").html("("+data.jin_num1+")");
 			$("#jin_num2").html("("+data.jin_num2+")");

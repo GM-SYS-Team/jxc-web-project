@@ -21,8 +21,12 @@ import com.gms.entity.jxc.CouponCode;
 import com.gms.entity.jxc.CouponGoods;
 import com.gms.entity.jxc.Shop;
 import com.gms.entity.jxc.User;
+import com.gms.exception.MyException;
+import com.gms.service.jxc.CouponCodeService;
 import com.gms.service.jxc.CouponService;
 import com.gms.service.jxc.ShopService;
+import com.gms.util.Constant;
+import com.gms.util.DateUtil;
 import com.gms.util.StringUtil;
 
 @Controller
@@ -34,17 +38,24 @@ public class CouponController extends BaseAppController {
 
 	@Autowired
 	private ShopService shopService;
+	
+	@Autowired
+	private CouponCodeService couponCodeService;
 
 	/**
-	 * @throws ParseException @Title: save @Description:
-	 * TODO(这里用一句话描述这个方法的作用) @param @param coupon @param @param
-	 * request @param @return @param @throws Exception 设定文件 @return
-	 * Map<String,Object> 返回类型 @throws
+	 * 
+	 * @Title: save
+	 * @Description: TODO(这里用一句话描述这个方法的作用)
+	 * @param request
+	 * @throws Exception
+	 * @return Map<String,Object> 返回类型
+	 * @throws MyException 
 	 */
 	@RequestMapping("/save")
 	@ResponseBody
-	public Map<String, Object> save(HttpServletRequest request) throws ParseException {
+	public Map<String, Object> save(HttpServletRequest request) throws ParseException, MyException {
 		User user = getUser();
+		validateUser(user, User.SHOPER);
 		Integer goodsId = Integer.parseInt(request.getParameter("goodsId"));
 		/* 当前登录的店铺 */
 		Integer shopId = Integer.parseInt(request.getParameter("shopId"));
@@ -82,7 +93,7 @@ public class CouponController extends BaseAppController {
 		if (StringUtil.isEmpty(expiryDateStop)) {
 			return error("优惠券结束时间不能为空");
 		}
-		SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm");
 		Coupon coupon = new Coupon();
 		coupon.setCouponName(couponName);
 		coupon.setTotalCount(totalCount);
@@ -106,19 +117,21 @@ public class CouponController extends BaseAppController {
 		couponGoods.setShopId(shop.getId());
 		couponGoods.setGoodId(goodsId);
 		couponService.saveCouponGoods(couponGoods);
-		return success();
+		return success(coupon);
 	}
 
 	/**
-	 * @throws ParseException @Title: save @Description:
-	 * TODO(这里用一句话描述这个方法的作用) @param @param coupon @param @param
-	 * request @param @return @param @throws Exception 设定文件 @return
-	 * Map<String,Object> 返回类型 @throws
+	 * 修改优惠券信息
+	 * @param request
+	 * @return
+	 * @throws ParseException
+	 * @throws MyException 
 	 */
 	@RequestMapping("/modify")
 	@ResponseBody
-	public Map<String, Object> modify(HttpServletRequest request) throws ParseException {
+	public Map<String, Object> modify(HttpServletRequest request) throws ParseException, MyException {
 		User user = getUser();
+		validateUser(user, User.SHOPER);
 		Integer goodsId = Integer.parseInt(request.getParameter("goodsId"));
 		/* 当前登录的店铺 */
 		Integer couponId = Integer.parseInt(request.getParameter("couponId"));
@@ -136,11 +149,17 @@ public class CouponController extends BaseAppController {
 		if (StringUtil.isEmpty(couponName)) {
 			return error("请设置优惠券名称");
 		}
+		if (couponName.length() > 50) {
+			return error("优惠券名称长度不能超过50");
+		}
 		if (totalCount <= 0) {
 			return error("请设置优惠券数量");
 		}
 		if (StringUtil.isEmpty(couponInfo)) {
 			return error("请设置优惠券描述");
+		}
+		if (couponInfo.length() > 500) {
+			return error("优惠券描述的长度不能超过500");
 		}
 		if (maxAmount <= 0 || minAmount <= 0) {
 			return error("请设置优惠券金额");
@@ -159,14 +178,14 @@ public class CouponController extends BaseAppController {
 		}
 		Date startTime = null;
 		Date endTime = null;
-		SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm");
 		try {
 			startTime = sdf.parse(expiryDateStart);
 			endTime = sdf.parse(expiryDateStop);
 		} catch (Exception e) {
 			return error("优惠券开始时间和结束时间参数错误");
 		}
-		
+
 		Shop shop = shopService.queryShopByShopIdAndUserId(shopId, user.getId());
 		if (shop == null) {
 			return error("店铺不存在");
@@ -187,12 +206,7 @@ public class CouponController extends BaseAppController {
 		coupon.setExpiryDateStop(endTime);
 		coupon.setShopId(shopId);
 		couponService.save(coupon);
-		CouponGoods couponGoods = new CouponGoods();
-		couponGoods.setCouponId(coupon.getId());
-		couponGoods.setShopId(shop.getId());
-		couponGoods.setGoodId(goodsId);
-		couponService.saveCouponGoods(couponGoods);
-		return success();
+		return success(coupon);
 	}
 
 	/**
@@ -207,6 +221,7 @@ public class CouponController extends BaseAppController {
 	@ResponseBody
 	public Map<String, Object> delete(Integer couponId, Integer shopId) throws Exception {
 		User user = getUser();
+		validateUser(user, User.SHOPER);
 		if (couponId == null || couponId <= 0) {
 			return error("优惠券id错误");
 		}
@@ -249,6 +264,7 @@ public class CouponController extends BaseAppController {
 	@ResponseBody
 	public Map<String, Object> list(Integer status, Integer shopId) throws Exception {
 		User user = getUser();
+		validateUser(user, User.SHOPER);
 		if (shopId == null || shopId <= 0) {
 			return error("店铺id错误");
 		}
@@ -258,7 +274,7 @@ public class CouponController extends BaseAppController {
 		}
 		List<Coupon> couponList = new ArrayList<Coupon>();
 		/* 当前登录的店铺 */
-		couponList = couponService.findCouponByStatus(status, shopId);
+		couponList = couponService.findCouponByStatus(status, shop);
 		Map<String, Object> resultMap = new HashMap<>();
 		resultMap.put("couponList", couponList);
 		resultMap.put("size", couponList == null ? 0 : couponList.size());
@@ -276,6 +292,7 @@ public class CouponController extends BaseAppController {
 	@ResponseBody
 	public Map<String, Object> shareCoupon(Integer couponId, Integer shopId) throws Exception {
 		User user = getUser();
+		validateUser(user, User.SHOPER);
 		if (couponId == null || couponId <= 0) {
 			return error("优惠券id错误");
 		}
@@ -296,5 +313,133 @@ public class CouponController extends BaseAppController {
 		coupon.setStatus(Coupon.STATUS_SHARE);
 		couponService.save(coupon);
 		return success();
+	}
+	
+	/**
+	 * 查询用户领取的优惠券
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping("/user/list")
+	@ResponseBody
+	public Map<String, Object> listUserCoupon(Integer status) throws Exception {
+		User user = getUser();
+		validateUser(user, User.CUSTOMER);
+		List<CouponCode> list = couponCodeService.findListByUserId(user.getId(), status);
+		return success(list);
+	}
+	
+	
+	/**
+	 * 领券
+	 * @param status
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping("/user/receive")
+	@ResponseBody
+	public Map<String, Object> receiveCoupon(Integer couponId, Integer shopId) throws Exception {
+		User user = getUser();
+		validateUser(user, User.CUSTOMER);
+		CouponCode couponCode = new CouponCode();
+		synchronized (this) {
+			Coupon coupon = couponService.findCouponById(couponId);
+			if (coupon == null) {
+				return error("优惠券不存在");
+			}
+			if (coupon.getShopId() != shopId) {
+				return error("优惠券不存在");
+			}
+			Date now = new Date();
+			if (DateUtil.compare_date(now, coupon.getExpiryDateStop()) == 1) {
+				return error("优惠券已过期无法领取");
+			}
+			if (coupon.getRemainCount() <= 0) {
+				return error("优惠券已发放完毕");
+			}
+			couponCode.setReceiveTime(now);
+			couponCode.setCoupon(coupon);
+			couponCode.setAmount((int) (Math.random()*(coupon.getMaxAmount() - coupon.getMinAmount()) + coupon.getMinAmount()));
+			couponCode.setUserId(user.getId());
+			couponCode.setIsUsed(Constant.COUPON_NOT_USED);
+			couponCode.setExpiryDateStart(coupon.getExpiryDateStart());
+			couponCode.setExpiryDateStop(coupon.getExpiryDateStop());
+			coupon.setRemainCount(coupon.getRemainCount() - 1);
+			couponService.save(coupon);
+			couponCodeService.save(couponCode);
+		}
+		return success(couponCode);
+	}
+	
+	/**
+	 * 销券
+	 * @param status
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping("/user/sale")
+	@ResponseBody
+	public Map<String, Object> saleCoupon(Integer couponCodeId, Integer ownerId) throws Exception {
+		User user = getUser();
+		validateUser(user, User.SHOPER);
+		CouponCode couponCode = couponCodeService.findCouponCodeById(couponCodeId, ownerId);
+		if (couponCode == null) {
+			return error("优惠券不存在");
+		}
+		Coupon coupon = couponCode.getCoupon();
+		Shop shop = shopService.findById(coupon.getShopId());
+		if (shop.getUserId() != user.getId()) {
+			return error("优惠券不存在");
+		}
+		Date now = new Date();
+		if (DateUtil.compare_date(now, couponCode.getExpiryDateStop()) == 1) {
+			return error("优惠券已过期");
+		}
+		if (DateUtil.compare_date(couponCode.getExpiryDateStart(), now) == 1) {
+			return error("该活动尚未开始");
+		}
+ 		couponCode.setUsedTime(now);
+		couponCode.setIsUsed(Constant.COUPON_USED);
+		couponCodeService.save(couponCode);
+		return success();
+	}
+	
+	/**
+	 * 查询用户领取的优惠券
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping("/user")
+	@ResponseBody
+	public Map<String, Object> getCoupon(Integer couponId, Integer shopId) throws Exception {
+		User user = getUser();
+		validateUser(user, User.CUSTOMER);
+		Coupon coupon = couponService.findCouponById(couponId);
+		if (coupon == null) {
+			return error("优惠券活动不存在");
+		}
+		if (coupon.getShopId() != shopId) {
+			return error("优惠券活动不存在");
+		}
+		Date now = new Date();
+		if (DateUtil.compare_date(now, coupon.getExpiryDateStop()) == 1) {
+			return error("活动已结束");
+		}
+		Coupon randomCoupon = couponService.findRandomCoupon(now, coupon.getId());
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("coupon", coupon);
+		map.put("shareCoupon", randomCoupon);
+		return success(map);
+	}
+	
+	/**
+	 * 判断用户类型
+	 * @param user
+	 * @throws MyException 
+	 */
+	private void validateUser(User user, String userType) throws MyException {
+		if (!userType.equals(user.getUserType())) {
+			throw new MyException("非法请求");
+		}
 	}
 }

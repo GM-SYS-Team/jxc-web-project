@@ -12,6 +12,13 @@ public class ImageServerProperties {
 	 */
 	private String url;
 	private String action;
+	private String quickMarkAction;
+	public String getQuickMarkAction() {
+		return quickMarkAction;
+	}
+	public void setQuickMarkAction(String quickMarkAction) {
+		this.quickMarkAction = quickMarkAction;
+	}
 	public String getUrl() {
 		return url;
 	}

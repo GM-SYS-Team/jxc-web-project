@@ -24,4 +24,18 @@ public class Constant {
 	public static final String RET_CODE_ERROR = "0";
 	
 	public static final String RET_CODE_ERRO_SYS_EXCEPTION_MSG = "系统异常";
+	//商铺二维码
+	public static final String QUICK_MARK_SHOP_TYPE = "SHOP";
+	//商品优惠券
+	public static final String QUICK_MARK_COUPON_TYPE = "COUPON";
+	//消费者领取的优惠券
+	public static final String QUICK_MARK_CUSTOMER_TYPE = "CUSTOMER";
+	
+	//优惠券没有被使用
+	public static final String COUPON_NOT_USED = "0";
+	
+	//优惠券已经被使用
+	public static final String COUPON_USED = "1";
+	
+	
 }

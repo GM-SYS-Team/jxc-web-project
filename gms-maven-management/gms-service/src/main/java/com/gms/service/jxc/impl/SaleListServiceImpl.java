@@ -14,13 +14,14 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import com.gms.entity.jxc.Goods;
-import com.gms.entity.jxc.SaleList;
-import com.gms.entity.jxc.SaleListGoods;
 import com.gms.dao.repository.GoodsRepository;
 import com.gms.dao.repository.GoodsTypeRepository;
 import com.gms.dao.repository.SaleListGoodsRepository;
 import com.gms.dao.repository.SaleListRepository;
+import com.gms.entity.jxc.Goods;
+import com.gms.entity.jxc.SaleList;
+import com.gms.entity.jxc.SaleListGoods;
+import com.gms.entity.jxc.Shop;
 import com.gms.service.jxc.SaleListService;
 import com.gms.util.StringUtil;
 
@@ -126,7 +127,12 @@ public class SaleListServiceImpl implements SaleListService{
 	}
 
 	@Override
-	public int getSaleOrderPayedListCount(Integer shopId, Integer state) {
-		return saleListRepository.getSaleOrderPayedListCount(shopId, state);
+	public int getSaleOrderPayedListCount(Shop shop, Integer state) {
+		if(shop!= null){
+			return saleListRepository.getSaleOrderPayedListCount(shop.getId(), state);
+		}else{
+			return saleListRepository.getSaleOrderPayedListCountAdmin(state);
+		}
+		
 	}
 }

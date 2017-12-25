@@ -80,7 +80,9 @@ public class UserAdminController {
 	 */
 	@GetMapping("/logout")
 	@RequiresPermissions(value = { "安全退出" })
-	public String logout()throws Exception{
+	public String logout(HttpSession session)throws Exception{
+		session.removeAttribute("currentShop");
+		session.removeAttribute("currentUser");
 		logService.save(new Log(Log.LOGOUT_ACTION,"用户注销"));
 		SecurityUtils.getSubject().logout();
 		return "redirect:/login.html";

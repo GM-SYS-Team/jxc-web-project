@@ -21,6 +21,7 @@ import com.gms.dao.repository.CouponRepository;
 import com.gms.entity.jxc.Coupon;
 import com.gms.entity.jxc.CouponCode;
 import com.gms.entity.jxc.CouponGoods;
+import com.gms.entity.jxc.Shop;
 import com.gms.service.jxc.CouponService;
 
 /**
@@ -44,22 +45,38 @@ public class CouponServiceImpl implements CouponService {
 	}
 
 	@Override
-	public List<Coupon> findCouponAll(Integer shopId) {
-		return couponRepository.findCouponAll(shopId);
+	public List<Coupon> findCouponAll(Shop shop) {
+		if (shop != null) {
+			return couponRepository.findCouponAll(shop.getId());
+		} else {
+			return couponRepository.findCouponAllAdmin();
+		}
+
 	}
 
 	@Override
-	public List<Coupon> findCouponByStatus(Integer status,Integer shopId) {
+	public List<Coupon> findCouponByStatus(Integer status, Shop shop) {
 		Date today = new Date();
-		if (status == 0) {
-			return couponRepository.findCouponAll(shopId);
-		}
-		else if (status == 1) {
-			return couponRepository.findCouponBygt(today,shopId);
-		} else if (status == 2) {
-			return couponRepository.findCouponBybt(today,shopId);
+		if (shop != null) {
+			if (status == 0) {
+				return couponRepository.findCouponAll(shop.getId());
+			} else if (status == 1) {
+				return couponRepository.findCouponBygt(today, shop.getId());
+			} else if (status == 2) {
+				return couponRepository.findCouponBybt(today, shop.getId());
+			} else {
+				return couponRepository.findCouponBylt(today, shop.getId());
+			}
 		} else {
-			return couponRepository.findCouponBylt(today,shopId);
+			if (status == 0) {
+				return couponRepository.findCouponAllAdmin();
+			} else if (status == 1) {
+				return couponRepository.findCouponBygtAdmin(today);
+			} else if (status == 2) {
+				return couponRepository.findCouponBybtAdmin(today);
+			} else {
+				return couponRepository.findCouponByltAdmin(today);
+			}
 		}
 
 	}
@@ -70,9 +87,9 @@ public class CouponServiceImpl implements CouponService {
 	}
 
 	@Override
-	public void deleteCoupon(Integer id,Integer shopId) {
+	public void deleteCoupon(Integer id, Integer shopId) {
 		couponGoodsRepository.deleteCouponGoods(id, shopId);
-		couponRepository.delete(id);
+		couponRepository.deleteCoupon(id);
 	}
 
 	@Override
@@ -92,61 +109,94 @@ public class CouponServiceImpl implements CouponService {
 
 	@Override
 	public List<Coupon> list(Coupon coupon, Integer page, Integer pageSize,
-			Direction direction,Integer state, String... properties) {
-		Pageable pageable=new PageRequest(page-1, pageSize, direction,properties);
-		Page<Coupon> pageCoupon=couponRepository.findAll(new Specification<Coupon>() {
-			@Override
-			public Predicate toPredicate(Root<Coupon> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
-				Predicate predicate=cb.conjunction();
-				Date currentDate = new Date();
-				if(coupon!=null){
-					if(coupon.getShopId()!=null && coupon.getShopId().intValue()>0){//默认等于零
-						predicate.getExpressions().add(cb.equal(root.get("shopId"), coupon.getShopId()));
+			Direction direction, Integer state, String... properties) {
+		Pageable pageable = new PageRequest(page - 1, pageSize, direction,
+				properties);
+		Page<Coupon> pageCoupon = couponRepository.findAll(
+				new Specification<Coupon>() {
+					@Override
+					public Predicate toPredicate(Root<Coupon> root,
+							CriteriaQuery<?> query, CriteriaBuilder cb) {
+						Predicate predicate = cb.conjunction();
+						Date currentDate = new Date();
+						if (coupon != null) {
+							if (coupon.getShopId() != null
+									&& coupon.getShopId().intValue() > 0) {// 默认等于零
+								predicate.getExpressions().add(
+										cb.equal(root.get("shopId"),
+												coupon.getShopId()));
+							}
+						}
+						if (state == 0) {
+							// 获取商铺所有
+						} else if (state == 1) {
+							predicate.getExpressions().add(
+									cb.greaterThan(root.get("expiryDateStart"),
+											currentDate));
+						} else if (state == 2) {
+							predicate.getExpressions().add(
+									cb.lessThanOrEqualTo(
+											root.get("expiryDateStart"),
+											currentDate));
+							predicate.getExpressions().add(
+									cb.greaterThanOrEqualTo(
+											root.get("expiryDateStop"),
+											currentDate));
+						} else {
+							predicate.getExpressions().add(
+									cb.lessThan(root.get("expiryDateStop"),
+											currentDate));
+						}
+						return predicate;
 					}
-				}
-				if(state == 0){
-					//获取商铺所有
-				}else if(state == 1){
-					predicate.getExpressions().add(cb.greaterThan(root.get("expiryDateStart"), currentDate));
-				}else if(state == 2){
-					predicate.getExpressions().add(cb.lessThanOrEqualTo(root.get("expiryDateStart"), currentDate));
-					predicate.getExpressions().add(cb.greaterThanOrEqualTo(root.get("expiryDateStop"), currentDate));
-				}else{
-					predicate.getExpressions().add(cb.lessThan(root.get("expiryDateStop"), currentDate));
-				}
-				return predicate;
-			}
-		}, pageable);
+				}, pageable);
 		return pageCoupon.getContent();
 	}
 
 	@Override
 	public Long listCount(Coupon coupon, Integer state) {
-		Long count=couponRepository.count(new Specification<Coupon>() {
+		Long count = couponRepository.count(new Specification<Coupon>() {
 
 			@Override
-			public Predicate toPredicate(Root<Coupon> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
-				Predicate predicate=cb.conjunction();
+			public Predicate toPredicate(Root<Coupon> root,
+					CriteriaQuery<?> query, CriteriaBuilder cb) {
+				Predicate predicate = cb.conjunction();
 				Date currentDate = new Date();
-				if(coupon!=null){
-					if(coupon.getShopId()!=null && coupon.getShopId().intValue()>0){//默认等于零
-						predicate.getExpressions().add(cb.equal(root.get("shopId"), coupon.getShopId()));
+				if (coupon != null) {
+					if (coupon.getShopId() != null
+							&& coupon.getShopId().intValue() > 0) {// 默认等于零
+						predicate.getExpressions()
+								.add(cb.equal(root.get("shopId"),
+										coupon.getShopId()));
 					}
 				}
-				if(state == 0){
-					//获取商铺所有
-				}else if(state == 1){
-					predicate.getExpressions().add(cb.greaterThan(root.get("expiryDateStart"), currentDate));
-				}else if(state == 2){
-					predicate.getExpressions().add(cb.lessThanOrEqualTo(root.get("expiryDateStart"), currentDate));
-					predicate.getExpressions().add(cb.greaterThanOrEqualTo(root.get("expiryDateStop"), currentDate));
-				}else{
-					predicate.getExpressions().add(cb.lessThan(root.get("expiryDateStop"), currentDate));
+				if (state == 0) {
+					// 获取商铺所有
+				} else if (state == 1) {
+					predicate.getExpressions().add(
+							cb.greaterThan(root.get("expiryDateStart"),
+									currentDate));
+				} else if (state == 2) {
+					predicate.getExpressions().add(
+							cb.lessThanOrEqualTo(root.get("expiryDateStart"),
+									currentDate));
+					predicate.getExpressions().add(
+							cb.greaterThanOrEqualTo(root.get("expiryDateStop"),
+									currentDate));
+				} else {
+					predicate.getExpressions()
+							.add(cb.lessThan(root.get("expiryDateStop"),
+									currentDate));
 				}
 				return predicate;
 			}
 		});
 		return count;
+	}
+
+	@Override
+	public Coupon findRandomCoupon(Date now, Integer id) {
+		return couponRepository.findRandomCoupon(now, id);
 	}
 
 }

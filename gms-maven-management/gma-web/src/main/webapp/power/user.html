@@ -16,6 +16,13 @@
 		return "<a href=\"javascript:openRoleChooseDialog('"+row.roles+"',"+row.id+")\"><img style='margin-top: 4px' src='/static/images/edit.gif' /></a>";
 	}
 	
+	function formatShopStatus(val,row){
+		if(row.quickMark!=null && row.quickMark.indexOf('/')>=0){
+			return '已生成';
+		}
+		return "<a href=\"javascript:createQuickMarkForShop("+row.id+")\"><img style='margin-top: 4px' src='/static/images/create.png' /></a>";
+	}
+	
 	function openRoleChooseDialog(roles,userId){
 		var rolesArr=roles.split(",");
 		$("#roleSetDialog").dialog("open").dialog("setTitle","选择角色");
@@ -32,6 +39,16 @@
 					}
 		});
 		$("#userId").val(userId);
+	}
+	
+	function createQuickMarkForShop(shopid){
+		$.post("/admin/shop/createAndUpdateQuickMark",{id:shopid},function(result){
+						if(result.success){
+							 reloadShop();
+						}else{
+							$.messager.alert("系统提示",result.error);
+						}
+					},"json");
 	}
 	
 	function saveRoleSet(){
@@ -374,7 +391,7 @@
 	   		<th field="contactNum" width="50" align="center">联系电话</th>
 	   		<th field="phoneNum" width="50" align="center">手机号码</th>
 	   		<th field="shopAddress" width="150" align="center">商铺地址</th>
-	   		<th field="updateTime" width="50" align="center">更新时间</th>
+	   		<th field="bb" width="150" align="center" formatter="formatShopStatus">二维码状态</th>
 	   	</tr>
 	   </thead>
 	 </table>

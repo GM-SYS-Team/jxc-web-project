@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.gms.conf.ImageServerProperties;
 import com.gms.entity.jxc.Log;
@@ -86,7 +85,7 @@ public class ShopController extends BaseController {
 	 * @throws Exception
 	 */
 	@RequestMapping("/save")
-	public Map<String, Object> save(Shop shop, HttpServletRequest request,@RequestParam("pictureFile") MultipartFile pictureFile)
+	public Map<String, Object> save(Shop shop, HttpServletRequest request,@RequestParam(value = "pictureFile", required = false) MultipartFile pictureFile)
 			throws Exception {
 		boolean flag = true;
 		Map<String, Object> resultMap = new HashMap<>();
@@ -162,6 +161,38 @@ public class ShopController extends BaseController {
 			logService.save(new Log(Log.DELETE_ACTION, "删除商铺信息"
 					+ shopService.findById(id))); // 写入日志
 			shopService.delete(id);
+		}
+		resultMap.put("success", true);
+		return resultMap;
+	}
+	
+	/**
+	 * 删除供应商信息
+	 * 
+	 * @param id
+	 * @param response
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping("/createAndUpdateQuickMark")
+	@RequiresPermissions(value = { "供应商管理" })
+	public Map<String, Object> createAndUpdateQuickMark(Integer id) throws Exception {
+		Map<String, Object> resultMap = new HashMap<>();
+		String result = HttpsUtil.getInstance().sendHttpPost(imageServerProperties.getUrl()+"/"+
+				imageServerProperties.getQuickMarkAction(),"quickMarkStr="+String.valueOf(id.intValue()
+						+"&markType="+Constant.QUICK_MARK_SHOP_TYPE));
+		Shop shop = shopService.findById(id);
+		if(result!=null){
+			String quickMarkImageName = null;
+			JSONObject resultJson = (JSONObject)JSONObject.parse(result);
+			if(resultJson.getString("message").equals("Ok")){
+				quickMarkImageName = resultJson.getJSONObject("data").getString("quickMark");
+				shop.setQuickMark(quickMarkImageName);
+				shopService.save(shop);
+			}else{
+				resultMap.put("error", "服务器请假了，请稍后重试");
+				return resultMap;
+			}
 		}
 		resultMap.put("success", true);
 		return resultMap;

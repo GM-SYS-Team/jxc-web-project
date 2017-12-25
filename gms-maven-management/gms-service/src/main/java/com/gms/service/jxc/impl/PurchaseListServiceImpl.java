@@ -14,13 +14,14 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import com.gms.entity.jxc.Goods;
-import com.gms.entity.jxc.PurchaseList;
-import com.gms.entity.jxc.PurchaseListGoods;
 import com.gms.dao.repository.GoodsRepository;
 import com.gms.dao.repository.GoodsTypeRepository;
 import com.gms.dao.repository.PurchaseListGoodsRepository;
 import com.gms.dao.repository.PurchaseListRepository;
+import com.gms.entity.jxc.Goods;
+import com.gms.entity.jxc.PurchaseList;
+import com.gms.entity.jxc.PurchaseListGoods;
+import com.gms.entity.jxc.Shop;
 import com.gms.service.jxc.PurchaseListService;
 import com.gms.util.MathUtil;
 import com.gms.util.StringUtil;
@@ -121,7 +122,12 @@ public class PurchaseListServiceImpl implements PurchaseListService{
 	}
 
 	@Override
-	public int getPurchasePayedListCount(Integer shopId,Integer state) {
-		return purchaseListRepository.getPurchasePayedListCount(shopId,state);
+	public int getPurchasePayedListCount(Shop shop,Integer state) {
+		if(shop != null){
+			return purchaseListRepository.getPurchasePayedListCount(shop.getId(),state);
+		}else{
+			return purchaseListRepository.getPurchasePayedListCountAdmin(state);
+		}
+		
 	}
 }
