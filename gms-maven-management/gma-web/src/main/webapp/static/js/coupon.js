@@ -36,6 +36,12 @@ $(function () {
 	 today("stopExpiryDate");
 	 
 	 keyupDate();
+	 
+	 setTimeout(function(){
+		 if(getUrlParam("flag")==1){
+			 addCoupon();
+		 }
+     },1000);
 })
 
 function today(input_id){
@@ -74,6 +80,12 @@ Date.prototype.format = function (format) {
                 ("00" + o[k]).substr(("" + o[k]).length));
     return format;
 }
+//获取url中的参数
+function getUrlParam(name) {
+    var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
+    var r = window.location.search.substr(1).match(reg);  //匹配目标参数
+    if (r != null) return unescape(r[2]); return null; //返回参数值
+}
 
 function addCoupon() {
 	emptyText();
@@ -92,14 +104,34 @@ function keyup() {
 
 function keyupAmount() {
 	var minAmount = $("#min_amount").val();
-	$("#coupon-amount").html(minAmount);
-	$("#max_amount").attr("min",minAmount);
+	if($('#is_random').is(':checked')) {
+		var maxAmount = $("#max_amount").val();
+		if(minAmount>maxAmount){
+			$("#min_amount").val(maxAmount)
+			$("#max_amount").val(minAmount)
+			$("#coupon-amount").html(maxAmount+"~"+minAmount);
+			$("#max_amount").attr("min",maxAmount);
+		}else{
+			$("#max_amount").attr("min",minAmount);
+			$("#coupon-amount").html(minAmount+"~"+maxAmount);
+		}
+	}else{
+		$("#coupon-amount").html(minAmount);
+	}
 }
 
 function keyRadomAmount(){
 	var minAmount = $("#min_amount").val();
 	var maxAmount = $("#max_amount").val();
-	$("#coupon-amount").html(minAmount+"~"+maxAmount);
+	if(minAmount>maxAmount){
+		$("#min_amount").val(maxAmount)
+		$("#max_amount").val(minAmount)
+		$("#coupon-amount").html(maxAmount+"~"+minAmount);
+		$("#max_amount").attr("min",maxAmount);
+	}else{
+		$("#max_amount").attr("min",minAmount);
+		$("#coupon-amount").html(minAmount+"~"+maxAmount);
+	}
 }
 function keyupDate() {
 	var startExpiryDate = $("#startExpiryDate").val();
@@ -387,7 +419,7 @@ function chooseGoods(){
 
 function goodsAjax(currentPage,page_size){
 	$.ajax( {
-		url : "/admin/goods/listHasInventoryQuantity",
+		url : "/admin/goods/list",
 		type : "GET",
 		data : {
 			page:currentPage,
@@ -417,7 +449,8 @@ function goodsAjax(currentPage,page_size){
 					$(".total_num_goods").html(data.total);
 				}
 			}else{
-				alert("暂无商品");
+				html += "<tr><td colspan='5'>暂无商品</td></tr>";
+				$("#goods_tbody").html(html);
 			}
 		}
 	});
