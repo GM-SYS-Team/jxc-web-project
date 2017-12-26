@@ -205,7 +205,8 @@ body{overflow:scroll;}
 												<label class="control-label"><em class="required">*</em>发放总量：</label>
 												<div class="controls">
 													<div class="input-append">
-														<input type="number" name="total" id="totalCount" value=""  min="1"
+														<input type="number" name="total" id="totalCount" value=""  min="1"   onkeyup="value=(parseInt((value=value.replace(/\D/g,''))==''||parseInt((value=value.replace(/\D/g,''))==0)?'1':value,10))"
+														 onafterpaste="value=(parseInt((value=value.replace(/\D/g,''))==''||parseInt((value=value.replace(/\D/g,''))==0)?'1':value,10))"
 															class="input-small" style="width:60px;"> <span class="add-on">张</span>
 													</div>
 												</div>
@@ -214,9 +215,13 @@ body{overflow:scroll;}
 											<div class="control-group" id="set_amount">
 												<label class="control-label"><em class="required">*</em>面值：</label>
 												<div class="js-preferential_type" data-value="1" style="display: ">
-											        <input type="number" name="value" id="min_amount" class="input-small" value="" min="1"  style="width:60px;"  onchange="keyupAmount();">
+											        <input type="number" name="value" id="min_amount" class="input-small" value="1" min="1"  style="width:60px;"  onchange="keyupAmount();"
+											           onkeyup="value=(parseInt((value=value.replace(/\D/g,''))==''||parseInt((value=value.replace(/\D/g,''))==0)?'1':value,10))" 
+											           onafterpaste="value=(parseInt((value=value.replace(/\D/g,''))==''||parseInt((value=value.replace(/\D/g,''))==0)?'1':value,10))">
 							                        <span class="js-random" style="display: none;">至
-							                            <input type="number" name="value_random_to" id="max_amount" class="input-small" value=""  style="width:60px;" onchange="keyRadomAmount();">
+							                            <input type="number" name="value_random_to" id="max_amount" class="input-small" value="1"  style="width:60px;"
+							                               onkeyup="value=(parseInt((value=value.replace(/\D/g,''))==''||parseInt((value=value.replace(/\D/g,''))==0)?'1':value,10))" 
+							                               onafterpaste="value=(parseInt((value=value.replace(/\D/g,''))==''||parseInt((value=value.replace(/\D/g,''))==0)?'1':value,10))" onchange="keyRadomAmount();">
 							                        </span>
 											                        元&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 								                    <label class="checkbox inline js-is-random is-random">
