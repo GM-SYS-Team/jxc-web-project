@@ -60,7 +60,6 @@ public class UserAdminController {
 	 */
 	@ResponseBody
 	@PostMapping("/modifyPassword")
-	@RequiresPermissions(value = { "修改密码" })
 	public Map<String,Object> modifyPassword(Integer id,String newPassword,HttpSession session)throws Exception{
 		User currentUser=(User) session.getAttribute("currentUser");
 		User user=userService.findById(currentUser.getId());
@@ -79,7 +78,6 @@ public class UserAdminController {
 	 * @throws Exception
 	 */
 	@GetMapping("/logout")
-	@RequiresPermissions(value = { "安全退出" })
 	public String logout(HttpSession session)throws Exception{
 		session.removeAttribute("currentShop");
 		session.removeAttribute("currentUser");
@@ -98,7 +96,7 @@ public class UserAdminController {
 	 */
 	@ResponseBody
 	@RequestMapping("/list")
-	@RequiresPermissions(value = { "用户管理" })
+	@RequiresPermissions(value = { "角色管理" })
 	public Map<String,Object> list(User user,@RequestParam(value="page",required=false)Integer page,@RequestParam(value="rows",required=false)Integer rows,@RequestParam(value="shopid",required=false)Integer shopid)throws Exception{
 		if(shopid!=null){
 			if(user==null){user=new User();}
@@ -130,7 +128,7 @@ public class UserAdminController {
 	 */
 	@ResponseBody
 	@RequestMapping("/saveRoleSet")
-	@RequiresPermissions(value = { "用户管理" })
+	@RequiresPermissions(value = { "角色管理" })
 	public Map<String,Object> saveRoleSet(String roleIds,Integer userId)throws Exception{
 		Map<String, Object> resultMap = new HashMap<>();
 		userRoleService.deleteByUserId(userId);  // 根据用户id删除所有用户角色关联实体
@@ -157,7 +155,7 @@ public class UserAdminController {
 	 */
 	@ResponseBody
 	@RequestMapping("/save")
-	@RequiresPermissions(value = { "用户管理" })
+	@RequiresPermissions(value = { "角色管理" })
 	public Map<String,Object> save(User user)throws Exception{
 		Map<String, Object> resultMap = new HashMap<>();
 		if(user.getId()==null){
@@ -194,7 +192,7 @@ public class UserAdminController {
 	 */
 	@ResponseBody
 	@RequestMapping("/delete")
-	@RequiresPermissions(value = { "用户管理" })
+	@RequiresPermissions(value = { "角色管理" })
 	public Map<String,Object> delete(Integer id)throws Exception{
 		logService.save(new Log(Log.DELETE_ACTION,"删除用户信息"+userService.findById(id)));  // 写入日志
 		Map<String, Object> resultMap = new HashMap<>();

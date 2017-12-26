@@ -30,10 +30,14 @@ public class GoodsTypeServiceImpl implements GoodsTypeService{
 	public void delete(Integer id) {
 		goodsTypeRepository.delete(id);
 	}
+	@Override
+	public List<GoodsType> getAllByParentId(int parentId) {
+		return goodsTypeRepository.findByParentId(parentId);
+	}
 
 	@Override
-	public List<GoodsType> findByParentId(int parentId) {
-		return goodsTypeRepository.findByParentId(parentId);
+	public List<GoodsType> getAllByParentIdAndShopId(int parentId,Integer shopId) {
+		return goodsTypeRepository.findByParentIdAndShopId(parentId,shopId);
 	}
 
 	@Override

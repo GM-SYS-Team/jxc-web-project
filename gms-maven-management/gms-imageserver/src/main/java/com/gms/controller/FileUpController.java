@@ -93,13 +93,17 @@ public class FileUpController
     byte[] quickMarkImage = EncodeUtil.encodeShop(quickMarkProperties.getRows(), quickMarkProperties.getCols(),
 			quickMarkProperties.getModelSize(), quickMarkProperties.getQzsize(), quickMarkStr);
     String markRealFileName = null;
+    String successMsg = null;//json回传结果
     File dest = null;
     if(markType.equals(Constant.QUICK_MARK_SHOP_TYPE)){
     	markRealFileName = realPath+this.quickuploadPath + fileName;
+    	successMsg = this.imageServerProperties.getShopMark() + fileName;
     }else if(markType.equals(Constant.QUICK_MARK_COUPON_TYPE)){
     	markRealFileName = realPath+this.couponuploadPath + fileName;
+    	successMsg = this.imageServerProperties.getCouponMark() + fileName;
     }else if(markType.equals(Constant.QUICK_MARK_CUSTOMER_TYPE)){
     	markRealFileName = realPath+this.customeruploadPath + fileName;
+    	successMsg = this.imageServerProperties.getCustomerMark() + fileName;
     }
     dest = new File(markRealFileName);
 
@@ -110,7 +114,8 @@ public class FileUpController
     {
     	out = new FileOutputStream(dest,false);
 		out.write(quickMarkImage);
-		ResultData resultData = ResultData.ok().putDataValue("quickMark", this.imageServerProperties.getQuickMark() + fileName);
+		ResultData resultData = ResultData.ok().putDataValue("quickMark", successMsg);
+		logger.info("商铺二维码生成成功，商铺ID为：" + quickMarkStr);
 		return resultData.putDataValue("messageInfo", "二维码上传成功");
     }catch (FileNotFoundException e1) {
 		e1.printStackTrace();

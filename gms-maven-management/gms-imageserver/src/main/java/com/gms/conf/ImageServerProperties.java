@@ -6,7 +6,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 public class ImageServerProperties
 {
   private String sourcePath;
-  private String quickMark;
+  private String shopMark;
   private String couponMark;
   private String customerMark;
 
@@ -22,13 +22,13 @@ public String getCustomerMark() {
 public void setCustomerMark(String customerMark) {
 	this.customerMark = customerMark;
 }
-public String getQuickMark() {
-	return quickMark;
+  public String getShopMark() {
+	return shopMark;
 }
-public void setQuickMark(String quickMark) {
-	this.quickMark = quickMark;
+public void setShopMark(String shopMark) {
+	this.shopMark = shopMark;
 }
-  public String getSourcePath() {
+public String getSourcePath() {
     return this.sourcePath;
   }
   public void setSourcePath(String sourcePath) {

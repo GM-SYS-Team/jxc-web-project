@@ -39,15 +39,15 @@ spring:
         template-loader-path: classpath:/templates/
         request-context-attribute: request
 picuploadPath: //src//main//resources//static//imagePath//
-quickuploadPath: //src//main//resources//static//quickMark//
-couponuploadPath: //src//main//resources//static//quickMark//
-customeruploadPath: //src//main//resources//static//quickMark//
+quickuploadPath: //src//main//resources//static//quickMark//shopMark//
+couponuploadPath: //src//main//resources//static//quickMark//couponMark//
+customeruploadPath: //src//main//resources//static//quickMark//customerMark//
 image: 
     server: 
         sourcePath: /static/imagePath/
-        quickMark: /static/quickMark/
-        couponMark: /static/couponMark/
-        customerMark: /static/customerMark/
+        shopMark: /static/quickMark/shopMark/
+        couponMark: /static/couponMark/couponMark/
+        customerMark: /static/customerMark/customerMark/
     quickmark:
         rows: 25
         cols: 25

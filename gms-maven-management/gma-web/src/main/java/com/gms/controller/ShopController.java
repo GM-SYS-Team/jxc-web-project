@@ -10,6 +10,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -38,6 +40,7 @@ public class ShopController extends BaseController {
 	 * @date 2017年11月21日 下午5:24:12
 	 * @description
 	 */
+	private static final Logger logger = LoggerFactory.getLogger(ShopController.class);
 	@Resource
 	private LogService logService;
 	@Autowired
@@ -152,7 +155,7 @@ public class ShopController extends BaseController {
 	 * @throws Exception
 	 */
 	@RequestMapping("/delete")
-	@RequiresPermissions(value = { "供应商管理" })
+	@RequiresPermissions(value = { "角色管理" })
 	public Map<String, Object> delete(String ids) throws Exception {
 		Map<String, Object> resultMap = new HashMap<>();
 		String[] idsStr = ids.split(",");
@@ -175,12 +178,13 @@ public class ShopController extends BaseController {
 	 * @throws Exception
 	 */
 	@RequestMapping("/createAndUpdateQuickMark")
-	@RequiresPermissions(value = { "供应商管理" })
+	@RequiresPermissions(value = { "角色管理" })
 	public Map<String, Object> createAndUpdateQuickMark(Integer id) throws Exception {
 		Map<String, Object> resultMap = new HashMap<>();
+		logger.info("开始生成商铺二维码，商铺ID为：" + String.valueOf(id.intValue()));
 		String result = HttpsUtil.getInstance().sendHttpPost(imageServerProperties.getUrl()+"/"+
-				imageServerProperties.getQuickMarkAction(),"quickMarkStr="+String.valueOf(id.intValue()
-						+"&markType="+Constant.QUICK_MARK_SHOP_TYPE));
+				imageServerProperties.getQuickMarkAction(),"quickMarkStr="+String.valueOf(id.intValue())
+						+"&markType="+Constant.QUICK_MARK_SHOP_TYPE);
 		Shop shop = shopService.findById(id);
 		if(result!=null){
 			String quickMarkImageName = null;
@@ -217,7 +221,7 @@ public class ShopController extends BaseController {
 	 * @throws Exception
 	 */
 	@RequestMapping("/exchangeShop")
-	@RequiresPermissions(value = { "供应商管理" })
+	@RequiresPermissions(value = { "角色管理" })
 	public Map<String, Object> exchangeShop(@RequestParam(value = "shopid", required = true)Integer shopid,HttpSession session) throws Exception {
 		Map<String, Object> resultMap = new HashMap<>();
 		try {
