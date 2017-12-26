@@ -32,13 +32,6 @@ function queryContent(){
 					$('#shopPic').attr('src',"../static/images/nopic.jpg");
 				}
 			}
-			
-			$("#jin_num1").html("("+data.jin_num1+")");
-			$("#jin_num2").html("("+data.jin_num2+")");
-			$("#sale_num1").html("("+data.sale_num1+")");
-			$("#sale_num2").html("("+data.sale_num2+")");
-			$("#kucun_num").html("("+data.kucun_num+")");
-			
 			 require.config({
 				 paths: {
 		                echarts: '../static/bgManager/js/dist'

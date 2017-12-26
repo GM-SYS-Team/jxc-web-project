@@ -43,7 +43,7 @@ public class GoodsUnitAdminController {
 	 * @throws Exception
 	 */
 	@RequestMapping("/listAll")
-	@RequiresPermissions(value = { "商品管理","进货入库"},logical=Logical.OR)
+	@RequiresPermissions(value = { "商品管理"},logical=Logical.OR)
 	public Map<String,Object> listAll()throws Exception{
 		List<GoodsUnit> goodsUnitList=goodsUnitService.listAll();
 		Map<String, Object> resultMap = new HashMap<>();
@@ -59,7 +59,7 @@ public class GoodsUnitAdminController {
 	 * @throws Exception
 	 */
 	@RequestMapping("/save")
-	@RequiresPermissions(value = { "商品管理","进货入库"},logical=Logical.OR)
+	@RequiresPermissions(value = { "商品管理"},logical=Logical.OR)
 	public Map<String,Object> save(GoodsUnit goodsUnit)throws Exception{
 		Map<String, Object> resultMap = new HashMap<>();
 		logService.save(new Log(Log.ADD_ACTION,"添加商品单位信息"+goodsUnit)); 
@@ -76,7 +76,7 @@ public class GoodsUnitAdminController {
 	 * @throws Exception
 	 */
 	@RequestMapping("/delete")
-	@RequiresPermissions(value = { "商品管理","进货入库"},logical=Logical.OR)
+	@RequiresPermissions(value = { "商品管理"},logical=Logical.OR)
 	public Map<String,Object> delete(Integer id)throws Exception{
 		Map<String, Object> resultMap = new HashMap<>();
 		logService.save(new Log(Log.DELETE_ACTION,"删除商品单位信息"+goodsUnitService.findById(id)));  // 写入日志

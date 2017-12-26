@@ -1,7 +1,5 @@
 package com.gms.controller;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,24 +13,18 @@ import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.multipart.MultipartFile;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
 import com.gms.entity.jxc.Log;
 import com.gms.entity.jxc.Menu;
 import com.gms.entity.jxc.Role;
 import com.gms.entity.jxc.Shop;
 import com.gms.entity.jxc.User;
-import com.gms.entity.util.ResultData;
 import com.gms.service.jxc.LogService;
 import com.gms.service.jxc.MenuService;
 import com.gms.service.jxc.RoleService;
@@ -41,6 +33,8 @@ import com.gms.service.jxc.UserService;
 import com.gms.util.Constant;
 import com.gms.util.MD5Util;
 import com.gms.util.StringUtil;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 
 /**
  * 当前登录用户控制器

@@ -21,11 +21,7 @@ import com.gms.entity.jxc.Shop;
 import com.gms.entity.jxc.User;
 import com.gms.service.jxc.CouponCodeService;
 import com.gms.service.jxc.CouponService;
-import com.gms.service.jxc.DamageListService;
 import com.gms.service.jxc.LogService;
-import com.gms.service.jxc.PurchaseListService;
-import com.gms.service.jxc.SaleListService;
-import com.gms.util.Constant;
 import com.gms.util.DateUtil;
 
 @RestController
@@ -35,13 +31,6 @@ public class OverviewController extends BaseController {
 	private LogService logService;
 	@Autowired
 	private CouponService couponService;
-
-	@Autowired
-	private PurchaseListService purchaseListService;
-	@Autowired
-	private DamageListService damageListService;
-	@Autowired
-	private SaleListService saleListService;
 
 	@Autowired
 	private ImageServerProperties imageServerProperties;
@@ -63,18 +52,6 @@ public class OverviewController extends BaseController {
 		int between_date_count = couponService.findCouponByStatus(2, shop)
 				.size();
 		int out_date_count = couponService.findCouponByStatus(3, shop).size();
-
-		// 已支付进货单数量
-		int jin_num1 = purchaseListService.getPurchasePayedListCount(
-				shop, Constant.ORDER_PAYED_STATE);
-		// 未支付进货单数量
-		int jin_num2 = purchaseListService.getPurchasePayedListCount(
-				shop, Constant.ORDER_NO_PAYED_STATE);
-		int sale_num1 = saleListService.getSaleOrderPayedListCount(
-				shop, Constant.ORDER_PAYED_STATE);
-		int sale_num2 = saleListService.getSaleOrderPayedListCount(
-				shop, Constant.ORDER_NO_PAYED_STATE);
-		int kucun_num = damageListService.getDamageOrderListCount(shop);
 
 		/* 优惠券领取状况 */
 		Date today = new Date();
@@ -103,11 +80,6 @@ public class OverviewController extends BaseController {
 		resultMap.put("dateArr", dateArr);
 		resultMap.put("amountArr", amountArr);
 
-		resultMap.put("jin_num1", jin_num1);
-		resultMap.put("jin_num2", jin_num2);
-		resultMap.put("sale_num1", sale_num1);
-		resultMap.put("sale_num2", sale_num2);
-		resultMap.put("kucun_num", kucun_num);
 		return resultMap;
 	}
 

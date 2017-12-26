@@ -23,7 +23,8 @@ public interface GoodsTypeService {
 	 * @param parentId
 	 * @return
 	 */
-	public List<GoodsType> findByParentId(int parentId);
+	public List<GoodsType> getAllByParentId(int parentId);
+	public List<GoodsType> getAllByParentIdAndShopId(int parentId,Integer shopId);
 	
 	/**
 	 * 添加或者修改商品类别信息

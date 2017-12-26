@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
  * 首页或者权限url跳转控制器
- * @author java1234 小锋 老师
+ * @author 
  *
  */
 @Controller
