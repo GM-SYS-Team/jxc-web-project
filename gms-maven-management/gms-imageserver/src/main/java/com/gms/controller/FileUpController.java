@@ -82,36 +82,51 @@ public class FileUpController
     }
     return ResultData.serverInternalError().putDataValue("messageInfo", "服务器请假了，请稍后再试"); 
 }
-  
+  /**
+	* @author zhoutianqi
+	* @date 2017年12月27日 下午2:17:46
+	* @param quickMarkStr 生成二维码的key
+	* @param markType 区别二维码类别   SHOP(商铺二维码)  COUPON(优惠券二维码) CUSTOMER(用户领取的卷对应的二维码-如果需要的话)
+	* @param quickMarkRows 二维码宽度，服务器端默认值：13
+	* @param quickMarkCols 二维码长度，服务器端默认值：41
+	* @param quickMarkModelSize 单元模块大小，服务器端默认值：2
+	* @param quickMarkQzsize 空白区16像素，服务器端默认值：1
+	* @param quickMarkType 文件后缀，服务器端默认值：.png
+	* @description 处理二维码定制参数
+	*/
   @ResponseBody
   @RequestMapping(value={"quickMark/upload"}, method={org.springframework.web.bind.annotation.RequestMethod.POST})
-  public ResultData quickMarkUpload(@RequestParam("quickMarkStr") String quickMarkStr,@RequestParam("markType") String markType) { if (!StringUtil.isValid(quickMarkStr)) {
+  public ResultData quickMarkUpload(@RequestParam("quickMarkStr") String quickMarkStr,@RequestParam("markType") String markType,
+		  @RequestParam("quickMarkRows") String quickMarkRows,@RequestParam("quickMarkCols") String quickMarkCols,@RequestParam("quickMarkModelSize") String quickMarkModelSize,
+		  @RequestParam("quickMarkQzsize") String quickMarkQzsize,@RequestParam("quickMarkType") String quickMarkType) { if (!StringUtil.isValid(quickMarkStr)) {
       return ResultData.forbidden().putDataValue("messageInfo", "商铺ID不能为空");
     }
-	String realPath = systemPath.replaceAll("\\\\", "//");
-    String fileName = DateUtil.getCurrentTime() + quickMarkProperties.getType();
-    byte[] quickMarkImage = EncodeUtil.encodeShop(quickMarkProperties.getRows(), quickMarkProperties.getCols(),
-			quickMarkProperties.getModelSize(), quickMarkProperties.getQzsize(), quickMarkStr);
-    String markRealFileName = null;
-    String successMsg = null;//json回传结果
-    File dest = null;
-    if(markType.equals(Constant.QUICK_MARK_SHOP_TYPE)){
-    	markRealFileName = realPath+this.quickuploadPath + fileName;
-    	successMsg = this.imageServerProperties.getShopMark() + fileName;
-    }else if(markType.equals(Constant.QUICK_MARK_COUPON_TYPE)){
-    	markRealFileName = realPath+this.couponuploadPath + fileName;
-    	successMsg = this.imageServerProperties.getCouponMark() + fileName;
-    }else if(markType.equals(Constant.QUICK_MARK_CUSTOMER_TYPE)){
-    	markRealFileName = realPath+this.customeruploadPath + fileName;
-    	successMsg = this.imageServerProperties.getCustomerMark() + fileName;
-    }
-    dest = new File(markRealFileName);
-
-    if (!dest.getParentFile().exists())
-      dest.getParentFile().mkdirs();
-    FileOutputStream out=null;
+		  FileOutputStream out=null;
     try
     {
+		//处理二维码定制参数
+		dealQuickMarkProperties(quickMarkRows,quickMarkCols,quickMarkModelSize,quickMarkQzsize,quickMarkType);
+		String realPath = systemPath.replaceAll("\\\\", "//");
+	    String fileName = DateUtil.getCurrentTime() + quickMarkProperties.getType();
+	    byte[] quickMarkImage = EncodeUtil.encodeShop(quickMarkProperties.getRows(), quickMarkProperties.getCols(),
+				quickMarkProperties.getModelSize(), quickMarkProperties.getQzsize(), quickMarkStr,quickMarkProperties.getType());
+	    String markRealFileName = null;
+	    String successMsg = null;//json回传结果
+	    File dest = null;
+	    if(markType.equals(Constant.QUICK_MARK_SHOP_TYPE)){
+	    	markRealFileName = realPath+this.quickuploadPath + fileName;
+	    	successMsg = this.imageServerProperties.getShopMark() + fileName;
+	    }else if(markType.equals(Constant.QUICK_MARK_COUPON_TYPE)){
+	    	markRealFileName = realPath+this.couponuploadPath + fileName;
+	    	successMsg = this.imageServerProperties.getCouponMark() + fileName;
+	    }else if(markType.equals(Constant.QUICK_MARK_CUSTOMER_TYPE)){
+	    	markRealFileName = realPath+this.customeruploadPath + fileName;
+	    	successMsg = this.imageServerProperties.getCustomerMark() + fileName;
+	    }
+	    dest = new File(markRealFileName);
+	
+	    if (!dest.getParentFile().exists())
+	      dest.getParentFile().mkdirs();
     	out = new FileOutputStream(dest,false);
 		out.write(quickMarkImage);
 		ResultData resultData = ResultData.ok().putDataValue("quickMark", successMsg);
@@ -123,17 +138,45 @@ public class FileUpController
 		e.printStackTrace();
 	} catch (IllegalStateException e) {
       e.printStackTrace();
-    }finally{
+    }catch (Exception e) {
+        e.printStackTrace();
+      }finally{
     	try {
-			out.close();
+    		if(out!=null){
+    			out.close();
+    		}
 		} catch (IOException e) {
 			logger.info("商铺二维码生成数据流关闭异常，商铺ID为：" + quickMarkStr);
 		}
     }
     return ResultData.serverInternalError().putDataValue("messageInfo", "服务器请假了，请稍后再试"); 
 }
+  /**
+	* @author zhoutianqi
+	* @date 2017年12月27日 下午2:17:46
+	* @description 处理二维码定制参数
+	*/
+  private void dealQuickMarkProperties(String quickMarkRows,
+		String quickMarkCols, String quickMarkModelSize,
+		String quickMarkQzsize, String quickMarkType) {
+	if(!StringUtil.isEmpty(quickMarkRows)){
+		quickMarkProperties.setRows(Integer.parseInt(quickMarkRows));
+	}
+	if(!StringUtil.isEmpty(quickMarkCols)){
+		quickMarkProperties.setCols(Integer.parseInt(quickMarkCols));
+	}
+	if(!StringUtil.isEmpty(quickMarkModelSize)){
+		quickMarkProperties.setModelSize(Integer.parseInt(quickMarkModelSize));
+	}
+	if(!StringUtil.isEmpty(quickMarkQzsize)){
+		quickMarkProperties.setQzsize(Integer.parseInt(quickMarkQzsize));
+	}
+	if(!StringUtil.isEmpty(quickMarkType)){
+		quickMarkProperties.setType(quickMarkType);
+	}
+}
 
-  @RequestMapping({"/download"})
+@RequestMapping({"/download"})
   public String downloadFile(HttpServletRequest request, HttpServletResponse response)
   {
     String fileName = "FileUploadTests.java";

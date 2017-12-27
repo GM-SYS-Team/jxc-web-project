@@ -184,7 +184,8 @@ public class ShopController extends BaseController {
 		logger.info("开始生成商铺二维码，商铺ID为：" + String.valueOf(id.intValue()));
 		String result = HttpsUtil.getInstance().sendHttpPost(imageServerProperties.getUrl()+"/"+
 				imageServerProperties.getQuickMarkAction(),"quickMarkStr="+String.valueOf(id.intValue())
-						+"&markType="+Constant.QUICK_MARK_SHOP_TYPE);
+						+"&markType="+Constant.QUICK_MARK_SHOP_TYPE+"&quickMarkRows="+""+"&quickMarkCols=" +""
+						+"&quickMarkModelSize=" +""+ "&quickMarkQzsize=" +""+ "&quickMarkType="+"");
 		Shop shop = shopService.findById(id);
 		if(result!=null){
 			String quickMarkImageName = null;

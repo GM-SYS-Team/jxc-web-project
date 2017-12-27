@@ -49,8 +49,8 @@ image:
         couponMark: /static/couponMark/couponMark/
         customerMark: /static/customerMark/customerMark/
     quickmark:
-        rows: 25
-        cols: 25
-        modelSize: 5
-        qzsize: 16
+        rows: 13
+        cols: 41
+        modelSize: 2
+        qzsize: 1
         type: .png

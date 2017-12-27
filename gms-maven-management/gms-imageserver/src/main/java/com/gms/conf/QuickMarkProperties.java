@@ -12,9 +12,9 @@ public class QuickMarkProperties {
 	 */
 	private int rows;
 	private int cols;
-	private int modelSize;
-	private int qzsize;
-	private String type;
+	private int modelSize;//单元模块大小5(像素)
+	private int qzsize;//空白区16像素
+	private String type;//文件后缀
 	public String getType() {
 		return type;
 	}
