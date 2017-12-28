@@ -33,7 +33,7 @@ public interface PushJobService {
      * @param pushJobId 确认的推送任务
      * @return 已推送的PushJob
      */
-    PushJob submitPushJob(Long pushJobId);
+    PushJob submitPushJob(Long pushJobId) throws Exception;
 
 
     /**
