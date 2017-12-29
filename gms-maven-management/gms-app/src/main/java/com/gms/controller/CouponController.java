@@ -11,8 +11,11 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.gms.annoation.NeedAuth;
@@ -262,7 +265,7 @@ public class CouponController extends BaseAppController {
 	 */
 	@RequestMapping("/list")
 	@ResponseBody
-	public Map<String, Object> list(Integer status, Integer shopId) throws Exception {
+	public Map<String, Object> list(Integer state, Integer shopId, @RequestParam(value="page",required=false)Integer page,@RequestParam(value="rows",required=false)Integer rows) throws Exception {
 		User user = getUser();
 		validateUser(user, User.SHOPER);
 		if (shopId == null || shopId <= 0) {
@@ -272,12 +275,19 @@ public class CouponController extends BaseAppController {
 		if (shop == null) {
 			return error("店铺不存在");
 		}
+		if (page == null) {
+			page = 1;
+			rows = 10;
+		}
+		Coupon ParamCoupon = new Coupon();
+		ParamCoupon.setShopId(shopId);
 		List<Coupon> couponList = new ArrayList<Coupon>();
 		/* 当前登录的店铺 */
-		couponList = couponService.findCouponByStatus(status, shop);
+		couponList = couponService.list(ParamCoupon, page, rows, Direction.ASC, state, "id");
+		Long couponListSize = couponService.listCount(ParamCoupon, state);
 		Map<String, Object> resultMap = new HashMap<>();
 		resultMap.put("couponList", couponList);
-		resultMap.put("size", couponList == null ? 0 : couponList.size());
+		resultMap.put("size", couponListSize);
 		return success(resultMap);
 	}
 
@@ -322,11 +332,15 @@ public class CouponController extends BaseAppController {
 	 */
 	@RequestMapping("/user/list")
 	@ResponseBody
-	public Map<String, Object> listUserCoupon(Integer status) throws Exception {
+	public Map<String, Object> listUserCoupon(Integer state, @RequestParam(value="page",required=false)Integer page,@RequestParam(value="rows",required=false)Integer rows) throws Exception {
 		User user = getUser();
 		validateUser(user, User.CUSTOMER);
-		List<CouponCode> list = couponCodeService.findListByUserId(user.getId(), status);
-		return success(list);
+		Page<CouponCode> pageCouponCode = couponCodeService.list(user.getId(), state, page, rows,  Direction.ASC, "id");
+		List<CouponCode> list = pageCouponCode.getContent();
+		Map<String, Object> resultMap = new HashMap<>();
+		resultMap.put("couponList", list);
+		resultMap.put("size", pageCouponCode.getTotalElements());
+		return success(resultMap);
 	}
 	
 	

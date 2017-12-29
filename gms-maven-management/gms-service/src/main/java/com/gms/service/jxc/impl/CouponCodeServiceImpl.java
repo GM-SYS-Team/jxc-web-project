@@ -4,7 +4,16 @@ import java.util.Date;
 import java.util.List;
 
 import javax.annotation.Resource;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import com.gms.dao.repository.CouponCodeRepository;
@@ -52,6 +61,47 @@ public class CouponCodeServiceImpl implements CouponCodeService {
 		else {
 			return couponCodeRepository.findUsedCoupon(userId);
 		}
+	}
+	
+	@Override
+	public Page<CouponCode> list(Integer userId, Integer state, Integer page, Integer pageSize,
+			Direction direction, String... properties) {
+		Pageable pageable = new PageRequest(page - 1, pageSize, direction,
+				properties);
+		Page<CouponCode> pageCouponCode = couponCodeRepository.findAll(
+				new Specification<CouponCode>() {
+					@Override
+					public Predicate toPredicate(Root<CouponCode> root,
+							CriteriaQuery<?> query, CriteriaBuilder cb) {
+						Predicate predicate = cb.conjunction();
+						Date currentDate = new Date();
+						predicate.getExpressions().add(
+								cb.equal(root.get("userId"),
+										userId));
+						if (state == 0) {
+							// 获取商铺所有
+						} else if (state == 1) {
+							predicate.getExpressions().add(
+									cb.greaterThan(root.get("expiryDateStart"),
+											currentDate));
+						} else if (state == 2) {
+							predicate.getExpressions().add(
+									cb.lessThanOrEqualTo(
+											root.get("expiryDateStart"),
+											currentDate));
+							predicate.getExpressions().add(
+									cb.greaterThanOrEqualTo(
+											root.get("expiryDateStop"),
+											currentDate));
+						} else {
+							predicate.getExpressions().add(
+									cb.lessThan(root.get("expiryDateStop"),
+											currentDate));
+						}
+						return predicate;
+					}
+				}, pageable);
+		return pageCouponCode;
 	}
 
 	@Override
