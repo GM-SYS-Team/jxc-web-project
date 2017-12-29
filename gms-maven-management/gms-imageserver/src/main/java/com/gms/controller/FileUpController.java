@@ -15,10 +15,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.gms.common.EncodeUtil;
 import com.gms.conf.ImageServerProperties;
 import com.gms.conf.QuickMarkProperties;
 import com.gms.conf.ResultData;
+import com.gms.serverutil.EncodeUtil;
 import com.gms.util.Constant;
 import com.gms.util.DateUtil;
 import com.gms.util.StringUtil;
@@ -112,7 +112,7 @@ public class FileUpController
   public ResultData quickMarkUpload(@RequestParam("quickMarkStr") String quickMarkStr,@RequestParam("markType") String markType,
 		  @RequestParam("quickMarkRows") String quickMarkRows,@RequestParam("quickMarkCols") String quickMarkCols,@RequestParam("quickMarkModelSize") String quickMarkModelSize,
 		  @RequestParam("quickMarkQzsize") String quickMarkQzsize,@RequestParam("quickMarkType") String quickMarkType) { if (!StringUtil.isValid(quickMarkStr)) {
-      return ResultData.forbidden().putDataValue("messageInfo", "商铺ID不能为空");
+      return ResultData.forbidden().putDataValue("messageInfo", "商铺uuid不能为空");
     }
 		  FileOutputStream out=null;
     try
@@ -120,6 +120,7 @@ public class FileUpController
 		//处理二维码定制参数
 		dealQuickMarkProperties(quickMarkRows,quickMarkCols,quickMarkModelSize,quickMarkQzsize,quickMarkType);
 		/*String realPath = systemPath.replaceAll("\\\\", "//");*/
+		logger.info("开始生成商铺二维码，商铺ID为：" + quickMarkStr);
 	    String fileName = DateUtil.getCurrentTime()+ UUIDUtil.getUUIDKey() + quickMarkProperties.getType();
 	    byte[] quickMarkImage = EncodeUtil.encodeShop(quickMarkProperties.getRows(), quickMarkProperties.getCols(),
 				quickMarkProperties.getModelSize(), quickMarkProperties.getQzsize(), quickMarkStr,quickMarkProperties.getType());

@@ -168,13 +168,13 @@ public class ShopController extends BaseController {
 	@RequestMapping("/createAndUpdateQuickMark")
 	@RequiresPermissions(value = { "角色管理" })
 	public Map<String, Object> createAndUpdateQuickMark(Integer id) throws Exception {
+		Shop shop = shopService.findById(id);
 		Map<String, Object> resultMap = new HashMap<>();
-		logger.info("开始生成商铺二维码，商铺ID为：" + String.valueOf(id.intValue()));
+		logger.info("开始生成商铺二维码，商铺ID为：" + shop.getUuid());
 		String result = HttpsUtil.getInstance().sendHttpPost(imageServerProperties.getUrl()+"/"+
-				imageServerProperties.getQuickMarkAction(),"quickMarkStr="+String.valueOf(id.intValue())
+				imageServerProperties.getQuickMarkAction(),"quickMarkStr="+shop.getUuid()
 						+"&markType="+Constant.QUICK_MARK_SHOP_TYPE+"&quickMarkRows="+""+"&quickMarkCols=" +""
 						+"&quickMarkModelSize=" +""+ "&quickMarkQzsize=" +""+ "&quickMarkType="+"");
-		Shop shop = shopService.findById(id);
 		if(result!=null){
 			String quickMarkImageName = null;
 			JSONObject resultJson = (JSONObject)JSONObject.parse(result);

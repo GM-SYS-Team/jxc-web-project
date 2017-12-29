@@ -451,6 +451,40 @@ public class CouponController extends BaseAppController {
 		couponCodeService.save(couponCode);
 		return success();
 	}
+	
+	/**
+	 * 销券
+	 * 
+	 * @param status
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping("/user/couponCodeState")
+	@ResponseBody
+	public Map<String, Object> couponCodeState(Integer couponCodeId, Integer ownerId) throws Exception {
+		User user = getUser();
+		validateUser(user, User.SHOPER);
+		CouponCode couponCode = couponCodeService.findCouponCodeById(couponCodeId, ownerId);
+		if (couponCode == null) {
+			return error("优惠券不存在");
+		}
+		Coupon coupon = couponCode.getCoupon();
+		Shop shop = shopService.findById(coupon.getShopId());
+		if (shop.getUserId() != user.getId()) {
+			return error("优惠券不存在");
+		}
+		Date now = new Date();
+		if (DateUtil.compare_date(now, couponCode.getExpiryDateStop()) == 1) {
+			return error("优惠券已过期");
+		}
+		if (DateUtil.compare_date(couponCode.getExpiryDateStart(), now) == 1) {
+			return error("该活动尚未开始");
+		}
+		if (Constant.COUPON_USED.equals(couponCode.getIsUsed())) {
+			return error("优惠券已使用");
+		}
+		return success(couponCode);
+	}
 
 	/**
 	 * 查询用户领取的优惠券
