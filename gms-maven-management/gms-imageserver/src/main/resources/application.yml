@@ -5,10 +5,10 @@ spring:
         hibernate.ddl-auto: update
         show-sql: true
     datasource: 
-        name: db_jxc
-        url: jdbc:mysql://localhost:3306/gms_new?characterEncoding=UTF-8
+        name: gms
+        url: jdbc:mysql://39.104.68.153:3306/gms?characterEncoding=UTF-8
         username: root
-        password: root 
+        password: Abcd1234**! 
         # 使用druid数据源
         type: com.alibaba.druid.pool.DruidDataSource
         driver-class-name: com.mysql.jdbc.Driver
@@ -38,16 +38,19 @@ spring:
         suffix: .html
         template-loader-path: classpath:/templates/
         request-context-attribute: request
-picuploadPath: //src//main//resources//static//imagePath//
-quickuploadPath: //src//main//resources//static//quickMark//shopMark//
-couponuploadPath: //src//main//resources//static//quickMark//couponMark//
-customeruploadPath: //src//main//resources//static//quickMark//customerMark//
+headuploadPath: E://test//imagePath//headshot//
+goodsUploadPath: E://test//imagePath//goodspic//
+quickuploadPath: E://test//quickMark//shopMark//
+couponuploadPath: E://test//quickMark//couponMark//
+customeruploadPath: E://test//quickMark//customerMark//
 image: 
     server: 
-        sourcePath: /static/imagePath/
-        shopMark: /static/quickMark/shopMark/
-        couponMark: /static/couponMark/couponMark/
-        customerMark: /static/customerMark/customerMark/
+        hostaddress: http://116.62.143.222/static/
+        headShot: headshot/
+        goodsPic: goodspic/
+        shopMark: shopMark/
+        couponMark: couponMark/
+        customerMark: customerMark/
     quickmark:
         rows: 13
         cols: 41
