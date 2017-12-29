@@ -84,7 +84,7 @@ public class Shop {
     /**
      * 二维码地址
      */
-    @Column(length=100)
+    @Column(length=500)
     private String quickMark;
     
 

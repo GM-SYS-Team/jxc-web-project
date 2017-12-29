@@ -99,45 +99,32 @@ public class ShopController extends BaseController {
 		}
 		//选择了图像文件才会上传，否则用老的发黄的旧照片
 		if(pictureFile!=null && StringUtil.isValid(pictureFile.getOriginalFilename())){
+			Map<String, String> paramMap = new HashMap<>();
+			paramMap.put("picType", Constant.HEAD_SHOT);//用户头像
 			String result = HttpsUtil.getInstance().sendHttpPost(imageServerProperties.getUrl()+"/"+
-					imageServerProperties.getAction(), pictureFile);
+					imageServerProperties.getAction(), pictureFile,paramMap);
 			if(result!=null){
-				String imageName = null;
+				String pictureAddress = null;
 				JSONObject resultJson = (JSONObject)JSONObject.parse(result);
 				if(resultJson.getString("message").equals("Ok")){
-					imageName = resultJson.getJSONObject("data").getString("imageName");
-					shop.setPictureAddress(imageName);
+					pictureAddress = resultJson.getJSONObject("data").getString("url");
+					shop.setPictureAddress(pictureAddress);
 				}else{
 					resultMap.put("error", "服务器请假了，请稍后重试");
 					flag = false;
 				}
 			}
 		}
-		
 		shop.setUpdateTime(new Date());
-		Shop existedNameOne = shopService.findByShopName(shop.getShopName());
-		List<Shop> existedPhoneOne = shopService.findPhoneNum(shop
-				.getPhoneNum());
 		if (shop.getId() != null) { // 写入日志
 			logService.save(new Log(Log.UPDATE_ACTION, "更新商铺信息" + shop));
-			Shop old_shop = shopService.findById(shop.getId());
-			if(!shop.getShopName().equals(old_shop.getShopName())){
-				if (existedNameOne != null) {
-					resultMap.put("error", "该商铺名称已存在");
-					flag = false;
-				} 
-			}
+			/*Shop old_shop = shopService.findById(shop.getId());
+			if(StringUtil.isValid(old_shop.getPictureAddress())){
+				shop.setPictureAddress(old_shop.getPictureAddress());
+			}*/
 		} else {
-			if (existedNameOne != null) {
-				resultMap.put("error", "该商铺名称已存在");
-				flag = false;
-			} else if (existedPhoneOne.size() > 0) {
-				resultMap.put("error", "该手机号码已存在");
-				flag = false;
-			} else {
-				logService.save(new Log(Log.ADD_ACTION, "添加商铺信息" + shop));
-				shop.setCreateTime(new Date());
-			}
+			logService.save(new Log(Log.ADD_ACTION, "添加商铺信息" + shop));
+			shop.setCreateTime(new Date());
 		}
 		if (flag) {
 			shopService.save(shop);
@@ -191,7 +178,7 @@ public class ShopController extends BaseController {
 			String quickMarkImageName = null;
 			JSONObject resultJson = (JSONObject)JSONObject.parse(result);
 			if(resultJson.getString("message").equals("Ok")){
-				quickMarkImageName = resultJson.getJSONObject("data").getString("quickMark");
+				quickMarkImageName = resultJson.getJSONObject("data").getString("url");
 				shop.setQuickMark(quickMarkImageName);
 				shopService.save(shop);
 			}else{

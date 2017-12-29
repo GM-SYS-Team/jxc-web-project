@@ -8,7 +8,8 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
@@ -44,7 +45,7 @@ import com.google.gson.JsonObject;
 @Controller
 @RequestMapping("/user")
 public class UserController {
-	private static Logger logger = Logger.getLogger(UserController.class);
+	private static Logger logger = LogManager.getLogger(UserController.class);
 	@Resource
 	private RoleService roleService;
 	

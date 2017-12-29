@@ -6,6 +6,9 @@
     <version>0.0.1-SNAPSHOT</version>
   </parent>
   <artifactId>gms-imageserver</artifactId>
+  <properties>
+        <start-class>com.gms.Application</start-class>
+    </properties>
   <dependencies>
         <dependency>
             <groupId>com.gms</groupId>

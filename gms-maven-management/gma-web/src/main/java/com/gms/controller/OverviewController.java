@@ -43,7 +43,6 @@ public class OverviewController extends BaseController {
 			throws ParseException {
 		/* 当前登录的店铺 */
 		Shop shop = getCurrentShop(request);
-		String url = imageServerProperties.getUrl();
 
 		/* 查询当前店铺优惠券量 */
 		int totalCount = couponService.findCouponAll(shop).size();
@@ -71,7 +70,6 @@ public class OverviewController extends BaseController {
 		}
 		Map<String, Object> resultMap = new HashMap<>();
 		resultMap.put("shop", shop);
-		resultMap.put("url", url);
 		resultMap.put("totalCount", totalCount + "张");
 		resultMap.put("before_date_count", before_date_count + "张");
 		resultMap.put("between_date_count", between_date_count + "张");

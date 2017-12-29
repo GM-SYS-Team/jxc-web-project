@@ -30,7 +30,10 @@ public class Constant {
 	public static final String QUICK_MARK_COUPON_TYPE = "COUPON";
 	//消费者领取的优惠券
 	public static final String QUICK_MARK_CUSTOMER_TYPE = "CUSTOMER";
-	
+	//用户头像
+	public static final String HEAD_SHOT = "HEAD_SHOT";
+	//商品图片
+	public static final String GOODS_PIC = "GOODS_PIC";
 	//优惠券没有被使用
 	public static final String COUPON_NOT_USED = "0";
 	

@@ -86,11 +86,15 @@ public class HttpsUtil {
 	 * @param params
 	 *            文件
 	 */
-	public String sendHttpPost(String httpUrl, MultipartFile multipartFile) {
+	public String sendHttpPost(String httpUrl, MultipartFile multipartFile,Map<String, String> maps) {
 		HttpPost httpPost = new HttpPost(httpUrl);// 创建httpPost
 		try {
 			String fileName = multipartFile.getOriginalFilename();
 			MultipartEntityBuilder multipartEntityBuilder = MultipartEntityBuilder.create();
+			for (String key : maps.keySet()) {
+				multipartEntityBuilder.addPart(key, new StringBody(maps.get(key),
+						ContentType.TEXT_PLAIN));
+			}
 			multipartEntityBuilder.addBinaryBody("pictureFile", multipartFile.getInputStream(), ContentType.MULTIPART_FORM_DATA, fileName);// 文件流
 			multipartEntityBuilder.addTextBody("pictureFile", fileName);// 类似浏览器表单提交，对应input的name和value
 			httpPost.setEntity(multipartEntityBuilder.build());

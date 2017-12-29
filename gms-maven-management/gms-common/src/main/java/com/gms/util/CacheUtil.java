@@ -4,7 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
@@ -13,7 +14,7 @@ import com.google.common.cache.RemovalNotification;
 
 public class CacheUtil {
 
-	private static Logger logger = Logger.getLogger(CacheUtil.class);
+	private static Logger logger = LogManager.getLogger(CacheUtil.class);
 
 	public static final String USER = "user";
 

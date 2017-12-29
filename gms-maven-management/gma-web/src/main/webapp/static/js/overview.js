@@ -27,7 +27,7 @@ function queryContent(){
 				$(".shop_createTime").html(data.shop.createTime);
 				
 				if(data.shop.pictureAddress != "" && data.shop.pictureAddress!=null){
-					$('#shopPic').attr('src',data.url + data.shop.pictureAddress);
+					$('#shopPic').attr('src',data.shop.pictureAddress);
 				}else{
 					$('#shopPic').attr('src',"../static/images/nopic.jpg");
 				}

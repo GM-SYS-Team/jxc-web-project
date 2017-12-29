@@ -6,8 +6,8 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -18,7 +18,7 @@ import com.gms.util.Constant;
 
 
 public class MyExceptionHandler implements HandlerExceptionResolver{
-	private static Logger log = LogManager.getLogger(MyExceptionHandler.class.getName());
+	private static Logger log = LogManager.getLogger(MyExceptionHandler.class);
 
 	@Override
 	public ModelAndView resolveException(HttpServletRequest request, HttpServletResponse response, Object arg2,
