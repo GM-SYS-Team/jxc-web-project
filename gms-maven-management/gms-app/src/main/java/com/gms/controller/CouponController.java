@@ -443,6 +443,9 @@ public class CouponController extends BaseAppController {
 		if (DateUtil.compare_date(couponCode.getExpiryDateStart(), now) == 1) {
 			return error("该活动尚未开始");
 		}
+		if (Constant.COUPON_USED.equals(couponCode.getIsUsed())) {
+			return error("优惠券已使用");
+		}
 		couponCode.setUsedTime(now);
 		couponCode.setIsUsed(Constant.COUPON_USED);
 		couponCodeService.save(couponCode);
