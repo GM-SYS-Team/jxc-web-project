@@ -1,5 +1,6 @@
 package com.gms.entity.jxc;
 import java.util.Date;
+import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -75,6 +76,9 @@ public class CouponCode {
      */
     @Column(length=500)
     private String quickMark;
+    
+    @Column(length=64)
+	private String uuid;
     /**
      * @return id
      */
@@ -180,5 +184,16 @@ public class CouponCode {
 
 	public void setQuickMark(String quickMark) {
 		this.quickMark = quickMark;
+	}
+	
+	public void generateUUID(){
+		this.uuid =  UUID.randomUUID().toString().replaceAll("-", "");
+	}
+	public String getUuid() {
+		return uuid;
+	}
+
+	public void setUuid(String uuid) {
+		this.uuid = uuid;
 	}
 }

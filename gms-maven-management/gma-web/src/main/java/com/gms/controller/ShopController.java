@@ -125,6 +125,7 @@ public class ShopController extends BaseController {
 		} else {
 			logService.save(new Log(Log.ADD_ACTION, "添加商铺信息" + shop));
 			shop.setCreateTime(new Date());
+			shop.generateUUID();
 		}
 		if (flag) {
 			shopService.save(shop);

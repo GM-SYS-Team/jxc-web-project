@@ -1,6 +1,7 @@
 package com.gms.entity.jxc;
 
 import java.util.Date;
+import java.util.UUID;
 
 import javax.persistence.*;
 /**
@@ -87,6 +88,8 @@ public class Shop {
     @Column(length=500)
     private String quickMark;
     
+    @Column(length=64)
+	private String uuid;
 
     public String getQuickMark() {
 		return quickMark;
@@ -297,5 +300,16 @@ public class Shop {
 
 	public void setUserId(Integer userId) {
 		this.userId = userId;
+	}
+	
+	public void generateUUID(){
+		this.uuid =  UUID.randomUUID().toString().replaceAll("-", "");
+	}
+	public String getUuid() {
+		return uuid;
+	}
+
+	public void setUuid(String uuid) {
+		this.uuid = uuid;
 	}
 }
