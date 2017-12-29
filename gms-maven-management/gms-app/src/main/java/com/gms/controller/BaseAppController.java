@@ -1,20 +1,16 @@
 package com.gms.controller;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.json.JSONObject;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
 import com.gms.entity.jxc.User;
 import com.gms.util.CacheUtil;
 import com.gms.util.Constant;
-import com.google.gson.JsonObject;
 
 public class BaseAppController {
 
