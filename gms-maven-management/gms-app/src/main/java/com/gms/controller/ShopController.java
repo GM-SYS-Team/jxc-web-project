@@ -12,12 +12,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.alibaba.fastjson.JSONObject;
 import com.gms.annoation.NeedAuth;
+import com.gms.conf.ImageServerProperties;
 import com.gms.entity.jxc.Goods;
 import com.gms.entity.jxc.Shop;
 import com.gms.entity.jxc.User;
 import com.gms.service.jxc.GoodsService;
 import com.gms.service.jxc.ShopService;
+import com.gms.util.Constant;
+import com.gms.util.HttpsUtil;
 import com.gms.util.StringUtil;
 
 @Controller
@@ -30,6 +34,9 @@ public class ShopController extends BaseAppController {
 	
 	@Autowired
 	private GoodsService goodsService;
+	
+	@Autowired
+	private ImageServerProperties imageServerProperties;
 	
 	/**
 	 * 分页查询商铺信息
@@ -86,9 +93,22 @@ public class ShopController extends BaseAppController {
 			shop.setCreateTime(new Date());
 		}
 		shop.setUserId(user.getId());
-		//FIXME 此处添加店铺生成二维码的代码
-		shop.setQuickMark("");
-		shopService.save(shop);			
+		shop.generateUUID();
+		String result = HttpsUtil.getInstance().sendHttpPost(imageServerProperties.getUrl()+"/"+
+				imageServerProperties.getQuickMarkAction(),"quickMarkStr="+ shop.getUuid()
+						+"&markType="+Constant.QUICK_MARK_SHOP_TYPE+"&quickMarkRows="+""+"&quickMarkCols=" +""
+						+"&quickMarkModelSize=" +""+ "&quickMarkQzsize=" +""+ "&quickMarkType="+"");
+		if(result!=null){
+			String quickMarkImageName = null;
+			JSONObject resultJson = (JSONObject)JSONObject.parse(result);
+			if(resultJson.getString("message").equals("Ok")){
+				quickMarkImageName = resultJson.getJSONObject("data").getString("url");
+				shop.setQuickMark(quickMarkImageName);
+				shopService.save(shop);
+			}else{
+				return error("服务器请假了，请稍后重试");
+			}
+		}
 		return success(shop);
 	}
 	

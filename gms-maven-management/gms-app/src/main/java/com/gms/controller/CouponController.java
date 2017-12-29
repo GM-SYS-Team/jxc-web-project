@@ -18,7 +18,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.alibaba.fastjson.JSONObject;
 import com.gms.annoation.NeedAuth;
+import com.gms.conf.ImageServerProperties;
 import com.gms.entity.jxc.Coupon;
 import com.gms.entity.jxc.CouponCode;
 import com.gms.entity.jxc.CouponGoods;
@@ -30,6 +32,7 @@ import com.gms.service.jxc.CouponService;
 import com.gms.service.jxc.ShopService;
 import com.gms.util.Constant;
 import com.gms.util.DateUtil;
+import com.gms.util.HttpsUtil;
 import com.gms.util.StringUtil;
 
 @Controller
@@ -41,9 +44,12 @@ public class CouponController extends BaseAppController {
 
 	@Autowired
 	private ShopService shopService;
-	
+
 	@Autowired
 	private CouponCodeService couponCodeService;
+
+	@Autowired
+	private ImageServerProperties imageServerProperties;
 
 	/**
 	 * 
@@ -52,7 +58,7 @@ public class CouponController extends BaseAppController {
 	 * @param request
 	 * @throws Exception
 	 * @return Map<String,Object> 返回类型
-	 * @throws MyException 
+	 * @throws MyException
 	 */
 	@RequestMapping("/save")
 	@ResponseBody
@@ -125,10 +131,11 @@ public class CouponController extends BaseAppController {
 
 	/**
 	 * 修改优惠券信息
+	 * 
 	 * @param request
 	 * @return
 	 * @throws ParseException
-	 * @throws MyException 
+	 * @throws MyException
 	 */
 	@RequestMapping("/modify")
 	@ResponseBody
@@ -265,7 +272,9 @@ public class CouponController extends BaseAppController {
 	 */
 	@RequestMapping("/list")
 	@ResponseBody
-	public Map<String, Object> list(Integer state, Integer shopId, @RequestParam(value="page",required=false)Integer page,@RequestParam(value="rows",required=false)Integer rows) throws Exception {
+	public Map<String, Object> list(Integer state, Integer shopId,
+			@RequestParam(value = "page", required = false) Integer page,
+			@RequestParam(value = "rows", required = false) Integer rows) throws Exception {
 		User user = getUser();
 		validateUser(user, User.SHOPER);
 		if (shopId == null || shopId <= 0) {
@@ -324,28 +333,31 @@ public class CouponController extends BaseAppController {
 		couponService.save(coupon);
 		return success();
 	}
-	
+
 	/**
 	 * 查询用户领取的优惠券
+	 * 
 	 * @return
 	 * @throws Exception
 	 */
 	@RequestMapping("/user/list")
 	@ResponseBody
-	public Map<String, Object> listUserCoupon(Integer state, @RequestParam(value="page",required=false)Integer page,@RequestParam(value="rows",required=false)Integer rows) throws Exception {
+	public Map<String, Object> listUserCoupon(Integer state,
+			@RequestParam(value = "page", required = false) Integer page,
+			@RequestParam(value = "rows", required = false) Integer rows) throws Exception {
 		User user = getUser();
 		validateUser(user, User.CUSTOMER);
-		Page<CouponCode> pageCouponCode = couponCodeService.list(user.getId(), state, page, rows,  Direction.ASC, "id");
+		Page<CouponCode> pageCouponCode = couponCodeService.list(user.getId(), state, page, rows, Direction.ASC, "id");
 		List<CouponCode> list = pageCouponCode.getContent();
 		Map<String, Object> resultMap = new HashMap<>();
 		resultMap.put("couponList", list);
 		resultMap.put("size", pageCouponCode.getTotalElements());
 		return success(resultMap);
 	}
-	
-	
+
 	/**
 	 * 领券
+	 * 
 	 * @param status
 	 * @return
 	 * @throws Exception
@@ -373,22 +385,39 @@ public class CouponController extends BaseAppController {
 			}
 			couponCode.setReceiveTime(now);
 			couponCode.setCoupon(coupon);
-			couponCode.setAmount((int) (Math.random()*(coupon.getMaxAmount() - coupon.getMinAmount()) + coupon.getMinAmount()));
+			couponCode.setAmount(
+					(int) (Math.random() * (coupon.getMaxAmount() - coupon.getMinAmount()) + coupon.getMinAmount()));
 			couponCode.setUserId(user.getId());
 			couponCode.setIsUsed(Constant.COUPON_NOT_USED);
 			couponCode.setExpiryDateStart(coupon.getExpiryDateStart());
 			couponCode.setExpiryDateStop(coupon.getExpiryDateStop());
-			//FIXME 此处添加二维码生成的接口代码
-			couponCode.setQuickMark("");
+			couponCode.generateUUID();
 			coupon.setRemainCount(coupon.getRemainCount() - 1);
-			couponService.save(coupon);
-			couponCodeService.save(couponCode);
+			// FIXME 此处添加二维码生成的接口代码
+			String result = HttpsUtil.getInstance().sendHttpPost(
+					imageServerProperties.getUrl() + "/" + imageServerProperties.getQuickMarkAction(),
+					"quickMarkStr=######" + couponCode.getUuid() + "&markType=" + Constant.QUICK_MARK_CUSTOMER_TYPE
+							+ "&quickMarkRows=" + "" + "&quickMarkCols=" + "" + "&quickMarkModelSize=" + ""
+							+ "&quickMarkQzsize=" + "" + "&quickMarkType=" + "");
+			if (result != null) {
+				String quickMarkImageName = null;
+				JSONObject resultJson = (JSONObject) JSONObject.parse(result);
+				if (resultJson.getString("message").equals("Ok")) {
+					quickMarkImageName = resultJson.getJSONObject("data").getString("url");
+					couponCode.setQuickMark(quickMarkImageName);
+					couponService.save(coupon);
+					couponCodeService.save(couponCode);
+				} else {
+					return error("服务器请假了，请稍后重试");
+				}
+			}
 		}
 		return success(couponCode);
 	}
-	
+
 	/**
 	 * 销券
+	 * 
 	 * @param status
 	 * @return
 	 * @throws Exception
@@ -414,14 +443,15 @@ public class CouponController extends BaseAppController {
 		if (DateUtil.compare_date(couponCode.getExpiryDateStart(), now) == 1) {
 			return error("该活动尚未开始");
 		}
- 		couponCode.setUsedTime(now);
+		couponCode.setUsedTime(now);
 		couponCode.setIsUsed(Constant.COUPON_USED);
 		couponCodeService.save(couponCode);
 		return success();
 	}
-	
+
 	/**
 	 * 查询用户领取的优惠券
+	 * 
 	 * @return
 	 * @throws Exception
 	 */
@@ -447,11 +477,12 @@ public class CouponController extends BaseAppController {
 		map.put("shareCoupon", randomCoupon);
 		return success(map);
 	}
-	
+
 	/**
 	 * 判断用户类型
+	 * 
 	 * @param user
-	 * @throws MyException 
+	 * @throws MyException
 	 */
 	private void validateUser(User user, String userType) throws MyException {
 		if (!userType.equals(user.getUserType())) {

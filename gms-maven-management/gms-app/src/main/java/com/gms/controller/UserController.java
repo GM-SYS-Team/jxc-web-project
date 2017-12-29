@@ -1,14 +1,12 @@
 package com.gms.controller;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.annotation.Resource;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
@@ -17,13 +15,17 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.alibaba.fastjson.JSONObject;
 import com.aliyuncs.dysmsapi.model.v20170525.SendSmsResponse;
 import com.aliyuncs.exceptions.ClientException;
 import com.gms.annoation.NeedAuth;
+import com.gms.conf.ImageServerProperties;
 import com.gms.entity.jxc.User;
 import com.gms.exception.MyException;
 import com.gms.service.jxc.UserService;
+import com.gms.util.Constant;
 import com.gms.util.EmojiUtils;
+import com.gms.util.HttpsUtil;
 import com.gms.util.MD5Util;
 import com.gms.util.PhoneUtil;
 import com.gms.util.SmsUtil;
@@ -37,10 +39,12 @@ import com.gms.util.StringUtil;
 @Controller
 @RequestMapping("/app/user")
 public class UserController extends BaseAppController {
-	private static Logger logger = LogManager.getLogger(UserController.class);
 	
 	@Resource
 	private UserService userService;
+	
+	@Autowired
+	private ImageServerProperties imageServerProperties;
 	
 	//文件存储路径
 	@Value(value = "${picuploadPath}")
@@ -242,35 +246,28 @@ public class UserController extends BaseAppController {
     @RequestMapping(value = "picture/upload")
     @NeedAuth
     public Map<String,Object> upload(@RequestParam("pictureFile") MultipartFile pictureFile) {
-        if (pictureFile.isEmpty()) {
-            return error("图片不能为空");
-        }
-        // 获取文件名
-        String fileName = pictureFile.getOriginalFilename();
-        logger.info("上传的文件名为：" + fileName);
-        // 获取文件的后缀名
-        String suffixName = fileName.substring(fileName.lastIndexOf("."));
-        logger.info("上传的后缀名为：" + suffixName);
-        // 解决中文问题，liunx下中文路径，图片显示问题
-        // fileName = UUID.randomUUID() + suffixName;
-        File dest = new File(picturePath + fileName);
-        // 检测是否存在目录
-        if (!dest.getParentFile().exists()) {
-            dest.getParentFile().mkdirs();
-        }
-        try {
-        	pictureFile.transferTo(dest);
-        	User user = getUser();
-        	user.setImgUrl(picturePath + fileName);
-        	user.setUpdateTime(new Date());
-        	userService.save(user);
-            return success("头像上传成功");
-        } catch (IllegalStateException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return error("服务器请假了，请稍后再试");
+		//选择了图像文件才会上传，否则用老的发黄的旧照片
+		if(pictureFile!=null && StringUtil.isValid(pictureFile.getOriginalFilename())){
+			Map<String, String> paramMap = new HashMap<>();
+			paramMap.put("picType", Constant.HEAD_SHOT);//用户头像
+			String result = HttpsUtil.getInstance().sendHttpPost(imageServerProperties.getUrl()+"/"+
+					imageServerProperties.getAction(), pictureFile,paramMap);
+			if(result!=null){
+				String pictureAddress = null;
+				JSONObject resultJson = (JSONObject)JSONObject.parse(result);
+				if(resultJson.getString("message").equals("Ok")){
+					pictureAddress = resultJson.getJSONObject("data").getString("url");
+					// 4、把链接存到用户表中
+					User user = getUser();
+					user.setImgUrl(pictureAddress);
+					userService.save(user);
+					return success(pictureAddress);
+				}else{
+					return error();
+				}
+			}
+		}
+		return error();
     }
     
     
