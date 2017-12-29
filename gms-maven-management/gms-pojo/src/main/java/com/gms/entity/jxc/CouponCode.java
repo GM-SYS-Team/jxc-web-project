@@ -71,6 +71,11 @@ public class CouponCode {
 	private Date expiryDateStop;
     
     /**
+     * 二维码地址
+     */
+    @Column(length=500)
+    private String quickMark;
+    /**
      * @return id
      */
     public Integer getId() {
@@ -167,5 +172,13 @@ public class CouponCode {
 
 	public void setExpiryDateStop(Date expiryDateStop) {
 		this.expiryDateStop = expiryDateStop;
+	}
+
+	public String getQuickMark() {
+		return quickMark;
+	}
+
+	public void setQuickMark(String quickMark) {
+		this.quickMark = quickMark;
 	}
 }

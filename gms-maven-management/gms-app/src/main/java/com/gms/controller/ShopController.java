@@ -86,6 +86,8 @@ public class ShopController extends BaseAppController {
 			shop.setCreateTime(new Date());
 		}
 		shop.setUserId(user.getId());
+		//FIXME 此处添加店铺生成二维码的代码
+		shop.setQuickMark("");
 		shopService.save(shop);			
 		return success(shop);
 	}

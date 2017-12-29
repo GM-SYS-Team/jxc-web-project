@@ -37,7 +37,7 @@ public class SmsUtil {
 
     static final String templateCode = "SMS_112835024";
     
-    public static SendSmsResponse sendSms(String telephone, String smsCode) throws ClientException {
+    public SendSmsResponse sendSms(String telephone, String smsCode) throws ClientException {
 
         //可自助调整超时时间
         System.setProperty("sun.net.client.defaultConnectTimeout", "10000");
@@ -72,7 +72,7 @@ public class SmsUtil {
     }
 
 
-    public static QuerySendDetailsResponse querySendDetails(String bizId) throws ClientException {
+    public QuerySendDetailsResponse querySendDetails(String bizId) throws ClientException {
 
         //可自助调整超时时间
         System.setProperty("sun.net.client.defaultConnectTimeout", "10000");
@@ -86,7 +86,7 @@ public class SmsUtil {
         //组装请求对象
         QuerySendDetailsRequest request = new QuerySendDetailsRequest();
         //必填-号码
-        request.setPhoneNumber("18795959446");
+        request.setPhoneNumber("");
         //可选-流水号
         request.setBizId(bizId);
         //必填-发送日期 支持30天内记录查询，格式yyyyMMdd
@@ -104,9 +104,9 @@ public class SmsUtil {
     }
 
     public static void main(String[] args) throws ClientException, InterruptedException {
-
+    	SmsUtil smsUtil = new SmsUtil();
         //发短信
-        SendSmsResponse response = sendSms("1300000000" , "123456");
+        SendSmsResponse response = smsUtil.sendSms("18795959446" , "123456");
         System.out.println("短信接口返回的数据----------------");
         System.out.println("Code=" + response.getCode());
         System.out.println("Message=" + response.getMessage());
@@ -117,7 +117,7 @@ public class SmsUtil {
 
         //查明细
         if(response.getCode() != null && response.getCode().equals("OK")) {
-            QuerySendDetailsResponse querySendDetailsResponse = querySendDetails(response.getBizId());
+            QuerySendDetailsResponse querySendDetailsResponse = smsUtil.querySendDetails(response.getBizId());
             System.out.println("短信明细查询接口返回数据----------------");
             System.out.println("Code=" + querySendDetailsResponse.getCode());
             System.out.println("Message=" + querySendDetailsResponse.getMessage());

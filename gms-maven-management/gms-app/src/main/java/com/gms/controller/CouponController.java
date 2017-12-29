@@ -364,6 +364,8 @@ public class CouponController extends BaseAppController {
 			couponCode.setIsUsed(Constant.COUPON_NOT_USED);
 			couponCode.setExpiryDateStart(coupon.getExpiryDateStart());
 			couponCode.setExpiryDateStop(coupon.getExpiryDateStop());
+			//FIXME 此处添加二维码生成的接口代码
+			couponCode.setQuickMark("");
 			coupon.setRemainCount(coupon.getRemainCount() - 1);
 			couponService.save(coupon);
 			couponCodeService.save(couponCode);
