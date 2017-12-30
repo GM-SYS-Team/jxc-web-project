@@ -101,13 +101,13 @@ public class ShopController extends BaseAppController {
 		if(result!=null){
 			String quickMarkImageName = null;
 			JSONObject resultJson = (JSONObject)JSONObject.parse(result);
-			if(resultJson.getString("message").equals("Ok")){
-				quickMarkImageName = resultJson.getJSONObject("data").getString("url");
+//			if(resultJson.getString("message").equals("Ok")){
+//				quickMarkImageName = resultJson.getJSONObject("data").getString("url");
 				shop.setQuickMark(quickMarkImageName);
 				shopService.save(shop);
-			}else{
+//			}else{
 				return error("服务器请假了，请稍后重试");
-			}
+//			}
 		}
 		return success(shop);
 	}
