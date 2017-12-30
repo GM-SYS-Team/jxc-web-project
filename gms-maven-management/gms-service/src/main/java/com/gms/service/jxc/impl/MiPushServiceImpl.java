@@ -25,6 +25,7 @@ import java.util.Map;
  */
 @Service("miPushService")
 public class MiPushServiceImpl implements PushService {
+
     @Value("${mipush.appSecretKey.android}")
     private String appSecretKeyAndroid;
 
@@ -77,9 +78,7 @@ public class MiPushServiceImpl implements PushService {
         Result result = sender.broadcastAll(message, defaultRetryNum);
 
         logger.info("broadcast to all devices...params:{title:" + title + ",content:" + content + ",platform:" + platform.name() + ",sendTime:" + date2string(sendTime) + "}");
-        logger.info("broadcast to all devices...result:" + result.getErrorCode().getDescription());
-        if (result.getData() != null)
-            logger.info("broadcast to all devices...data:" + result.getData().toJSONString());
+        logger.info("broadcast to all devices...result:" + JSON.toJSONString(result));
         return result.getMessageId();
     }
 
@@ -131,7 +130,9 @@ public class MiPushServiceImpl implements PushService {
     }
 
     private static Message buildIosMessage(String title, String content, Map<String, String> payload, String packageName, Date sendTime) {
-        Message.IOSBuilder iOSBuilder = new Message.IOSBuilder().description(content) // 通知栏展示的通知的描述
+        Message.IOSBuilder iOSBuilder = new Message.IOSBuilder()
+                .title(title)
+                .description(content) // 通知栏展示的通知的描述
                 .soundURL("default") // 消息铃声
                 .badge(1) // 数字角标
                 .mutableContent("1");
@@ -155,7 +156,6 @@ public class MiPushServiceImpl implements PushService {
     private Sender buildSender(Constants.PUSH_PLATFORM platform) {
 
         String appKey = getAppSecretKey(platform);
-        logger.info("appKey = " + appKey);
         return new Sender(appKey);
     }
 
@@ -166,8 +166,7 @@ public class MiPushServiceImpl implements PushService {
      * @return
      */
     private String getAppSecretKey(Constants.PUSH_PLATFORM platform) {
-        logger.info(platform.toString());
-        String appKey = "";
+        String appKey;
         switch (platform) {
             case ANDROID:
                 appKey = appSecretKeyAndroid;
@@ -200,14 +199,5 @@ public class MiPushServiceImpl implements PushService {
             }
         }
     }
-//    private static void buildJobKeyExtra(String title, String content, Message.Builder builder) {
-//        if (ENABLE_JOB_KEY) {
-//            String jobKey = null;
-//            try {
-//                jobKey = MD5.encode(title + content).substring(0, 8);
-//                builder.extra("jobkey", jobKey); // 消息组的key
-//            } catch (NoSuchAlgorithmException e) {
-//            }
-//        }
-//    }
+
 }

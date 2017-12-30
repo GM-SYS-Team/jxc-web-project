@@ -1,11 +1,14 @@
 package com.gms.service.jxc.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.gms.dao.repository.PushJobRepository;
 import com.gms.entity.jxc.PushJob;
 import com.gms.service.jxc.PushJobService;
 import com.gms.service.jxc.PushService;
 import com.gms.util.Constants;
 import com.gms.util.StringUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -35,6 +38,8 @@ import java.util.Map;
 @Service("pushJobService")
 @Transactional
 public class PushJobServiceImpl implements PushJobService {
+
+    private static Logger logger = LoggerFactory.getLogger(MiPushServiceImpl.class);
 
     @Resource
     private PushJobRepository pushJobRepository;
@@ -110,6 +115,7 @@ public class PushJobServiceImpl implements PushJobService {
             payload.put("url", storedPushJob.getUrl());
             payload.put("openType", storedPushJob.getOpenType());
             payload.put("objectId", storedPushJob.getObjectId() + "");
+            logger.info("push payload = " + JSON.toJSONString(payload));
             String msgId = miPushService.broadcastAll(storedPushJob.getTitle(), storedPushJob.getContent(), payload, Constants.PUSH_PLATFORM.valueOf(storedPushJob.getDevicePlatform()), storedPushJob.getPushTime());
             storedPushJob.setPushMsgId(msgId);
             storedPushJob.setPushStatus("2");

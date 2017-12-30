@@ -48,11 +48,11 @@ image:
 mipush:
     appSecretKey:
         android: LaB9eoV5QtI7a0ledD3r4g==
-        iphone: dddd
+        iphone: BYHtWwdOqAaHmloUQ0eITQ==
         ipad: dddd
     packageName:
         android: com.meicci.gms
-        iphone:
+        iphone: com.meicci.gms
         ipad:
     defaultRetryNum: 3
-    production: true
+    production: false
