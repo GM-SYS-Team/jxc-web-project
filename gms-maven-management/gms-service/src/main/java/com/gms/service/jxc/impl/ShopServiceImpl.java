@@ -16,8 +16,11 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import com.gms.entity.jxc.Shop;
+import com.alibaba.fastjson.JSONObject;
 import com.gms.dao.repository.ShopRepository;
 import com.gms.service.jxc.ShopService;
+import com.gms.util.Constant;
+import com.gms.util.HttpsUtil;
 import com.gms.util.StringUtil;
 
 /**
@@ -46,7 +49,7 @@ public class ShopServiceImpl implements ShopService{
 	public void save(Shop Shop) {
 		shopRepository.save(Shop);
 	}
-
+	
 	@Override
 	public List<Shop> list(Shop shop, Integer page, Integer pageSize, Direction direction, String... properties) {
 		Pageable pageable=new PageRequest(page-1, pageSize, direction,properties);
