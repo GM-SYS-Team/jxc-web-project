@@ -187,7 +187,7 @@ public class UserController extends BaseAppController {
     	if (StringUtil.isEmpty(user.getDistrict())) {
     		return error("省区不能为空");
     	}
-    	if (user.getDistrict().indexOf("|") == -1) {
+    	if (user.getDistrict().indexOf(",") == -1) {
     		return error("省区参数不正确");
     	}
     	user.setUserName(telePhone);
