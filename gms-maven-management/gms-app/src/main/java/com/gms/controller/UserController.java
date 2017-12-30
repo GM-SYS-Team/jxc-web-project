@@ -143,7 +143,6 @@ public class UserController extends BaseAppController {
     	validateSmsCode(telePhone, smsCode);
     	String password = user.getPassword();
     	validatePassword(password);
-    	
     	user.setUserName(telePhone);
     	user.setPhoneNum(telePhone);
     	user.setUserType(User.CUSTOMER);
@@ -169,7 +168,6 @@ public class UserController extends BaseAppController {
     public Map<String,Object> shoperRegister(String smsCode, User user) throws MyException{
     	String telePhone = user.getPhoneNum();
     	telePhone = validatePhoneNum(telePhone);
-    	validateSmsCode(telePhone, smsCode);
     	String password = user.getPassword();
     	validatePassword(password);
     	if (StringUtil.isEmpty(user.getTrueName())) {
@@ -190,6 +188,7 @@ public class UserController extends BaseAppController {
     	if (user.getDistrict().indexOf(",") == -1) {
     		return error("省区参数不正确");
     	}
+    	validateSmsCode(telePhone, smsCode);
     	user.setUserName(telePhone);
     	user.setPhoneNum(telePhone);
     	user.setPassword(MD5Util.encode(password));
