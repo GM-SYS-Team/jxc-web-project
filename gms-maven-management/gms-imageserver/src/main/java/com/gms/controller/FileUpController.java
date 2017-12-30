@@ -115,15 +115,25 @@ public class FileUpController
       return ResultData.forbidden().putDataValue("messageInfo", "商铺uuid不能为空");
     }
 		  FileOutputStream out=null;
+		  /* test str here start  */
+		  String testStr = null;
+		  String testsuccessMsg = null;
+		  /* test str here end  */
     try
     {
 		//处理二维码定制参数
 		dealQuickMarkProperties(quickMarkRows,quickMarkCols,quickMarkModelSize,quickMarkQzsize,quickMarkType);
 		/*String realPath = systemPath.replaceAll("\\\\", "//");*/
-		logger.info("开始生成商铺二维码，商铺ID为：" + quickMarkStr);
 	    String fileName = DateUtil.getCurrentTime()+ UUIDUtil.getUUIDKey() + quickMarkProperties.getType();
+	    //logger.info("二维码属性quickMarkProperties：" + quickMarkProperties.toString());
+	    logger.info("开始生成二维码，quickMarkStr为：" + quickMarkStr);
 	    byte[] quickMarkImage = EncodeUtil.encodeShop(quickMarkProperties.getRows(), quickMarkProperties.getCols(),
 				quickMarkProperties.getModelSize(), quickMarkProperties.getQzsize(), quickMarkStr,quickMarkProperties.getType());
+	    if(quickMarkImage==null){
+	    	logger.info("byte[] quickMarkImage对象为null");
+	    }else{
+	    	 logger.info("生成二维码，byte[] quickMarkImage长度为：" + quickMarkImage.length);
+	    }
 	    String markRealFileName = null;
 	    String successMsg = null;//json回传结果
 	    String realUrlPath = null;//图片url包路径
@@ -146,6 +156,10 @@ public class FileUpController
 	    if (!dest.getParentFile().exists())
 	      dest.getParentFile().mkdirs();
     	out = new FileOutputStream(dest,false);
+    	/* test str here start  */
+    	testStr = imageServerProperties.getHostaddress()+realUrlPath+fileName;
+    	testsuccessMsg = successMsg;
+    	/* test str here end  */
 		out.write(quickMarkImage);
 		ResultData resultData = ResultData.ok().putDataValue("quickMark", successMsg);
 		resultData.putDataValue("url", imageServerProperties.getHostaddress()+realUrlPath+fileName);
@@ -168,7 +182,11 @@ public class FileUpController
 			logger.info("商铺二维码生成数据流关闭异常，商铺ID为：" + quickMarkStr);
 		}
     }
-    return ResultData.serverInternalError().putDataValue("messageInfo", "服务器请假了，请稍后再试"); 
+    ResultData resultData = ResultData.ok().putDataValue("quickMark", testsuccessMsg);
+	resultData.putDataValue("url", testStr);
+	logger.info("商铺二维码生成成功，商铺ID为：" + quickMarkStr);
+	return resultData.putDataValue("messageInfo", "二维码上传成功");
+    //return ResultData.serverInternalError().putDataValue("messageInfo", "服务器请假了，请稍后再试"); 
 }
   /**
 	* @author zhoutianqi

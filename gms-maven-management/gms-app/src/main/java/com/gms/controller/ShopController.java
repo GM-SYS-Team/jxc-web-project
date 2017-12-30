@@ -98,17 +98,17 @@ public class ShopController extends BaseAppController {
 				imageServerProperties.getQuickMarkAction(),"quickMarkStr="+ shop.getUuid()
 						+"&markType="+Constant.QUICK_MARK_SHOP_TYPE+"&quickMarkRows="+""+"&quickMarkCols=" +""
 						+"&quickMarkModelSize=" +""+ "&quickMarkQzsize=" +""+ "&quickMarkType="+"");
-		if(result!=null){
-			String quickMarkImageName = null;
-			JSONObject resultJson = (JSONObject)JSONObject.parse(result);
+//		if(result!=null){
+//			String quickMarkImageName = null;
+//			JSONObject resultJson = (JSONObject)JSONObject.parse(result);
 //			if(resultJson.getString("message").equals("Ok")){
 //				quickMarkImageName = resultJson.getJSONObject("data").getString("url");
-				shop.setQuickMark(quickMarkImageName);
+//				shop.setQuickMark(quickMarkImageName);
 				shopService.save(shop);
 //			}else{
-				return error("服务器请假了，请稍后重试");
+//				return error("服务器请假了，请稍后重试");
 //			}
-		}
+//		}
 		return success(shop);
 	}
 	
