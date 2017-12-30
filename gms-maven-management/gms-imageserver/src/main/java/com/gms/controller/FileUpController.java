@@ -142,7 +142,7 @@ public class FileUpController
 	    	realUrlPath = this.imageServerProperties.getCustomerMark();
 	    }
 	    dest = new File(markRealFileName);
-	
+	    logger.info("开始生成商铺二维码名称为：" + markRealFileName);
 	    if (!dest.getParentFile().exists())
 	      dest.getParentFile().mkdirs();
     	out = new FileOutputStream(dest,false);

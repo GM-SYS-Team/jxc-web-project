@@ -29,18 +29,6 @@ spring:
         testOnReturn: false
         poolPreparedStatements: true
         maxOpenPreparedStatements: 20
-    freemarker:
-        allow-request-override: false
-        cache: false
-        check-template-location: true
-        charset: UTF-8
-        content-type: text/html
-        expose-request-attributes: true
-        expose-session-attributes: false
-        expose-spring-macro-helpers: false
-        suffix: .html
-        template-loader-path: classpath:/templates/
-        request-context-attribute: request
 headuploadPath: E://test//imagePath//headshot//
 goodsUploadPath: E://test//imagePath//goodspic//
 quickuploadPath: E://test//quickMark//shopMark//
