@@ -1,14 +1,17 @@
 server:  
     port: 7000
-spring: 
+    #address: localhost
+    context-path: /
+# DATASOURCE
+spring:
     jpa:
         hibernate.ddl-auto: update
         show-sql: true
     datasource: 
-        name: gms
-        url: jdbc:mysql://39.104.68.153:3306/gms?characterEncoding=UTF-8
+        name: db_jxc
+        url: jdbc:mysql://106.14.135.185:3306/gms_new?characterEncoding=UTF-8
         username: root
-        password: Abcd1234**! 
+        password: Ryonwhl1314?
         # 使用druid数据源
         type: com.alibaba.druid.pool.DruidDataSource
         driver-class-name: com.mysql.jdbc.Driver
@@ -26,18 +29,6 @@ spring:
         testOnReturn: false
         poolPreparedStatements: true
         maxOpenPreparedStatements: 20
-    freemarker:
-        allow-request-override: false
-        cache: true
-        check-template-location: true
-        charset: UTF-8
-        content-type: text/html
-        expose-request-attributes: true
-        expose-session-attributes: false
-        expose-spring-macro-helpers: false
-        suffix: .html
-        template-loader-path: classpath:/templates/
-        request-context-attribute: request
 headuploadPath: E://test//imagePath//headshot//
 goodsUploadPath: E://test//imagePath//goodspic//
 quickuploadPath: E://test//quickMark//shopMark//
@@ -45,7 +36,7 @@ couponuploadPath: E://test//quickMark//couponMark//
 customeruploadPath: E://test//quickMark//customerMark//
 image: 
     server: 
-        hostaddress: http://116.62.143.222/static/
+        hostaddress: http://localhost/static/
         headShot: headshot/
         goodsPic: goodspic/
         shopMark: shopMark/

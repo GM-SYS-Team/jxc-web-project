@@ -10,8 +10,8 @@
     <module>gms-pojo</module>
     <module>gms-dao</module>
     <module>gms-service</module>
-    <!-- <module>gma-web</module>
-    <module>gms-app</module> -->
+    <module>gma-web</module>
+    <!-- <module>gms-app</module> -->
     <module>gms-imageserver</module>
   </modules>
   <parent>

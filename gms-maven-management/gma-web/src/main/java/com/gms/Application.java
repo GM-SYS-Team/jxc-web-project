@@ -9,11 +9,11 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.support.SpringBootServletInitializer;
 
 @SpringBootApplication
-public class JxcApplication extends SpringBootServletInitializer{
-	private static Logger logger = LogManager.getLogger(JxcApplication.class);
+public class Application extends SpringBootServletInitializer{
+	private static Logger logger = LogManager.getLogger(Application.class);
 	//
 	public static void main(String[] args) {
-		SpringApplication.run(JxcApplication.class, args);
+		SpringApplication.run(Application.class, args);
 		logger.info("info");
 		logger.debug("debug");
 		logger.error("error");
@@ -21,6 +21,6 @@ public class JxcApplication extends SpringBootServletInitializer{
 	
 	@Override
 	protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
-		return application.sources(JxcApplication.class);
+		return application.sources(Application.class);
 	}
 }
