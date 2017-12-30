@@ -9,7 +9,7 @@ spring:
         show-sql: true
     datasource: 
         name: db_jxc
-        url: jdbc:mysql://106.14.135.185:3306/gms_new?characterEncoding=UTF-8
+        url: jdbc:mysql://106.14.135.185:3306/gms?characterEncoding=UTF-8
         username: root
         password: Ryonwhl1314?
         # 使用druid数据源
@@ -45,4 +45,14 @@ image:
     server: 
         url: http://localhost:7000
         action: picture/upload
-        quickMarkAction: quickMark/upload
+mipush:
+    appSecretKey:
+        android: LaB9eoV5QtI7a0ledD3r4g==
+        iphone: BYHtWwdOqAaHmloUQ0eITQ==
+        ipad: dddd
+    packageName:
+        android: com.meicci.gms
+        iphone: com.meicci.gms
+        ipad:
+    defaultRetryNum: 3
+    production: false

@@ -1,9 +1,14 @@
 package com.gms.service.jxc.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.gms.dao.repository.PushJobRepository;
 import com.gms.entity.jxc.PushJob;
 import com.gms.service.jxc.PushJobService;
+import com.gms.service.jxc.PushService;
+import com.gms.util.Constants;
 import com.gms.util.StringUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -18,7 +23,9 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.transaction.Transactional;
 import java.sql.Timestamp;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author wuchuantong
@@ -32,8 +39,13 @@ import java.util.List;
 @Transactional
 public class PushJobServiceImpl implements PushJobService {
 
+    private static Logger logger = LoggerFactory.getLogger(MiPushServiceImpl.class);
+
     @Resource
     private PushJobRepository pushJobRepository;
+
+    @Resource
+    private PushService miPushService;
 
     @Override
     public List<PushJob> list(PushJob pushJob, Sort.Direction direction, String... properties) {
@@ -95,9 +107,17 @@ public class PushJobServiceImpl implements PushJobService {
     }
 
     @Override
-    public PushJob submitPushJob(Long pushJobId) {
+    public PushJob submitPushJob(Long pushJobId) throws Exception {
+        //调用推送任务
         PushJob storedPushJob = pushJobRepository.getOne(pushJobId);
         if (storedPushJob != null) {
+            Map<String, String> payload = new HashMap<>();
+            payload.put("url", storedPushJob.getUrl());
+            payload.put("openType", storedPushJob.getOpenType());
+            payload.put("objectId", storedPushJob.getObjectId() + "");
+            logger.info("push payload = " + JSON.toJSONString(payload));
+            String msgId = miPushService.broadcastAll(storedPushJob.getTitle(), storedPushJob.getContent(), payload, Constants.PUSH_PLATFORM.valueOf(storedPushJob.getDevicePlatform()), storedPushJob.getPushTime());
+            storedPushJob.setPushMsgId(msgId);
             storedPushJob.setPushStatus("2");
             pushJobRepository.save(storedPushJob);
         }
