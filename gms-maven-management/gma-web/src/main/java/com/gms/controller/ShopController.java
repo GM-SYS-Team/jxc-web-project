@@ -172,7 +172,7 @@ public class ShopController extends BaseController {
 		Map<String, Object> resultMap = new HashMap<>();
 		logger.info("开始生成商铺二维码，商铺ID为：" + shop.getUuid());
 		String result = HttpsUtil.getInstance().sendHttpPost(imageServerProperties.getUrl()+"/"+
-				imageServerProperties.getQuickMarkAction(),"quickMarkStr="+shop.getUuid()
+				imageServerProperties.getQuickMarkAction(),"quickMarkStr="+String.valueOf(shop.getId())
 						+"&markType="+Constant.QUICK_MARK_SHOP_TYPE+"&quickMarkRows="+""+"&quickMarkCols=" +""
 						+"&quickMarkModelSize=" +""+ "&quickMarkQzsize=" +""+ "&quickMarkType="+"");
 		if(result!=null){

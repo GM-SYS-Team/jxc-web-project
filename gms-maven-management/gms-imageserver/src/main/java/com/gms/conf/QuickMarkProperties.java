@@ -45,6 +45,12 @@ public class QuickMarkProperties {
 	public void setQzsize(int qzsize) {
 		this.qzsize = qzsize;
 	}
+	@Override
+	public String toString() {
+		return "QuickMarkProperties [rows=" + rows + ", cols=" + cols
+				+ ", modelSize=" + modelSize + ", qzsize=" + qzsize + ", type="
+				+ type + "]";
+	}
 	
 	
 }
