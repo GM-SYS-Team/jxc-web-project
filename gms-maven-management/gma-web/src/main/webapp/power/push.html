@@ -101,14 +101,14 @@
 
         $(function () {
 
-            $("#dg").datagrid({
-                //双击事件
-                onDblClickRow: function (index, row) {
-                    $("#dlg").dialog("open").dialog("setTitle", "修改推送信息");
-                    $("#fm").form("load", row);
-                    url = "/admin/role/save?id=" + row.id;
-                }
-            });
+//            $("#dg").datagrid({
+//                //双击事件
+//                onDblClickRow: function (index, row) {
+//                    $("#dlg").dialog("open").dialog("setTitle", "修改推送信息");
+//                    $("#fm").form("load", row);
+//                    url = "/admin/role/save?id=" + row.id;
+//                }
+//            });
 
 
         });

@@ -2,9 +2,13 @@ package com.gms.controller;
 
 import com.gms.entity.jxc.Log;
 import com.gms.entity.jxc.PushJob;
+import com.gms.entity.jxc.User;
 import com.gms.service.jxc.LogService;
-import com.gms.service.jxc.PushJobService;
+import com.gms.service.PushJobService;
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -27,6 +31,8 @@ import java.util.Map;
 @RestController
 @RequestMapping("/admin/push")
 public class PushJobController {
+
+    private static Logger logger = LoggerFactory.getLogger(PushJobController.class);
 
     @Resource
     private PushJobService pushJobService;
@@ -57,7 +63,10 @@ public class PushJobController {
     @RequestMapping("/save")
     @RequiresPermissions(value = {"推送管理"})
     public Map<String, Object> save(PushJob pushJob) throws Exception {
+        User currentUser = (User) SecurityUtils.getSubject().getSession().getAttribute("currentUser");
+        pushJob.setModifyUser(currentUser.getTrueName());
         if (pushJob.getId() != null) { // 写入日志
+            pushJob.setCreateUser(currentUser.getTrueName());
             logService.save(new Log(Log.UPDATE_ACTION, "更新推送信息" + pushJob));
         } else {
             logService.save(new Log(Log.ADD_ACTION, "添加推送信息" + pushJob));
@@ -78,9 +87,10 @@ public class PushJobController {
     @RequestMapping("/delete")
     @RequiresPermissions(value = {"推送管理"})
     public Map<String, Object> delete(Long id) throws Exception {
+        User currentUser = (User) SecurityUtils.getSubject().getSession().getAttribute("currentUser");
         logService.save(new Log(Log.DELETE_ACTION, "删除推送信息" + pushJobService.findById(id)));  // 写入日志
         Map<String, Object> resultMap = new HashMap<>();
-        pushJobService.delete(id);
+        pushJobService.delete(id, currentUser.getTrueName());
         resultMap.put("success", true);
         return resultMap;
     }
@@ -95,9 +105,11 @@ public class PushJobController {
     @RequestMapping("/submit")
     @RequiresPermissions(value = {"推送管理"})
     public Map<String, Object> submit(Long id) throws Exception {
+        User currentUser = (User) SecurityUtils.getSubject().getSession().getAttribute("currentUser");
+
         logService.save(new Log(Log.DELETE_ACTION, "提交推送信息" + pushJobService.findById(id)));  // 写入日志
         Map<String, Object> resultMap = new HashMap<>();
-        pushJobService.submitPushJob(id);
+        pushJobService.submitPushJob(id, currentUser.getTrueName());
         resultMap.put("success", true);
         return resultMap;
     }
@@ -113,9 +125,11 @@ public class PushJobController {
     @RequestMapping("/withdraw")
     @RequiresPermissions(value = {"推送管理"})
     public Map<String, Object> withdraw(Long id) throws Exception {
+        User currentUser = (User) SecurityUtils.getSubject().getSession().getAttribute("currentUser");
+
         logService.save(new Log(Log.DELETE_ACTION, "撤回推送信息" + pushJobService.findById(id)));  // 写入日志
         Map<String, Object> resultMap = new HashMap<>();
-        pushJobService.withdrawPushJob(id);
+        pushJobService.withdrawPushJob(id, currentUser.getTrueName());
         resultMap.put("success", true);
         return resultMap;
     }
