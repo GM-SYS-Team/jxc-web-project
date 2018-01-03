@@ -81,8 +81,16 @@ public class PushJob {
     private Timestamp pushTime;
 
     @Basic
+    @Column(name = "create_user")
+    private String createUser;
+
+    @Basic
     @Column(name = "create_time")
     private Timestamp createTime;
+
+    @Basic
+    @Column(name = "modify_user")
+    private String modifyUser;
 
     @Basic
     @Column(name = "modify_time")
@@ -235,6 +243,22 @@ public class PushJob {
 
     public void setModifyTime(Timestamp modifyTime) {
         this.modifyTime = modifyTime;
+    }
+
+    public String getCreateUser() {
+        return createUser;
+    }
+
+    public void setCreateUser(String createUser) {
+        this.createUser = createUser;
+    }
+
+    public String getModifyUser() {
+        return modifyUser;
+    }
+
+    public void setModifyUser(String modifyUser) {
+        this.modifyUser = modifyUser;
     }
 
     @Override
