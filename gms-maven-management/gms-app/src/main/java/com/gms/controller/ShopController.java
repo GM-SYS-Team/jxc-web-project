@@ -1,6 +1,7 @@
 package com.gms.controller;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -93,22 +94,22 @@ public class ShopController extends BaseAppController {
 			shop.setCreateTime(new Date());
 		}
 		shop.setUserId(user.getId());
-		shop.generateUUID();
+		shopService.save(shop);
 		String result = HttpsUtil.getInstance().sendHttpPost(imageServerProperties.getUrl()+"/"+
-				imageServerProperties.getQuickMarkAction(),"quickMarkStr="+ shop.getUuid()
+				imageServerProperties.getQuickMarkAction(),"quickMarkStr="+ shop.getId()
 						+"&markType="+Constant.QUICK_MARK_SHOP_TYPE+"&quickMarkRows="+""+"&quickMarkCols=" +""
 						+"&quickMarkModelSize=" +""+ "&quickMarkQzsize=" +""+ "&quickMarkType="+"");
-//		if(result!=null){
-//			String quickMarkImageName = null;
-//			JSONObject resultJson = (JSONObject)JSONObject.parse(result);
-//			if(resultJson.getString("message").equals("Ok")){
-//				quickMarkImageName = resultJson.getJSONObject("data").getString("url");
-//				shop.setQuickMark(quickMarkImageName);
+		if(result!=null){
+			String quickMarkImageName = null;
+			JSONObject resultJson = (JSONObject)JSONObject.parse(result);
+			if(resultJson.getString("message").equals("Ok")){
+				quickMarkImageName = resultJson.getJSONObject("data").getString("url");
+				shop.setQuickMark(quickMarkImageName);
 				shopService.save(shop);
-//			}else{
-//				return error("服务器请假了，请稍后重试");
-//			}
-//		}
+			}else{
+				return error("服务器请假了，请稍后重试");
+			}
+		}
 		return success(shop);
 	}
 	
@@ -137,5 +138,27 @@ public class ShopController extends BaseAppController {
 		}	
 		shopService.delete(shopId);							
 		return success();
+	}
+	
+	/**
+	 * 根据条件分页查询商品信息
+	 * @param goods
+	 * @param page
+	 * @param rows
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping("/query")
+	@ResponseBody
+	public Map<String,Object> query(Integer shopId)throws Exception{
+		if (shopId == 0 || shopId <= 0) {
+			return error("非法请求");
+		}
+		User user = getUser();
+		Shop shop = shopService.queryShopByShopIdAndUserId(shopId, user.getId());
+		if (shop == null) {
+			return error("店铺不存在");
+		}
+		return success(shop);
 	}
 }

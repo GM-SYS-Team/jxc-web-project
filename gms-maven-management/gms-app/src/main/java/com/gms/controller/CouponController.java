@@ -453,7 +453,7 @@ public class CouponController extends BaseAppController {
 	}
 	
 	/**
-	 * 销券
+	 * 查询优惠券状态
 	 * 
 	 * @param status
 	 * @return
@@ -487,30 +487,25 @@ public class CouponController extends BaseAppController {
 	}
 
 	/**
-	 * 查询用户领取的优惠券
+	 * 查询用户可以领取的优惠券
 	 * 
 	 * @return
 	 * @throws Exception
 	 */
 	@RequestMapping("/user")
 	@ResponseBody
-	public Map<String, Object> getCoupon(Integer couponId, Integer shopId) throws Exception {
+	public Map<String, Object> getCoupon(Integer shopId) throws Exception {
 		User user = getUser();
 		validateUser(user, User.CUSTOMER);
-		Coupon coupon = couponService.findCouponById(couponId);
-		if (coupon == null) {
-			return error("优惠券活动不存在");
-		}
-		if (coupon.getShopId() != shopId) {
-			return error("优惠券活动不存在");
-		}
 		Date now = new Date();
-		if (DateUtil.compare_date(now, coupon.getExpiryDateStop()) == 1) {
-			return error("活动已结束");
-		}
-		Coupon randomCoupon = couponService.findRandomCoupon(now, coupon.getId());
+		List<Coupon> couponList = new ArrayList<Coupon>();
+		Coupon ParamCoupon = new Coupon();
+		ParamCoupon.setShopId(shopId);
+		/* 当前登录的店铺 */
+		couponList = couponService.list(ParamCoupon, 1, 10, Direction.ASC, 2, "id");
+		Coupon randomCoupon = couponService.findRandomCoupon(now, shopId);
 		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("coupon", coupon);
+		map.put("couponList", couponList);
 		map.put("shareCoupon", randomCoupon);
 		return success(map);
 	}
