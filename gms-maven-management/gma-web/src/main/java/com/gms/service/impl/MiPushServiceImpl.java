@@ -1,7 +1,7 @@
-package com.gms.service.jxc.impl;
+package com.gms.service.impl;
 
 import com.alibaba.fastjson.JSON;
-import com.gms.service.jxc.PushService;
+import com.gms.service.PushService;
 import com.gms.util.Constants;
 import com.xiaomi.xmpush.server.Message;
 import com.xiaomi.xmpush.server.Result;
@@ -83,6 +83,20 @@ public class MiPushServiceImpl implements PushService {
     }
 
 
+    /**
+     * 删除已经提交的定时推送任务
+     *
+     * @param platform 设备平台
+     * @param msgId    消息ID
+     * @throws Exception
+     */
+    public void deleteScheduleJob(Constants.PUSH_PLATFORM platform, String msgId) throws Exception {
+        Sender sender = buildSender(platform);
+        Result result = sender.deleteScheduleJob(msgId);
+        logger.info("deleteScheduleJob by msgId...params:{msgId:" + msgId + ",platform:" + platform.name() + "}");
+        logger.info("deleteScheduleJob by msgId...result:" + result.getErrorCode().getDescription());
+    }
+
     private static String date2string(Date date) {
         if (date == null) {
             return null;
@@ -131,7 +145,7 @@ public class MiPushServiceImpl implements PushService {
 
     private static Message buildIosMessage(String title, String content, Map<String, String> payload, String packageName, Date sendTime) {
         Message.IOSBuilder iOSBuilder = new Message.IOSBuilder()
-              //  .title(title)
+                //  .title(title)
                 .description(content) // 通知栏展示的通知的描述
                 .soundURL("default") // 消息铃声
                 .badge(1) // 数字角标
