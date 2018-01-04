@@ -7,7 +7,6 @@ import java.util.Map;
 import javax.annotation.Resource;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -46,9 +45,6 @@ public class UserController extends BaseAppController {
 	@Autowired
 	private ImageServerProperties imageServerProperties;
 	
-	//文件存储路径
-	@Value(value = "${picuploadPath}")
-	private String picturePath;
 	/**
      * 用户登录请求
      * @param user
