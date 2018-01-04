@@ -424,10 +424,10 @@ public class CouponController extends BaseAppController {
 	 */
 	@RequestMapping("/user/sale")
 	@ResponseBody
-	public Map<String, Object> saleCoupon(Integer couponCodeId, Integer ownerId) throws Exception {
+	public Map<String, Object> saleCoupon(Integer couponCodeId) throws Exception {
 		User user = getUser();
 		validateUser(user, User.SHOPER);
-		CouponCode couponCode = couponCodeService.findCouponCodeById(couponCodeId, ownerId);
+		CouponCode couponCode = couponCodeService.findCouponCode(couponCodeId);
 		if (couponCode == null) {
 			return error("优惠券不存在");
 		}

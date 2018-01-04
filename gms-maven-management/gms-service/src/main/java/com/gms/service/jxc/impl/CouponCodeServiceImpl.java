@@ -114,4 +114,9 @@ public class CouponCodeServiceImpl implements CouponCodeService {
 		return couponCodeRepository.findCouponCodeById(couponCodeId, ownerId);
 	}
 
+	@Override
+	public CouponCode findCouponCode(Integer couponCodeId) {
+		return couponCodeRepository.findOne(couponCodeId);
+	}
+
 }

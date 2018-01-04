@@ -29,4 +29,6 @@ public interface CouponCodeService {
 	public Page<CouponCode> list(Integer userId, Integer state, Integer page, Integer pageSize,
 			Direction direction, String... properties);
 
+	public CouponCode findCouponCode(Integer couponCodeId);
+
 }
