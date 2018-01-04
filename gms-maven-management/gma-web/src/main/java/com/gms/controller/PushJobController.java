@@ -3,8 +3,8 @@ package com.gms.controller;
 import com.gms.entity.jxc.Log;
 import com.gms.entity.jxc.PushJob;
 import com.gms.entity.jxc.User;
-import com.gms.service.jxc.LogService;
 import com.gms.service.PushJobService;
+import com.gms.service.jxc.LogService;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.slf4j.Logger;
@@ -72,8 +72,15 @@ public class PushJobController {
             logService.save(new Log(Log.ADD_ACTION, "添加推送信息" + pushJob));
         }
         Map<String, Object> resultMap = new HashMap<>();
-        pushJobService.save(pushJob);
-        resultMap.put("success", true);
+        try {
+            pushJobService.save(pushJob);
+            resultMap.put("success", true);
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            resultMap.put("success", false);
+            resultMap.put("errorInfo", e.getMessage());
+        }
+
         return resultMap;
     }
 
