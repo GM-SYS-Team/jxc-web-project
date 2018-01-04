@@ -2,6 +2,7 @@ package com.gms.controller;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -58,14 +59,23 @@ public class OverviewController extends BaseController {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		List<String> dateList = DateUtil.getTwoDay(sdf.format(today),
 				sdf.format(dayBeforeSeven), false);
-		List<CouponCode> codeList = couponCodeService.queryCouponCodeList(
-				shop, dayBeforeSeven);
+		List<CouponCode> codeList = new ArrayList<CouponCode>();
+		if(shop ==null){
+			codeList = couponCodeService.queryCouponCodeAdmin(sdf.format(dayBeforeSeven));
+		}else{
+			codeList = couponCodeService.queryCouponCodeList(
+					shop, sdf.format(dayBeforeSeven));
+		}
 		int[] amountArr = new int[7];
 		String[] dateArr = new String[7];
 		for (int i = 0; i < dateList.size(); i++) {
 			dateArr[dateList.size() - 1 - i] = dateList.get(i);
-			if (codeList.size() > i) {
-				amountArr[i] = codeList.get(i).getAmount();
+			if (codeList.size() > 0) {
+				for(CouponCode code:codeList){
+					if(sdf.format(code.getReceiveTime()).equals(dateArr[dateList.size() - 1 - i])){
+						amountArr[dateList.size() - 1 - i] += 1;
+					}
+				}
 			}
 		}
 		Map<String, Object> resultMap = new HashMap<>();

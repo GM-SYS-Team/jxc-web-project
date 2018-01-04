@@ -21,11 +21,13 @@ public interface CouponCodeRepository extends JpaRepository<CouponCode, Integer>
 	@Query(value="select * from t_coupon_code where coupon_id = ?1", nativeQuery=true)
 	public List<CouponCode> findCouponCodeListByCouponId(Integer couponId); 
 	
-	@Query(value="select count(*) as amount,receive_time from t_coupon_code  where coupon_id in(select id from t_coupon where shop_id=?1) and receive_time>=?2 group by receive_time",nativeQuery=true)
-	public List<CouponCode> queryCouponCodeByReTime(Integer shopId,Date receiveDate); 
+	//@Query(value="select count(*) as amount,a.receive_time from (select  DATE_FORMAT(receive_time, '%Y-%m-%d') as receive_time  from t_coupon_code where coupon_id in (select id from t_coupon where shop_id=?1) and receive_time>=?2) as a group by  a.receive_time",nativeQuery=true)
+	@Query(value="select * from t_coupon_code  where coupon_id in (select id from t_coupon where shop_id=?1) and receive_time>=?2",nativeQuery=true)
+	public List<CouponCode> queryCouponCodeByReTime(Integer shopId,String receiveDate); 
 	
-	@Query(value="select count(*) as amount,receive_time from t_coupon_code  where receive_time>=?1 group by receive_time",nativeQuery=true)
-	public List<CouponCode> queryCouponCodeByReTimeAdmin(Date receiveDate);
+	//@Query(value="select count(*) as amount,a.receive_time from (select  DATE_FORMAT(receive_time, '%Y-%m-%d') as receive_time  from t_coupon_code  where receive_time>=?1) as a group by  a.receive_time",nativeQuery=true)
+	@Query(value="select * from t_coupon_code  where receive_time>=?1",nativeQuery=true)
+	public List<CouponCode> queryCouponCodeByReTimeAdmin(String receiveDate);
 
 	@Query(value="select * from t_coupon_code where user_id = ?1 order by id desc", nativeQuery=true)
 	public List<CouponCode> findCouponAll(Integer userId);
