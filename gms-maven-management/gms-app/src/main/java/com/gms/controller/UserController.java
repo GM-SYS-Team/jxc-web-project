@@ -240,11 +240,16 @@ public class UserController extends BaseAppController {
     @ResponseBody
     @RequestMapping(value = "picture/upload")
     @NeedAuth
-    public Map<String,Object> upload(@RequestParam("pictureFile") MultipartFile pictureFile) {
+    public Map<String,Object> upload(@RequestParam("pictureFile") MultipartFile pictureFile, String fileType) {
 		//选择了图像文件才会上传，否则用老的发黄的旧照片
 		if(pictureFile!=null && StringUtil.isValid(pictureFile.getOriginalFilename())){
 			Map<String, String> paramMap = new HashMap<>();
-			paramMap.put("picType", Constant.HEAD_SHOT);//用户头像
+			if (Constant.FILE_UPLOAD_HEAD.equals(fileType)) {
+				paramMap.put("picType", Constant.HEAD_SHOT);//用户头像
+			}
+			else {
+				paramMap.put("picType", Constant.GOODS_PIC);//用户头像
+			}
 			String result = HttpsUtil.getInstance().sendHttpPost(imageServerProperties.getUrl()+"/"+
 					imageServerProperties.getAction(), pictureFile,paramMap);
 			if(result!=null){
@@ -252,10 +257,12 @@ public class UserController extends BaseAppController {
 				JSONObject resultJson = (JSONObject)JSONObject.parse(result);
 				if(resultJson.getString("message").equals("Ok")){
 					pictureAddress = resultJson.getJSONObject("data").getString("url");
-					// 4、把链接存到用户表中
-					User user = getUser();
-					user.setImgUrl(pictureAddress);
-					userService.save(user);
+					if  (Constant.FILE_UPLOAD_HEAD.equals(fileType)) {
+						// 4、把链接存到用户表中
+						User user = getUser();
+						user.setImgUrl(pictureAddress);
+						userService.save(user);
+					}
 					return success(pictureAddress);
 				}else{
 					return error();
