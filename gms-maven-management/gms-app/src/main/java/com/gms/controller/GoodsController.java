@@ -10,8 +10,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.alibaba.fastjson.JSONObject;
 import com.gms.annoation.NeedAuth;
+import com.gms.conf.ImageServerProperties;
 import com.gms.entity.jxc.CouponGoods;
 import com.gms.entity.jxc.Goods;
 import com.gms.entity.jxc.Shop;
@@ -19,6 +22,8 @@ import com.gms.entity.jxc.User;
 import com.gms.service.jxc.CouponService;
 import com.gms.service.jxc.GoodsService;
 import com.gms.service.jxc.ShopService;
+import com.gms.util.Constant;
+import com.gms.util.HttpsUtil;
 import com.gms.util.StringUtil;
 
 @Controller
@@ -34,6 +39,9 @@ public class GoodsController extends BaseAppController {
 	
 	@Autowired
 	private CouponService couponService;
+	
+	@Autowired
+	private ImageServerProperties imageServerProperties;
 	
 	/**
 	 * 根据条件分页查询商品信息
@@ -151,6 +159,33 @@ public class GoodsController extends BaseAppController {
 		goodsService.save(goods);
 		return success();
 	}
+	
+	
+    //文件上传相关代码
+    @ResponseBody
+    @RequestMapping(value = "picture/upload")
+    @NeedAuth
+    public Map<String,Object> upload(@RequestParam("pictureFile") MultipartFile pictureFile) {
+		//选择了图像文件才会上传，否则用老的发黄的旧照片
+		if(pictureFile!=null && StringUtil.isValid(pictureFile.getOriginalFilename())){
+			Map<String, String> paramMap = new HashMap<>();
+			paramMap.put("picType", Constant.GOODS_PIC);//用户头像
+			String result = HttpsUtil.getInstance().sendHttpPost(imageServerProperties.getUrl()+"/"+
+					imageServerProperties.getAction(), pictureFile,paramMap);
+			if(result!=null){
+				String pictureAddress = null;
+				JSONObject resultJson = (JSONObject)JSONObject.parse(result);
+				if(resultJson.getString("message").equals("Ok")){
+					pictureAddress = resultJson.getJSONObject("data").getString("url");
+					return success(pictureAddress);
+				}else{
+					return error();
+				}
+			}
+		}
+		return error();
+    }
+	
 	
 	/**
 	 * 删除商品信息
