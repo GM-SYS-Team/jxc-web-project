@@ -4,6 +4,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 /**
@@ -28,7 +30,6 @@ public class CouponGoods {
 
 	@Column(length=20)
 	private Integer goodId; // 商品ID
-	
 	
 	public Integer getId() {
 		return id;
@@ -61,6 +62,5 @@ public class CouponGoods {
 	public void setGoodId(Integer goodId) {
 		this.goodId = goodId;
 	}
-
 	
 }

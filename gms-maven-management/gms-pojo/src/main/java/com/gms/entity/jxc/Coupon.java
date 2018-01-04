@@ -72,6 +72,10 @@ public class Coupon {
 	@Column
 	private String status;
 	
+	@OneToOne
+	@JoinColumn(name="id")
+	private CouponGoods couponGoods; 
+	
 	/**
 	 * 表示优惠券为共享优惠券
 	 */
@@ -179,5 +183,13 @@ public class Coupon {
 
 	public void setShopId(Integer shopId) {
 		this.shopId = shopId;
+	}
+
+	public CouponGoods getCouponGoods() {
+		return couponGoods;
+	}
+
+	public void setCouponGoods(CouponGoods couponGoods) {
+		this.couponGoods = couponGoods;
 	}
 }

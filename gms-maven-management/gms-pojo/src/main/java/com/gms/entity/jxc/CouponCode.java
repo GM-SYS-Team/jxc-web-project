@@ -77,8 +77,11 @@ public class CouponCode {
     @Column(length=500)
     private String quickMark;
     
-    @Column(length=64)
-	private String uuid;
+    /**
+     * 商品图片地址
+     */
+    @Column(length=500)
+    private String goodsPicUrl;
     /**
      * @return id
      */
@@ -185,15 +188,12 @@ public class CouponCode {
 	public void setQuickMark(String quickMark) {
 		this.quickMark = quickMark;
 	}
-	
-	public void generateUUID(){
-		this.uuid =  UUID.randomUUID().toString().replaceAll("-", "");
-	}
-	public String getUuid() {
-		return uuid;
+
+	public String getGoodsPicUrl() {
+		return goodsPicUrl;
 	}
 
-	public void setUuid(String uuid) {
-		this.uuid = uuid;
+	public void setGoodsPicUrl(String goodsPicUrl) {
+		this.goodsPicUrl = goodsPicUrl;
 	}
 }

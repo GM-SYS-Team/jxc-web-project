@@ -24,11 +24,13 @@ import com.gms.conf.ImageServerProperties;
 import com.gms.entity.jxc.Coupon;
 import com.gms.entity.jxc.CouponCode;
 import com.gms.entity.jxc.CouponGoods;
+import com.gms.entity.jxc.Goods;
 import com.gms.entity.jxc.Shop;
 import com.gms.entity.jxc.User;
 import com.gms.exception.MyException;
 import com.gms.service.jxc.CouponCodeService;
 import com.gms.service.jxc.CouponService;
+import com.gms.service.jxc.GoodsService;
 import com.gms.service.jxc.ShopService;
 import com.gms.util.Constant;
 import com.gms.util.DateUtil;
@@ -50,6 +52,10 @@ public class CouponController extends BaseAppController {
 
 	@Autowired
 	private ImageServerProperties imageServerProperties;
+	
+	@Autowired
+	private GoodsService goodsService;
+	
 	/**
 	 * 
 	 * @Title: save
@@ -92,7 +98,7 @@ public class CouponController extends BaseAppController {
 		if (goodsId == null || goodsId <= 0) {
 			return error("请选择商品");
 		}
-		if (maxAmount > minAmount) {
+		if (minAmount > maxAmount) {
 			return error("优惠券最大金额不得低于优惠券最小金额");
 		}
 		if (StringUtil.isEmpty(expiryDateStart)) {
@@ -176,7 +182,7 @@ public class CouponController extends BaseAppController {
 		if (goodsId == null || goodsId <= 0) {
 			return error("请选择商品");
 		}
-		if (maxAmount > minAmount) {
+		if (minAmount > maxAmount) {
 			return error("优惠券最大金额不得低于优惠券最小金额");
 		}
 		if (StringUtil.isEmpty(expiryDateStart)) {
@@ -382,6 +388,8 @@ public class CouponController extends BaseAppController {
 			if (coupon.getRemainCount() <= 0) {
 				return error("优惠券已发放完毕");
 			}
+			CouponGoods couponGoods = coupon.getCouponGoods();
+			Goods goods = goodsService.findById(couponGoods.getGoodId());
 			couponCode.setReceiveTime(now);
 			couponCode.setCoupon(coupon);
 			couponCode.setAmount(
@@ -390,6 +398,7 @@ public class CouponController extends BaseAppController {
 			couponCode.setIsUsed(Constant.COUPON_NOT_USED);
 			couponCode.setExpiryDateStart(coupon.getExpiryDateStart());
 			couponCode.setExpiryDateStop(coupon.getExpiryDateStop());
+			couponCode.setGoodsPicUrl(goods.getPictureAddress());
 			coupon.setRemainCount(coupon.getRemainCount() - 1);
 			couponService.save(coupon);
 			couponCodeService.save(couponCode);
