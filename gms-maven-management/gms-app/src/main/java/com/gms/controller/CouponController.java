@@ -50,7 +50,6 @@ public class CouponController extends BaseAppController {
 
 	@Autowired
 	private ImageServerProperties imageServerProperties;
-
 	/**
 	 * 
 	 * @Title: save
@@ -391,12 +390,13 @@ public class CouponController extends BaseAppController {
 			couponCode.setIsUsed(Constant.COUPON_NOT_USED);
 			couponCode.setExpiryDateStart(coupon.getExpiryDateStart());
 			couponCode.setExpiryDateStop(coupon.getExpiryDateStop());
-			couponCode.generateUUID();
 			coupon.setRemainCount(coupon.getRemainCount() - 1);
+			couponService.save(coupon);
+			couponCodeService.save(couponCode);
 			// FIXME 此处添加二维码生成的接口代码
 			String result = HttpsUtil.getInstance().sendHttpPost(
 					imageServerProperties.getUrl() + "/" + imageServerProperties.getQuickMarkAction(),
-					"quickMarkStr=######" + couponCode.getUuid() + "&markType=" + Constant.QUICK_MARK_CUSTOMER_TYPE
+					"quickMarkStr=000000" + couponCode.getId()+ "&markType=" + Constant.QUICK_MARK_CUSTOMER_TYPE
 							+ "&quickMarkRows=" + "" + "&quickMarkCols=" + "" + "&quickMarkModelSize=" + ""
 							+ "&quickMarkQzsize=" + "" + "&quickMarkType=" + "");
 			if (result != null) {
@@ -405,14 +405,14 @@ public class CouponController extends BaseAppController {
 				if (resultJson.getString("message").equals("Ok")) {
 					quickMarkImageName = resultJson.getJSONObject("data").getString("url");
 					couponCode.setQuickMark(quickMarkImageName);
-					couponService.save(coupon);
 					couponCodeService.save(couponCode);
+					return success(couponCode);
 				} else {
 					return error("服务器请假了，请稍后重试");
 				}
 			}
 		}
-		return success(couponCode);
+		return error("服务器请假了，请稍后重试");
 	}
 
 	/**
