@@ -40,5 +40,9 @@ public class Constant {
 	//优惠券已经被使用
 	public static final String COUPON_USED = "1";
 	
+	public static final String FILE_UPLOAD_HEAD = "1";
+	
+	public static final String FILE_UPLOAD_HEAD_GOODS = "2";
+	
 	
 }
