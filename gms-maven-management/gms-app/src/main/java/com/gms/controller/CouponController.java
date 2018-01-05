@@ -433,7 +433,10 @@ public class CouponController extends BaseAppController {
 	 */
 	@RequestMapping("/user/sale")
 	@ResponseBody
-	public Map<String, Object> saleCoupon(Integer couponCodeId) throws Exception {
+	public Map<String, Object> saleCoupon(String id) throws Exception {
+		//去除前六位六个0
+		id = id.substring(6);
+		Integer couponCodeId = Integer.valueOf(id);
 		User user = getUser();
 		validateUser(user, User.SHOPER);
 		CouponCode couponCode = couponCodeService.findCouponCode(couponCodeId);
@@ -529,5 +532,12 @@ public class CouponController extends BaseAppController {
 		if (!userType.equals(user.getUserType())) {
 			throw new MyException("非法请求");
 		}
+	}
+	
+	public static void main(String[] args) {
+		String id = "000000123";
+		id = id.substring(6);
+		Integer couponCodeId = Integer.valueOf(id);
+		System.out.println(couponCodeId);
 	}
 }
