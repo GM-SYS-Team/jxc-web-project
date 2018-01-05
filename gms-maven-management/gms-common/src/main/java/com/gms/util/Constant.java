@@ -43,6 +43,9 @@ public class Constant {
 	public static final String FILE_UPLOAD_HEAD = "1";
 	
 	public static final String FILE_UPLOAD_HEAD_GOODS = "2";
-	
+	//文件类别，删除文件用来标识
+	public static final String NICK_PATH_TYPE = "NICK_PATH_TYPE";
+	//文件类别，删除文件用来标识
+	public static final String QUICK_PATH_TYPE = "QUICK_PATH_TYPE";
 	
 }

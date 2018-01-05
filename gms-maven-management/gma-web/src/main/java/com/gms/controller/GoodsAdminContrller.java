@@ -125,6 +125,10 @@ public class GoodsAdminContrller extends BaseController{
 				String pictureAddress = null;
 				JSONObject resultJson = (JSONObject)JSONObject.parse(result);
 				if(resultJson.getString("message").equals("Ok")){
+					if(goods.getId()!=null && StringUtil.isValid(goods.getPictureAddress())){
+						HttpsUtil.getInstance().sendHttpPost(imageServerProperties.getUrl()+"/static/pic/delete", 
+								"picAddress="+goods.getPictureAddress()+"&type="+Constant.NICK_PATH_TYPE);
+					}
 					pictureAddress = resultJson.getJSONObject("data").getString("url");
 					goods.setPictureAddress(pictureAddress);
 				}else{

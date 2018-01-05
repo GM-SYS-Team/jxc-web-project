@@ -218,6 +218,7 @@
 		$('#inventoryQuantity').numberbox('setValue', "");
 		$("#producer").val("");
 		$("#remarks").val("");
+		$("#pictureAddress").val("");
 	}
 	
 	function closeGoodsDialog(){
@@ -386,6 +387,7 @@
 		   		<th field="minNum" width="70" align="center" >库存下限</th>
 		   		<th field="producer" width="200" align="center">生产产商</th>
 		   		<th field="remarks" width="150" align="center" hidden=true>备注</th>
+		   		<th field="pictureAddress" width="50" align="center" hidden=true>图片</th>
 		   	</tr>
 		   </thead>
 		 </table>
@@ -482,6 +484,10 @@
 	 					<textarea rows="5" cols="47" id="remarks" name="remarks"></textarea>
 	 				</td>
 	 			</tr>
+	 			<tr hidden="hidden">
+	   				<td>图片</td>
+	   				<td><input type="text" id="pictureAddress" name="pictureAddress" class="easyui-validatebox" style="width: 250px"/></td>
+	   			</tr>
 	 		</table>
 	 	</form>
 	</div>
