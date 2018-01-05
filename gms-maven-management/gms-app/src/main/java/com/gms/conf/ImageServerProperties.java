@@ -13,6 +13,7 @@ public class ImageServerProperties {
 	private String url;
 	private String action;
 	private String quickMarkAction;
+	private String realQuickMarkAction;
 	public String getQuickMarkAction() {
 		return quickMarkAction;
 	}
@@ -30,6 +31,12 @@ public class ImageServerProperties {
 	}
 	public void setAction(String action) {
 		this.action = action;
+	}
+	public String getRealQuickMarkAction() {
+		return realQuickMarkAction;
+	}
+	public void setRealQuickMarkAction(String realQuickMarkAction) {
+		this.realQuickMarkAction = realQuickMarkAction;
 	}
 	
 }

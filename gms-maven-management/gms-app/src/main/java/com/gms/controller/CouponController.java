@@ -125,13 +125,36 @@ public class CouponController extends BaseAppController {
 			return error("店铺不存在");
 		}
 		coupon.setShopId(shopId);
-		couponService.save(coupon);
-		CouponGoods couponGoods = new CouponGoods();
-		couponGoods.setCouponId(coupon.getId());
-		couponGoods.setShopId(shop.getId());
-		couponGoods.setGoodId(goodsId);
-		couponService.saveCouponGoods(couponGoods);
-		return success(coupon);
+		Goods goods = goodsService.findById(goodsId);
+		if (goods == null) {
+			return error("商品不存在");
+		}
+		if (goods.getShopId() != shopId) {
+			return error("商品不存在");
+		}
+		//FIXME 这里添加生成二维码的代码
+		Map<String, String> maps = new HashMap<String, String>();
+		maps.put("quickAddress", shop.getQuickMark());
+		maps.put("goodsAddress", goods.getPictureAddress());
+		String result = HttpsUtil.getInstance().sendHttpPost(imageServerProperties.getUrl() + "/" + imageServerProperties.getRealQuickMarkAction() ,maps);
+		if (result != null) {
+			String quickMark = null;
+			JSONObject resultJson = (JSONObject) JSONObject.parse(result);
+			if (resultJson.getString("message").equals("Ok")) {
+				quickMark = resultJson.getJSONObject("data").getString("url");
+				coupon.setQuickMark(quickMark);
+				couponService.save(coupon);
+				CouponGoods couponGoods = new CouponGoods();
+				couponGoods.setCouponId(coupon.getId());
+				couponGoods.setShopId(shop.getId());
+				couponGoods.setGoodId(goodsId);
+				couponService.saveCouponGoods(couponGoods);
+				return success(coupon);
+			} else {
+				return error("服务器请假了，请稍后重试");
+			}
+		}
+		return error("服务器请假了，请稍后重试");
 	}
 
 	/**
@@ -413,9 +436,19 @@ public class CouponController extends BaseAppController {
 				JSONObject resultJson = (JSONObject) JSONObject.parse(result);
 				if (resultJson.getString("message").equals("Ok")) {
 					quickMarkImageName = resultJson.getJSONObject("data").getString("url");
-					couponCode.setQuickMark(quickMarkImageName);
-					couponCodeService.save(couponCode);
-					return success(couponCode);
+					Map<String, String> maps = new HashMap<String, String>();
+					maps.put("quickAddress", quickMarkImageName);
+					maps.put("goodsAddress", goods.getPictureAddress());
+					result = HttpsUtil.getInstance().sendHttpPost(imageServerProperties.getUrl() + "/" + imageServerProperties.getRealQuickMarkAction() ,maps);
+					if (result != null) {
+						resultJson = (JSONObject) JSONObject.parse(result);
+						if (resultJson.getString("message").equals("Ok")) {
+							quickMarkImageName = resultJson.getJSONObject("data").getString("url");
+							couponCode.setQuickMark(quickMarkImageName);
+							couponCodeService.save(couponCode);
+							return success(couponCode);
+						}
+					}
 				} else {
 					return error("服务器请假了，请稍后重试");
 				}
