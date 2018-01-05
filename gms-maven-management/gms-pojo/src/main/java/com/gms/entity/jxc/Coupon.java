@@ -66,6 +66,12 @@ public class Coupon {
 	@Column
 	private Double couponAmount;
 	
+    /**
+     * 二维码地址
+     */
+    @Column(length=500)
+    private String quickMark;
+	
 	/**
 	 * 优惠券状态 默认为0， 1-发放优惠券
 	 */
@@ -191,5 +197,13 @@ public class Coupon {
 
 	public void setCouponGoods(CouponGoods couponGoods) {
 		this.couponGoods = couponGoods;
+	}
+
+	public String getQuickMark() {
+		return quickMark;
+	}
+
+	public void setQuickMark(String quickMark) {
+		this.quickMark = quickMark;
 	}
 }
