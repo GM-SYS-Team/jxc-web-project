@@ -11,6 +11,7 @@ public class ImageServerProperties
   private String shopMark;//商铺二维码地址
   private String couponMark;//优惠券地址
   private String customerMark;//客户领取卷二维码地址
+  private String realMark;//合成的优惠券地址
 
   public String getCouponMark() {
 	return couponMark;
@@ -47,6 +48,12 @@ public String getHostaddress() {
 }
 public void setHostaddress(String hostaddress) {
 	this.hostaddress = hostaddress;
+}
+public String getRealMark() {
+	return realMark;
+}
+public void setRealMark(String realMark) {
+	this.realMark = realMark;
 }
 
 }

@@ -9,17 +9,22 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.shiro.authz.annotation.Logical;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.alibaba.fastjson.JSONObject;
+import com.gms.conf.ImageServerProperties;
 import com.gms.entity.jxc.Goods;
 import com.gms.entity.jxc.Log;
 import com.gms.entity.jxc.User;
 import com.gms.service.jxc.GoodsService;
 import com.gms.service.jxc.LogService;
 import com.gms.util.Constant;
+import com.gms.util.HttpsUtil;
 import com.gms.util.StringUtil;
 
 /**
@@ -36,6 +41,9 @@ public class GoodsAdminContrller extends BaseController{
 	
 	@Resource
 	private LogService logService;
+	
+	@Autowired
+	private ImageServerProperties imageServerProperties;
 	
 	/**
 	 * 根据条件分页查询商品信息
@@ -94,7 +102,9 @@ public class GoodsAdminContrller extends BaseController{
 	 */
 	@RequestMapping("/save")
 	@RequiresPermissions(value = { "商品管理"},logical=Logical.OR)
-	public Map<String,Object> save(Goods goods,HttpServletRequest request)throws Exception{
+	public Map<String,Object> save(Goods goods,HttpServletRequest request,@RequestParam(value = "pictureFile", required = false) MultipartFile pictureFile)throws Exception{
+		Map<String, Object> resultMap = new HashMap<>();
+		Boolean flag = true;
 		if(goods.getId()!=null){ // 写入日志
 			logService.save(new Log(Log.UPDATE_ACTION,"更新商品信息"+goods)); 
 		}else{
@@ -105,9 +115,32 @@ public class GoodsAdminContrller extends BaseController{
 		if(currentUser.getUserType().equals(Constant.SHOPTYPE)){
 			goods.setShopId(currentUser.getCurrentLoginShopId());
 		}
-		Map<String, Object> resultMap = new HashMap<>();
-		goodsService.save(goods);
-		resultMap.put("success", true);	
+		//选择了图像文件才会上传，否则用老的发黄的旧照片
+		if(pictureFile!=null && StringUtil.isValid(pictureFile.getOriginalFilename())){
+			Map<String, String> paramMap = new HashMap<>();
+			paramMap.put("picType", Constant.GOODS_PIC);
+			String result = HttpsUtil.getInstance().sendHttpPost(imageServerProperties.getUrl()+"/"+
+					imageServerProperties.getAction(), pictureFile,paramMap);
+			if(result!=null){
+				String pictureAddress = null;
+				JSONObject resultJson = (JSONObject)JSONObject.parse(result);
+				if(resultJson.getString("message").equals("Ok")){
+					if(goods.getId()!=null && StringUtil.isValid(goods.getPictureAddress())){
+						HttpsUtil.getInstance().sendHttpPost(imageServerProperties.getUrl()+"/static/pic/delete", 
+								"picAddress="+goods.getPictureAddress()+"&type="+Constant.NICK_PATH_TYPE);
+					}
+					pictureAddress = resultJson.getJSONObject("data").getString("url");
+					goods.setPictureAddress(pictureAddress);
+				}else{
+					resultMap.put("error", "服务器请假了，请稍后重试");
+					flag = false;
+				}
+			}
+		}
+		if (flag) {
+			goodsService.save(goods);
+			resultMap.put("success", true);	
+		}
 		return resultMap;
 	}
 	

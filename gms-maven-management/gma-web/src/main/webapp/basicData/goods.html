@@ -218,6 +218,7 @@
 		$('#inventoryQuantity').numberbox('setValue', "");
 		$("#producer").val("");
 		$("#remarks").val("");
+		$("#pictureAddress").val("");
 	}
 	
 	function closeGoodsDialog(){
@@ -386,6 +387,7 @@
 		   		<th field="minNum" width="70" align="center" >库存下限</th>
 		   		<th field="producer" width="200" align="center">生产产商</th>
 		   		<th field="remarks" width="150" align="center" hidden=true>备注</th>
+		   		<th field="pictureAddress" width="50" align="center" hidden=true>图片</th>
 		   	</tr>
 		   </thead>
 		 </table>
@@ -418,9 +420,9 @@
  	<a href="javascript:closeGoodsTypeDialog()" class="easyui-linkbutton" iconCls="icon-cancel">关闭</a>
  </div>
  
- <div id="dlg2" class="easyui-dialog" style="width: 500px;height:400px;padding: 10px 20px"
+ <div id="dlg2" class="easyui-dialog" style="width: 600px;height:400px;padding: 10px 20px"
 	  closed="true" buttons="#dlg-buttons2"  data-options="onClose:function(){resetValue()}">
-	 	<form id="fm2" method="post">
+	 	<form id="fm2" method="post"  enctype="multipart/form-data">
 	 		<table cellspacing="8px">
 	 			<tr>
 	 				<td>所属类别：</td>
@@ -473,11 +475,19 @@
 	 				</td>
 	 			</tr>
 	 			<tr>
+		   			<td>商品图片：</td>
+		   			<td  colspan="4"><input id="pictureFile" name="pictureFile"  style="width:250px" type="file" ></td>
+		   		</tr>
+	 			<tr>
 	 				<td valign="top">备注：</td>
 	 				<td colspan="4">
 	 					<textarea rows="5" cols="47" id="remarks" name="remarks"></textarea>
 	 				</td>
 	 			</tr>
+	 			<tr hidden="hidden">
+	   				<td>图片</td>
+	   				<td><input type="text" id="pictureAddress" name="pictureAddress" class="easyui-validatebox" style="width: 250px"/></td>
+	   			</tr>
 	 		</table>
 	 	</form>
 	</div>
