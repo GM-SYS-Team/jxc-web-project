@@ -43,7 +43,7 @@
      <div class="administrator l_f" style="padding-right: 10px;float: right;">
        <img src="../static/bgManager/images/avatar.png"  width="36px"/><span class="user-info"></span><i class="glyph-icon fa  fa-caret-down"></i>
        <ul class="dropdown-menu">
-        	<li><a href="javascript:void(0)" id="Exit_system"><i class="fa fa-user-times"></i>退出</a></li>
+        	<li><a href="/admin/user/logout" id="Exit_system"><i class="fa fa-user-times"></i>退出</a></li>
        </ul>
      </div>
    </div>
@@ -176,7 +176,7 @@
     return str; 
 } 
 setInterval(function(){$('#time').html(currentTime)},1000); 
-$('#Exit_system').on('click', function(){
+/*$('#Exit_system').on('click', function(){
       layer.confirm('是否确定退出系统？', {
      btn: ['是','否'] ,//按钮
 	 icon:2,
@@ -185,7 +185,7 @@ $('#Exit_system').on('click', function(){
 	  location.href="../login.html";
         
     });
-});
+});*/
 $("#menu_style").niceScroll({  
 	cursorcolor:"#888888",  
 	cursoropacitymax:1,  

@@ -1,6 +1,5 @@
 package com.gms.service.jxc;
 
-import java.util.Date;
 import java.util.List;
 
 import org.springframework.data.domain.Page;
@@ -18,7 +17,9 @@ import com.gms.entity.jxc.Shop;
 public interface CouponCodeService {
 
 	
-	public List<CouponCode> queryCouponCodeList(Shop shop,Date receiveDate);
+	public List<CouponCode> queryCouponCodeList(Shop shop,String receiveDate);
+	
+	public List<CouponCode> queryCouponCodeAdmin(String receiveDate);
 
 	public List<CouponCode> findListByUserId(Integer id, Integer status);
 

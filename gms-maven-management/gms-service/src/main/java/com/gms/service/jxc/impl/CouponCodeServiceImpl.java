@@ -32,16 +32,16 @@ public class CouponCodeServiceImpl implements CouponCodeService {
 
 	@Resource
 	private CouponCodeRepository couponCodeRepository;
-
+	
 	@Override
-	public List<CouponCode> queryCouponCodeList(Shop shop, Date receiveDate) {
-		if (shop != null) {
-			return couponCodeRepository.queryCouponCodeByReTime(shop.getId(), receiveDate);
-		} else {
-			return couponCodeRepository.queryCouponCodeByReTimeAdmin(receiveDate);
-		}
+	public List<CouponCode> queryCouponCodeAdmin(String receiveDate) {
+		return couponCodeRepository.queryCouponCodeByReTimeAdmin(receiveDate);
 	}
-
+	
+	@Override
+	public List<CouponCode> queryCouponCodeList(Shop shop, String receiveDate) {
+		return couponCodeRepository.queryCouponCodeByReTime(shop.getId(), receiveDate);
+	}
 	@Override
 	public List<CouponCode> findListByUserId(Integer userId, Integer status) {
 		Date today = new Date();

@@ -5,7 +5,7 @@
     <!-- 定义下面的引用名 -->
     <Properties>
         <!--日志根目录-->
-        <property name="LOG_HOME">E:/test/logs_log4j2</property>
+        <property name="LOG_HOME">/home/gms-server-projects/gms-web/logs</property>
         <!--服务名-->
         <property name="SERVER_NAME">log4j2</property>
         <!--日志备份归档目录-->

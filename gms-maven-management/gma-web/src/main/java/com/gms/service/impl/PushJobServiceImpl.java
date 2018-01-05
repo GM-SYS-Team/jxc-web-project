@@ -87,6 +87,9 @@ public class PushJobServiceImpl implements PushJobService {
             pushJob.setValid("Y");
         } else {
             PushJob storedPushJob = pushJobRepository.getOne(pushJob.getId());
+            if (!storedPushJob.getPushStatus().equals("1")) {//只能在已保存的状态下可以修改
+                throw new RuntimeException("非已保存状态，不能再修改内容");
+            }
             storedPushJob.setTitle(pushJob.getTitle());
             storedPushJob.setContent(pushJob.getContent());
             storedPushJob.setUrl(pushJob.getUrl());

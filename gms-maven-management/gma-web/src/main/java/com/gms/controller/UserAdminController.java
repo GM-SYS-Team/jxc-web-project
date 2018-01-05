@@ -158,6 +158,7 @@ public class UserAdminController {
 	@RequiresPermissions(value = { "角色管理" })
 	public Map<String,Object> save(User user)throws Exception{
 		Map<String, Object> resultMap = new HashMap<>();
+		//不管更新还是新增，名称都不能重复
 		if(user.getId()==null){
 			if(userService.findByUserName(user.getUserName())!=null){
 				resultMap.put("success", false);
@@ -165,19 +166,25 @@ public class UserAdminController {
 				return resultMap;
 			}
 		}
+		User existUser = null;
 		if(user.getId()!=null){ // 写入日志
 			logService.save(new Log(Log.UPDATE_ACTION,"更新用户信息"+user)); 
+			existUser = userService.findById(user.getId());
+			existUser.setPassword(MD5Util.encode(user.getPassword()));
+			existUser.setRemarks(user.getRemarks());
+			existUser.setTrueName(user.getTrueName());
+			existUser.setUserType(user.getUserType());
+			existUser.setUpdateTime(new Date());
+			userService.save(existUser);	
 		}else{
-			logService.save(new Log(Log.ADD_ACTION,"添加用户信息"+user)); 
+			logService.save(new Log(Log.ADD_ACTION,"添加用户信息"+user));
+			user.setCreateTime(new Date());
+			user.setUuid(UUIDUtil.getUUIDKey());
+			//新增、修改操作密码和更新时间都会改变
+			user.setPassword(MD5Util.encode(user.getPassword()));
+			user.setUpdateTime(new Date());
+			userService.save(user);	
 		}
-		user.setPassword(MD5Util.encode(user.getPassword()));
-		user.setCreateTime(new Date());
-		user.setUpdateTime(new Date());
-		user.setUuid(UUIDUtil.getUUIDKey());
-		/*if(user.getCurrentLoginShopId()!=null){
-			user.setUserType("1");
-		}else{user.setUserType("0");}*/
-		userService.save(user);			
 		resultMap.put("success", true);
 		return resultMap;
 	}

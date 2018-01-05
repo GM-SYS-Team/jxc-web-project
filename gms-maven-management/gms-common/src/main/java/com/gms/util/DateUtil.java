@@ -139,7 +139,7 @@ public class DateUtil {
             java.util.Date mydate = ymdSDF.parse(beginTime);    
             long day = (date.getTime() - mydate.getTime())    
                     / (24 * 60 * 60 * 1000);    
-            result = getDate(beginTime, Integer.parseInt(day + ""), isEndTime);    
+            result = getDate(endTime, Integer.parseInt(day + ""), isEndTime);    
         } catch (Exception e) {    
         }    
         return result;    

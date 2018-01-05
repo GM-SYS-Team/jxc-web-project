@@ -35,4 +35,22 @@
 			<systemPath>${basedir}/lib/aliyun-java-sdk-dysmsapi-1.0.0.jar</systemPath>
 		</dependency>
 	</dependencies>
+	<build>
+        <resources>
+            <resource>
+                <directory>lib</directory>
+                <targetPath>BOOT-INF/lib/</targetPath>
+                <includes>
+                    <include>**/*.jar</include>
+                </includes>
+            </resource>
+            <resource>
+                <directory>src/main/resources</directory>
+                <includes>
+                    <include>**/**</include>
+                </includes>
+                <filtering>false</filtering>
+            </resource>
+        </resources>
+    </build>
 </project>

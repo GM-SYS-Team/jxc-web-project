@@ -11,7 +11,7 @@
     <module>gms-dao</module>
     <module>gms-service</module>
     <module>gma-web</module>
-    <!-- <module>gms-app</module> -->
+    <module>gms-app</module>
     <module>gms-imageserver</module>
   </modules>
   <parent>
@@ -46,6 +46,7 @@
 		<dependency>
 		    <groupId>org.springframework.boot</groupId>
 		    <artifactId>spring-boot-starter-log4j2</artifactId>
+		    <version>1.5.8.RELEASE</version>
 		</dependency>
 		<dependency>
 			<groupId>mysql</groupId>
