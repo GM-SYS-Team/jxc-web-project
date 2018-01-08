@@ -48,8 +48,17 @@ public class GoodsTypeAdminController extends BaseController{
 	public String loadTreeInfo(HttpServletRequest request)throws Exception{
     	logService.save(new Log(Log.SEARCH_ACTION,"查询商品类别信息")); // 写入日志
     	Shop currentShop = getCurrentShop(request);
-		
-		return getAllByParentId(-1,currentShop.getId(),false).toString();
+    	List<GoodsType> list = goodsTypeService.getAllByParentIdAndShopId(-1,currentShop.getId());
+    	if(list==null || list.isEmpty()){
+    		GoodsType type = new GoodsType();
+    		type.setName("所有类别");
+    		type.setpId(-1);
+    		type.setIcon("icon-folderOpen");
+    		type.setState(0);
+    		type.setShopId(currentShop.getId());
+    		goodsTypeService.save(type);
+    	}
+		return getAllByParentId(-1,currentShop.getId()).toString();
 	}
 	
 	/**
@@ -113,14 +122,14 @@ public class GoodsTypeAdminController extends BaseController{
 	 * @param parentId
 	 * @return
 	 */
-	public JsonArray getAllByParentId(Integer parentId,Integer shopId,boolean flag){
-		JsonArray jsonArray=this.getByParentId(parentId,shopId,flag);
+	public JsonArray getAllByParentId(Integer parentId,Integer shopId){
+		JsonArray jsonArray=this.getByParentId(parentId,shopId);
 		for(int i=0;i<jsonArray.size();i++){
 			JsonObject jsonObject=(JsonObject) jsonArray.get(i);
     		if("open".equals(jsonObject.get("state").getAsString())){
     			continue;
     		}else{
-    			jsonObject.add("children", getAllByParentId(jsonObject.get("id").getAsInt(),shopId,true));
+    			jsonObject.add("children", getAllByParentId(jsonObject.get("id").getAsInt(),shopId));
     		}
 		}
 		return jsonArray;
@@ -131,15 +140,10 @@ public class GoodsTypeAdminController extends BaseController{
 	 * @param parentId
 	 * @return
 	 */
-	private JsonArray getByParentId(Integer parentId,Integer shopId,boolean flag){
+	private JsonArray getByParentId(Integer parentId,Integer shopId){
 		JsonArray jsonArray=new JsonArray();
 		List<GoodsType> goodsTypeList=null;
-		if(parentId==-1 && !flag){
-			goodsTypeList = goodsTypeService.getAllByParentId(parentId);
-		}else{
-			goodsTypeList = goodsTypeService.getAllByParentIdAndShopId(parentId,shopId);
-		}
-		
+		goodsTypeList = goodsTypeService.getAllByParentIdAndShopId(parentId,shopId);
 		for(GoodsType goodsType:goodsTypeList){
 			JsonObject jsonObject=new JsonObject();
 			jsonObject.addProperty("id", goodsType.getId()); // 节点id

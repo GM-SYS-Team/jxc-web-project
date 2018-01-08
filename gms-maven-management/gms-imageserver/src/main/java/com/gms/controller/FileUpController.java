@@ -222,6 +222,14 @@ public class FileUpController
   		return ResultData.ok().putDataValue("messageInfo", "删除成功");
 	}
   	
+  	/**
+	* @author zhoutianqi
+	* @date 2017年12月27日 下午2:17:46
+	* @param picAddress 优惠卷二维码框与商品图片合成
+	* @param quickAddress 二维码框图片HTTP地址
+	* 		 goodsAddress 商品图片地址
+	* @description 处理二维码定制参数
+	*/
   	@ResponseBody
 	@RequestMapping(value={"quick/mark/merge"}, method={org.springframework.web.bind.annotation.RequestMethod.POST})
 	public ResultData mergeFile(@RequestParam(value="quickAddress",required=true) String quickAddress, 

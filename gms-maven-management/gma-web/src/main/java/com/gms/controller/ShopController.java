@@ -7,7 +7,6 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.slf4j.Logger;
@@ -219,11 +218,13 @@ public class ShopController extends BaseController {
 	 * @throws Exception
 	 */
 	@RequestMapping("/exchangeShop")
-	@RequiresPermissions(value = { "角色管理" })
-	public Map<String, Object> exchangeShop(@RequestParam(value = "shopid", required = true)Integer shopid,HttpSession session) throws Exception {
+	public Map<String, Object> exchangeShop(@RequestParam(value = "shopid", required = true)Integer shopid,HttpServletRequest request) throws Exception {
 		Map<String, Object> resultMap = new HashMap<>();
 		try {
-			session.setAttribute("currentShop", shopService.findById(shopid));
+			User user = getCurrentUser(request);
+			user.setCurrentLoginShopId(shopid);
+			request.getSession().setAttribute("currentUserp", user);
+			request.getSession().setAttribute("currentShop", shopService.findById(shopid));
 			resultMap.put("success", true);
 		} catch (Exception e) {
 			resultMap.put("success", false);
