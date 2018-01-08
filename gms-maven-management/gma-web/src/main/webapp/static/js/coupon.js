@@ -231,9 +231,11 @@ function saveCoupon() {
 				$("#list_coupon").show();
 				$(".pull-left li").removeClass("active");
 				$(".pull-left li:first").addClass("active");
-				var page_size = $("#page_size").val();
-				couponAjax(0,1,page_size);
+			}else{
+				alert("插入失败，生成二维码图片失败！");
 			}
+			var page_size = $("#page_size").val();
+			couponAjax(0,1,page_size);
 		}
 	});
 }
