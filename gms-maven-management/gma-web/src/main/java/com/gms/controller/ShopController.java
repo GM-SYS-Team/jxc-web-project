@@ -93,6 +93,7 @@ public class ShopController extends BaseController {
 		Map<String, Object> resultMap = new HashMap<>();
 		//获取当前用户，判断是管理员操作还是商铺操作
 		User currentUser = getCurrentUser(request);
+		Shop currentShop = getCurrentShop(request);
 		if(currentUser.getUserType().equals(Constant.SHOPTYPE)){
 			shop.setUserId(currentUser.getId());
 		}
@@ -138,6 +139,9 @@ public class ShopController extends BaseController {
 		if (flag) {
 			shopService.save(shop);
 			resultMap.put("success", true);
+		}
+		if(currentShop.getId().intValue()==shop.getId().intValue()){
+			setCurrentShop(request, shop);
 		}
 		return resultMap;
 	}

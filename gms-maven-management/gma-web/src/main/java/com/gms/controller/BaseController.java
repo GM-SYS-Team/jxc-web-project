@@ -21,4 +21,18 @@ public class BaseController {
 		Shop currentShop= (Shop)request.getSession().getAttribute("currentShop");
 		return currentShop;
 	}
+	
+	/**
+	 * 获取Session中保存的当前User Info
+	*/
+	public void setCurrentUser(HttpServletRequest request,User user){
+		request.getSession().setAttribute("currentUser",user);
+	}
+	
+	/**
+	 * 获取Session中保存的当前Shop Info
+	*/
+	public void setCurrentShop(HttpServletRequest request,Shop shop){
+		request.getSession().setAttribute("currentShop",shop);
+	}
 }

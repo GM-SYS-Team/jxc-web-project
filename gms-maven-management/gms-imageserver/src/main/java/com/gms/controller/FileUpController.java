@@ -251,15 +251,15 @@ public class FileUpController
   			logger.info("文件地址"+realMarkDir);
   			File quickFile = new File(quickRealDir);
   			File goodsFile = new File(goodsRealDir);
-  			if(!quickFile.exists() || !goodsFile.exists()){
-  				ResultData.serverInternalError().putDataValue("messageInfo", "文件不存在");
+  			if(quickFile.length()==0 || goodsFile.length()==0){
+  				return ResultData.serverInternalError().putDataValue("messageInfo", "文件不存在");
   			}
   			// 构建叠加层
   			BufferedImage buffImg = QuickMarkMergeUtil.watermark( quickFile, goodsFile, 265, 75, 1.0f);
   	        // 输出水印图片
   	        QuickMarkMergeUtil.generateWaterFile(buffImg, realMarkDir);
 		} catch (Exception e) {
-			ResultData.serverInternalError().putDataValue("messageInfo", "合成文件失败");
+			return ResultData.serverInternalError().putDataValue("messageInfo", "合成文件失败");
 		}
   		ResultData result = ResultData.ok();
   		result.putDataValue("url", imageServerProperties.getHostaddress()+imageServerProperties.getRealMark()+fileName);
