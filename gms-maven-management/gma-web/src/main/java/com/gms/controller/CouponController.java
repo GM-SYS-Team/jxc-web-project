@@ -102,6 +102,8 @@ public class CouponController extends BaseController {
 			} else {
 				resultMap.put("success", false);
 			}
+		}else{
+			resultMap.put("success", false);
 		}
 		/*couponService.save(coupon);
 		for (String goodsId : goodsIds) {
