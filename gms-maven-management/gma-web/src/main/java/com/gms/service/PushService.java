@@ -15,6 +15,8 @@ import java.util.Map;
  */
 public interface PushService {
 
+    String getPushShopUrl();
+
     String broadcastAll(String title, String content, Map<String, String> payload, Constants.PUSH_PLATFORM platform, Date sendTime) throws Exception;
 
     void deleteScheduleJob(Constants.PUSH_PLATFORM platform, String msgId) throws Exception;
