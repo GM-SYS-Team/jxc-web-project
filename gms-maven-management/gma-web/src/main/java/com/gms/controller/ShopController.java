@@ -124,10 +124,13 @@ public class ShopController extends BaseController {
 		if (shop.getId() != null) { // 写入日志
 			logService.save(new Log(Log.UPDATE_ACTION, "更新商铺信息" + shop));
 			
-			/*Shop old_shop = shopService.findById(shop.getId());
-			if(StringUtil.isValid(old_shop.getPictureAddress())){
+			Shop old_shop = shopService.findById(shop.getId());
+			if(StringUtil.isValid(shop.getPictureAddress())){
 				shop.setPictureAddress(old_shop.getPictureAddress());
-			}*/
+			}
+			shop.setUuid(old_shop.getUuid());
+			shop.setUserId(old_shop.getUserId());
+			shop.setQuickMark(old_shop.getQuickMark());
 		} else {
 			logService.save(new Log(Log.ADD_ACTION, "添加商铺信息" + shop));
 			shop.setCreateTime(new Date());

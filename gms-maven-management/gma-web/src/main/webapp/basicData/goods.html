@@ -56,6 +56,8 @@
 	}
 	
 	function saveGoodsType(){
+		//置灰不可用
+		$("#dlg-buttons a:eq(0)").linkbutton('disable');
 		var goodsTypeName=$("#goodsTypeName").val();
 		if(!$("#fm").form("validate")){
 			return;
@@ -75,6 +77,8 @@
 				$.messager.alert("系统提示","提交失败，请联系管理员！");
 			}
 		},"json");
+		//置灰不可用
+	    $("#dlg-buttons a:eq(0)").linkbutton('disable');
 	}
 	
 
@@ -171,6 +175,9 @@
 	
 	
 	function saveGoods(type){
+		//置灰不可用
+		$("#dlg-buttons2 a:eq(0)").linkbutton('disable');
+		$("#dlg-buttons2 a:eq(1)").linkbutton('disable');
 		$("#fm2").form("submit",{
 			url:url,
 			onSubmit:function(){
@@ -203,6 +210,8 @@
 				}
 			}
 		 });
+		 $("#dlg-buttons2 a:eq(0)").linkbutton('enable');
+		 $("#dlg-buttons2 a:eq(1)").linkbutton('enable');
 	}
 	
 	function resetValue(){
@@ -301,6 +310,8 @@
 	}
 	
 	function saveGoodsUnit(){
+		//置灰不可用
+		$("#dlg-buttons5 a:eq(0)").linkbutton('disable');
 		$("#fm5").form("submit",{
 			url:"/admin/goodsUnit/save",
 			onSubmit:function(){
@@ -317,6 +328,7 @@
 				}
 			}
 		 });
+		 $("#dlg-buttons5 a:eq(0)").linkbutton('enable');
 	}
 	
 	function closeGoodsUnitAddDialog(){

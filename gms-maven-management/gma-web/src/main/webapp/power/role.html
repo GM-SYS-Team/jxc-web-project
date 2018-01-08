@@ -45,6 +45,8 @@
 	}
 	
 	function saveMenuSet(){
+		//置灰不可用
+		$("#dlg-buttons2 a:eq(0)").linkbutton('disable');
 		var roleId=$("#roleId").val();
 		var nodes=$('#menuTree').tree('getChecked');
 		var menuArrIds=[];
@@ -59,6 +61,7 @@
 				$.messager.alert("系统提示","提交失败，请联系管理员！");
 			}
 		},"json");
+		$("#dlg-buttons2 a:eq(0)").linkbutton('enable');
 	}
 	
 	function closeMenuSetDialog(){
@@ -110,6 +113,8 @@
 	
 	
 	function saveRole(){
+		 //置灰不可用
+         $("#dlg-buttons a:eq(0)").linkbutton('disable');
 		 $("#fm").form("submit",{
 			url:url,
 			onSubmit:function(){
@@ -125,8 +130,10 @@
 				}else{
 					$.messager.alert("系统提示",result.errorInfo);
 				}
+				$("#dlg-buttons a:eq(0)").linkbutton('enable');
 			}
 		 });
+		 
 	 }
 	
 	
@@ -139,6 +146,7 @@
 	 function closeRoleDialog(){
 		 $("#dlg").dialog("close");
 		 resetValue();
+		 $("#dlg-buttons a:eq(0)").linkbutton('enable');
 	 }
 	 
 	 function searchRole(){

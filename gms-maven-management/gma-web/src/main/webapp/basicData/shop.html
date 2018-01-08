@@ -60,6 +60,8 @@
 	
 	
 	function saveShop(){
+		 //置灰不可用
+		 $("#dlg-buttons a:eq(0)").linkbutton('disable');
 		 $("#fm").form("submit",{
 			url:url,
 			onSubmit:function(){
@@ -77,6 +79,7 @@
 				}
 			}
 		 });
+		 $("#dlg-buttons a:eq(0)").linkbutton('enable');
 	 }
 	
 	function resetValue(){
@@ -131,7 +134,7 @@
  
  <div id="tb">
  	<div>
- 		<a href="javascript:openShopAddDialog()" class="easyui-linkbutton" iconCls="icon-add" plain="true">添加</a>
+ 		
  		<a href="javascript:openShopModifyDialog()" class="easyui-linkbutton" iconCls="icon-edit" plain="true">修改</a>
  		<a href="javascript:deleteShop()" class="easyui-linkbutton" iconCls="icon-remove" plain="true">删除</a>
  	</div> 

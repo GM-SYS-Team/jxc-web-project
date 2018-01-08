@@ -106,6 +106,8 @@
 	
 	
 	function saveSupplier(){
+		 //置灰不可用
+		 $("#dlg-buttons a:eq(0)").linkbutton('disable');
 		 $("#fm").form("submit",{
 			url:url,
 			onSubmit:function(){
@@ -121,8 +123,10 @@
 				}else{
 					$.messager.alert("系统提示",result.errorInfo);
 				}
+				$("#dlg-buttons a:eq(0)").linkbutton('enable');
 			}
 		 });
+		 
 	 }
 	
 	
@@ -138,6 +142,7 @@
 	 function closeSupplierDialog(){
 		 $("#dlg").dialog("close");
 		 resetValue();
+		 $("#dlg-buttons a:eq(0)").linkbutton('enable');
 	 }
 	 
 	 function searchSupplier(){
