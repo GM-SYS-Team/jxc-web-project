@@ -25,7 +25,7 @@ spring:
         validationQuery: select 'x'
         testWhileIdle: true
         #cachePrepStmts: true 开启二级缓存
-        testOnBorrow: false
+        testOnBorrow: true
         testOnReturn: false
         poolPreparedStatements: true
         maxOpenPreparedStatements: 20
@@ -43,8 +43,10 @@ spring:
         request-context-attribute: request
 image: 
     server: 
-        url: http://localhost:7000
+        url: http://116.62.143.222:8088
         action: picture/upload
+        quickMarkAction: quickMark/upload
+        realQuickMarkAction: quick/mark/merge
 mipush:
     appSecretKey:
         android: LaB9eoV5QtI7a0ledD3r4g==
