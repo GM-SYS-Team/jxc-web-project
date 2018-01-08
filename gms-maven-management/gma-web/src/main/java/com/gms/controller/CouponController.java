@@ -17,12 +17,17 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.alibaba.fastjson.JSONObject;
+import com.gms.conf.ImageServerProperties;
 import com.gms.entity.jxc.Coupon;
 import com.gms.entity.jxc.CouponGoods;
+import com.gms.entity.jxc.Goods;
 import com.gms.entity.jxc.Log;
 import com.gms.entity.jxc.Shop;
 import com.gms.service.jxc.CouponService;
+import com.gms.service.jxc.GoodsService;
 import com.gms.service.jxc.LogService;
+import com.gms.util.HttpsUtil;
 
 @RestController
 @RequestMapping("/admin/coupon")
@@ -31,6 +36,12 @@ public class CouponController extends BaseController {
 	private LogService logService;
 	@Autowired
 	private CouponService couponService;
+	
+	@Autowired
+	private ImageServerProperties imageServerProperties;
+	
+	@Autowired
+	private GoodsService goodsService;
 
 	/**
 	 * @throws ParseException
@@ -46,7 +57,8 @@ public class CouponController extends BaseController {
 	@PostMapping("/save")
 	public Map<String, Object> save(HttpServletRequest request)
 			throws ParseException {
-		String[] goodsIds = request.getParameter("goodsIds").split(",");
+		Integer goodsId = Integer.parseInt(request.getParameter("goodsId"));
+		Goods goods = goodsService.findById(goodsId);
 		/* 当前登录的店铺 */
 		Shop shop = getCurrentShop(request);
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm");
@@ -68,7 +80,30 @@ public class CouponController extends BaseController {
 		coupon.setExpiryDateStop(sdf.parse(request
 				.getParameter("stopExpiryDate")));
 		coupon.setShopId(shop.getId());
-		couponService.save(coupon);
+		
+		//FIXME 这里添加生成二维码的代码
+		Map<String, String> maps = new HashMap<String, String>();
+		maps.put("quickAddress", shop.getQuickMark());
+		maps.put("goodsAddress", goods.getPictureAddress());
+		String result = HttpsUtil.getInstance().sendHttpPost(imageServerProperties.getUrl() + "/" + imageServerProperties.getRealQuickMarkAction() ,maps);
+		if (result != null) {
+			String quickMark = null;
+			JSONObject resultJson = (JSONObject) JSONObject.parse(result);
+			if (resultJson.getString("message").equals("Ok")) {
+				quickMark = resultJson.getJSONObject("data").getString("url");
+				coupon.setQuickMark(quickMark);
+				couponService.save(coupon);
+				CouponGoods couponGoods = new CouponGoods();
+				couponGoods.setCouponId(coupon.getId());
+				couponGoods.setShopId(shop.getId());
+				couponGoods.setGoodId(goodsId);
+				couponService.saveCouponGoods(couponGoods);
+				resultMap.put("success", true);
+			} else {
+				resultMap.put("success", false);
+			}
+		}
+		/*couponService.save(coupon);
 		for (String goodsId : goodsIds) {
 			CouponGoods couponGoods = new CouponGoods();
 			couponGoods.setCouponId(coupon.getId());
@@ -76,7 +111,7 @@ public class CouponController extends BaseController {
 			couponGoods.setGoodId(Integer.parseInt(goodsId));
 			couponService.saveCouponGoods(couponGoods);
 		}
-		resultMap.put("success", true);
+		resultMap.put("success", true);*/
 		return resultMap;
 	}
 

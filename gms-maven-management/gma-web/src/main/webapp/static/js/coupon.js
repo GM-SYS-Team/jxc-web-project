@@ -200,8 +200,8 @@ function saveCoupon() {
 		alert("优惠券使用结束日期不能为空！");
 		return false;
 	}
-	var goodsIds = $("#goodsIds").html();
-	if(isEmpty(goodsIds)){
+	var goodsId = $("#goodsIds").html();
+	if(isEmpty(goodsId)){
 		alert("适用商品不能为空！");
 		return false;
 	}
@@ -218,7 +218,7 @@ function saveCoupon() {
 			startExpiryDate : startExpiryDate,
 			stopExpiryDate : stopExpiryDate,
 			couponIntro : couponIntro,
-			goodsIds:goodsIds
+			goodsId:goodsId
 		},
 		beforeSend : function() {
 			$("#save_btn").attr("disabled", true);
@@ -430,7 +430,7 @@ function goodsAjax(currentPage,page_size){
 			if(data.total>0){
 				$.each(data.rows, function (index, item) {
 					html += "<tr>"
-							     +"<td><label><input type='checkbox' name='goodsId' class='ace' value='"+ item.id +"'/><span class='lbl'></span></label></td>"
+							     +"<td><label><input type='radio' name='goodsId' class='ace' value='"+ item.id +"'/><span class='lbl'></span></label></td>"
 							     +"<td>"+ item.name +"</td>"
 							     +"<td>"+ item.model +"</td>"
 							     +"<td>"+ item.unit +"</td>"
