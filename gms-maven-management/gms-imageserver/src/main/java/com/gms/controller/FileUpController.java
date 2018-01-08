@@ -249,8 +249,13 @@ public class FileUpController
   			//合成图片的存储地址
   			String realMarkDir = quickhomedir + imageServerProperties.getRealMark() + fileName;
   			logger.info("文件地址"+realMarkDir);
+  			File quickFile = new File(quickRealDir);
+  			File goodsFile = new File(goodsRealDir);
+  			if(!quickFile.exists() || !goodsFile.exists()){
+  				ResultData.serverInternalError().putDataValue("messageInfo", "文件不存在");
+  			}
   			// 构建叠加层
-  			BufferedImage buffImg = QuickMarkMergeUtil.watermark( new File(quickRealDir), new File(goodsRealDir), 265, 75, 1.0f);
+  			BufferedImage buffImg = QuickMarkMergeUtil.watermark( quickFile, goodsFile, 265, 75, 1.0f);
   	        // 输出水印图片
   	        QuickMarkMergeUtil.generateWaterFile(buffImg, realMarkDir);
 		} catch (Exception e) {

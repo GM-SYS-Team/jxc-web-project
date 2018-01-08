@@ -124,7 +124,7 @@ public class ShopController extends BaseController {
 			logService.save(new Log(Log.UPDATE_ACTION, "更新商铺信息" + shop));
 			
 			Shop old_shop = shopService.findById(shop.getId());
-			if(StringUtil.isValid(shop.getPictureAddress())){
+			if(!StringUtil.isValid(shop.getPictureAddress())){
 				shop.setPictureAddress(old_shop.getPictureAddress());
 			}
 			shop.setUuid(old_shop.getUuid());
