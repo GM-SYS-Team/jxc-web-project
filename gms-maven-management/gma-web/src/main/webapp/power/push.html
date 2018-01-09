@@ -22,7 +22,12 @@
                 $.messager.alert("系统提示", "请选择一条要修改的数据！");
                 return;
             }
+
             var row = selectedRows[0];
+            if (row.pushStatus != '1') {
+                $.messager.alert("系统提示", "非已保存状态，不能再修改内容！");
+                return;
+            }
             $("#dlg").dialog("open").dialog("setTitle", "修改推送信息");
             $("#fm").form("load", {
                 "id": row.id,
@@ -405,7 +410,7 @@
                 </td>
             </tr>
             <tr>
-                <td>商铺：</td>
+                <td>推送商铺：</td>
                 <td><input id="cg" name="cg" style="width:300px"/>
                     <!--<input type="text" id="txtGender"/>-->
                     <!--<input type="text" id="url" name="url" class="easyui-validatebox" required="true"-->
