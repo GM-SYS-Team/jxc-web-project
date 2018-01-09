@@ -46,9 +46,11 @@
                 "id": row.id,
                 "title": row.title,
                 "content": row.content,
+                //"devicePlatform": row.devicePlatform,
                 "url": row.url,
                 "pushTime": new Date(row.pushTime).format("yyyy-mm-dd HH:MM:SS")
             });
+            $('#devicePlatform').combobox("setValue", row.devicePlatform);
             $('#cg').combogrid("setValue", row.objectId);
             url = "/admin/push/save?id=" + row.id;
         }
