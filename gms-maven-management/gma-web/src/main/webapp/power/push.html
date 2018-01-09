@@ -9,7 +9,20 @@
     <script type="text/javascript" src="/static/jquery-easyui-1.3.3/jquery.easyui.min.js"></script>
     <script type="text/javascript" src="/static/jquery-easyui-1.3.3/locale/easyui-lang-zh_CN.js"></script>
     <script type="text/javascript">
-
+        /**
+         * 扩展combox验证，easyui原始只验证select text的值，不支持value验证
+         */
+        $.extend($.fn.validatebox.defaults.rules, {
+            comboxValidate: {
+                validator: function (value, param, missingMessage) {
+                    if ($('#' + param).combobox('getValue') != '' && $('#' + param).combobox('getValue') != null) {
+                        return true;
+                    }
+                    return false;
+                },
+                message: "{1}"
+            }
+        });
         var url;
         function openPushJobAddDialog() {
             $("#dlg").dialog("open").dialog("setTitle", "添加推送信息");
@@ -422,7 +435,8 @@
                 <td>
                     <!--<input type="text" id="devicePlatform" name="devicePlatform" class="easyui-validatebox" required="true"/>-->
                     <select class="easyui-combobox" id="devicePlatform" name="devicePlatform" style="width: 154px;"
-                            editable="false" panelHeight="auto">
+                            editable="false" panelHeight="auto" validType="comboxValidate['devicePlatform','请选择设备平台']">
+                        <option value="">请选择</option>
                         <option value="ANDROID">安卓设备</option>
                         <option value="IPHONE">苹果设备</option>
                     </select>
