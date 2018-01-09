@@ -9,32 +9,21 @@
     <script type="text/javascript" src="/static/jquery-easyui-1.3.3/jquery.easyui.min.js"></script>
     <script type="text/javascript" src="/static/jquery-easyui-1.3.3/locale/easyui-lang-zh_CN.js"></script>
     <script type="text/javascript">
-
+        /**
+         * 扩展combox验证，easyui原始只验证select text的值，不支持value验证
+         */
+        $.extend($.fn.validatebox.defaults.rules, {
+            comboxValidate: {
+                validator: function (value, param, missingMessage) {
+                    if ($('#' + param).combobox('getValue') != '' && $('#' + param).combobox('getValue') != null) {
+                        return true;
+                    }
+                    return false;
+                },
+                message: "{1}"
+            }
+        });
         var url;
-
-
-        //        function deleteRole() {
-        //            var selectedRows = $("#dg").datagrid("getSelections");
-        //            if (selectedRows.length != 1) {
-        //                $.messager.alert("系统提示", "请选择要删除的数据！");
-        //                return;
-        //            }
-        //            var id = selectedRows[0].id;
-        //            $.messager.confirm("系统提示", "您确定要删除这条数据吗？", function (r) {
-        //                if (r) {
-        //                    $.post("/admin/role/delete", {id: id}, function (result) {
-        //                        if (result.success) {
-        //                            $.messager.alert("系统提示", "数据已成功删除！");
-        //                            $("#dg").datagrid("reload");
-        //                        } else {
-        //                            $.messager.alert("系统提示", result.errorInfo);
-        //                        }
-        //                    }, "json");
-        //                }
-        //            });
-        //        }
-
-
         function openPushJobAddDialog() {
             $("#dlg").dialog("open").dialog("setTitle", "添加推送信息");
             url = "/admin/push/save";
@@ -46,7 +35,12 @@
                 $.messager.alert("系统提示", "请选择一条要修改的数据！");
                 return;
             }
+
             var row = selectedRows[0];
+            if (row.pushStatus != '1') {
+                $.messager.alert("系统提示", "非已保存状态，不能再修改内容！");
+                return;
+            }
             $("#dlg").dialog("open").dialog("setTitle", "修改推送信息");
             $("#fm").form("load", {
                 "id": row.id,
@@ -55,6 +49,7 @@
                 "url": row.url,
                 "pushTime": new Date(row.pushTime).format("yyyy-mm-dd HH:MM:SS")
             });
+            $('#cg').combogrid("setValue", row.objectId);
             url = "/admin/push/save?id=" + row.id;
         }
 
@@ -83,16 +78,16 @@
         function resetValue() {
             $("#title").val("");
             $("#content").val("");
-            $("#url").val("");
+            $('#cg').combogrid("setValue", "");
             $("#pushTime").datetimebox("setValue", "")
         }
 
-        function closeRoleDialog() {
+        function closePushJobDialog() {
             $("#dlg").dialog("close");
             resetValue();
         }
 
-        function searchRole() {
+        function searchRolePushJob() {
             $("#dg").datagrid('load', {
                 "title": $("#s_title").val()
             });
@@ -100,15 +95,127 @@
 
 
         $(function () {
+            $('#cg').combogrid({
+                panelWidth: 400,
+                idField: 'id',        //ID字段
+                textField: 'shopName',    //显示的字段
+                url: "/admin/push/listShop",
+                fitColumns: true,
+                striped: true,
+                editable: true,
+                pagination: true,           //是否分页  
+                rownumbers: true,           //序号  
+                collapsible: false,         //是否可折叠的  
+                fit: true,                  //自动大小  
+                method: 'post',
+                columns: [[
+                    {field: 'id', title: '商铺编号', width: 80, hidden: true},
+                    {field: 'shopName', title: '商铺名称', width: 150},
+                    {field: 'Gender', title: '用户性别', width: 150}
+                ]],
+                keyHandler: {
+                    up: function () {               //【向上键】押下处理  
+                        //取得选中行  
+                        var selected = $('#cg').combogrid('grid').datagrid('getSelected');
+                        if (selected) {
+                            //取得选中行的rowIndex  
+                            var index = $('#cg').combogrid('grid').datagrid('getRowIndex', selected);
+                            //向上移动到第一行为止  
+                            if (index > 0) {
+                                $('#cg').combogrid('grid').datagrid('selectRow', index - 1);
+                            }
+                        } else {
+                            var rows = $('#cg').combogrid('grid').datagrid('getRows');
+                            $('#cg').combogrid('grid').datagrid('selectRow', rows.length - 1);
+                        }
+                    },
+                    down: function () {             //【向下键】押下处理  
+                        //取得选中行  
+                        var selected = $('#cg').combogrid('grid').datagrid('getSelected');
+                        if (selected) {
+                            //取得选中行的rowIndex  
+                            var index = $('#cg').combogrid('grid').datagrid('getRowIndex', selected);
+                            //向下移动到当页最后一行为止  
+                            if (index < $('#cg').combogrid('grid').datagrid('getData').rows.length - 1) {
+                                $('#cg').combogrid('grid').datagrid('selectRow', index + 1);
+                            }
+                        } else {
+                            $('#cg').combogrid('grid').datagrid('selectRow', 0);
+                        }
+                    },
+                    enter: function () {             //【回车键】押下处理  
+                        //设置【性别】文本框的内容为选中行的的性别字段内容  
+                        $('#txtGender').val($('#cg').combogrid('grid').datagrid('getSelected').Gender);
+                        //选中后让下拉表格消失  
+                        $('#cg').combogrid('hidePanel');
+                    },
+                    query: function (keyword) {     //【动态搜索】处理  
+                        //设置查询参数  
+                        var queryParams = $('#cg').combogrid("grid").datagrid('options').queryParams;
+                        queryParams.shopName = keyword;
+                        $('#cg').combogrid("grid").datagrid('options').queryParams = queryParams;
+                        //重新加载  
+                        $('#cg').combogrid("grid").datagrid("reload");
 
-//            $("#dg").datagrid({
-//                //双击事件
-//                onDblClickRow: function (index, row) {
-//                    $("#dlg").dialog("open").dialog("setTitle", "修改推送信息");
-//                    $("#fm").form("load", row);
-//                    url = "/admin/role/save?id=" + row.id;
-//                }
-//            });
+                        $('#cg').combogrid("setValue", keyword);
+                        //将查询条件存入隐藏域  
+                        $('#hdKeyword').val(keyword);
+                    }
+                },
+                onSelect: function () {              //选中处理  
+                    $('#txtGender').val($('#cg').combogrid('grid').datagrid('getSelected').shopName);
+                }
+            });
+
+            //取得分页组件对象  
+            var pager = $('#cg').combogrid('grid').datagrid('getPager');
+
+            if (pager) {
+                $(pager).pagination({
+                    pageSize: 10,               //每页显示的记录条数，默认为10  
+                    pageList: [10, 5, 3],       //可以设置每页记录条数的列表  
+//                    beforePageText: '第',       //页数文本框前显示的汉字
+//                    afterPageText: '页    共 {pages} 页',
+//                    displayMsg: '当前显示 {from} - {to} 条记录   共 {total} 条记录',
+                    //选择页的处理  
+                    onSelectPage: function (pageNumber, pageSize) {
+                        //按分页的设置取数据  
+                        getData(pageNumber, pageSize);
+                        //设置表格的pageSize属性，表格变化时按分页组件设置的pageSize显示数据  
+                        $('#cg').combogrid("grid").datagrid('options').pageSize = pageSize;
+                        //将隐藏域中存放的查询条件显示在combogrid的文本框中  
+                        $('#cg').combogrid("setValue", $('#hdKeyword').val());
+                        $('#txtGender').val('');
+                    },
+                    //改变页显示条数的处理  
+                    //（处理后还是走onSelectPage事件，所以设置也写到onSelectPage事件中了）  
+                    onChangePageSize: function () {
+                    },
+                    //点击刷新的处理  
+                    onRefresh: function (pageNumber, pageSize) {
+                        //按分页的设置取数据  
+                        getData(pageNumber, pageSize);
+                        //将隐藏域中存放的查询条件显示在combogrid的文本框中  
+                        $('#cg').combogrid("setValue", $('#hdKeyword').val());
+                        $('#txtGender').val('');
+                    }
+                });
+            }
+
+            var getData = function (page, rows) {
+                $.ajax({
+                    type: "POST",
+                    url: "/admin/push/listShop?",
+                    data: "page=" + page + "&rows=" + rows + "&shopName=" + $('#hdKeyword').val(),
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {
+                        alert(textStatus);
+                        $.messager.progress('close');
+                    },
+                    success: function (data) {
+                        $('#cg').combogrid('grid').datagrid('loadData', data);
+                    }
+                });
+            };
 
 
         });
@@ -272,6 +379,7 @@
     <thead>
     <tr>
         <th field="id" width="20" align="center">编号</th>
+        <th field="objectId" width="20" align="center" hidden="true">编号</th>
         <th field="title" width="100" align="center">消息标题</th>
         <th field="content" width="200" align="center">消息内容</th>
         <th field="devicePlatform" width="50" align="center">设备平台</th>
@@ -291,8 +399,9 @@
         <a href="javascript:openPushJobModifyDialog()" class="easyui-linkbutton" iconCls="icon-edit" plain="true">修改</a>
     </div>
     <div>
-        &nbsp;消息标题：&nbsp;<input type="text" id="s_title" size="20" onkeydown="if(event.keyCode==13) searchRole()"/>
-        <a href="javascript:searchRole()" class="easyui-linkbutton" iconCls="icon-search" plain="true">搜索</a>
+        &nbsp;消息标题：&nbsp;<input type="text" id="s_title" size="20"
+                                onkeydown="if(event.keyCode==13) searchRolePushJob()"/>
+        <a href="javascript:searchRolePushJob()" class="easyui-linkbutton" iconCls="icon-search" plain="true">搜索</a>
     </div>
 </div>
 
@@ -314,16 +423,20 @@
                 </td>
             </tr>
             <tr>
-                <td>URL：</td>
-                <td><input type="text" id="url" name="url" class="easyui-validatebox" required="true"
-                           style="width: 300px;"/></td>
+                <td>推送商铺：</td>
+                <td><input id="cg" name="cg" style="width:300px"/>
+                    <!--<input type="text" id="txtGender"/>-->
+                    <!--<input type="text" id="url" name="url" class="easyui-validatebox" required="true"-->
+                    <!--style="width: 300px;"/>-->
+                </td>
             </tr>
             <tr>
                 <td>设备平台：</td>
                 <td>
                     <!--<input type="text" id="devicePlatform" name="devicePlatform" class="easyui-validatebox" required="true"/>-->
                     <select class="easyui-combobox" id="devicePlatform" name="devicePlatform" style="width: 154px;"
-                            editable="false" panelHeight="auto">
+                            editable="false" panelHeight="auto" validType="comboxValidate['devicePlatform','请选择设备平台']">
+                        <option value="">请选择</option>
                         <option value="ANDROID">安卓设备</option>
                         <option value="IPHONE">苹果设备</option>
                     </select>
@@ -340,7 +453,7 @@
 
 <div id="dlg-buttons">
     <a href="javascript:savePushJob()" class="easyui-linkbutton" iconCls="icon-ok">保存</a>
-    <a href="javascript:closeRoleDialog()" class="easyui-linkbutton" iconCls="icon-cancel">关闭</a>
+    <a href="javascript:closePushJobDialog()" class="easyui-linkbutton" iconCls="icon-cancel">关闭</a>
 </div>
 
 <div id="menuSetDialog" class="easyui-dialog" style="width:300px;height:500px;padding: 10px 20px"

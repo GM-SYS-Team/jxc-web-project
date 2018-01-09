@@ -29,11 +29,8 @@ spring:
         testOnReturn: false
         poolPreparedStatements: true
         maxOpenPreparedStatements: 20
-headuploadPath: E://test//imagePath//headshot//
-goodsUploadPath: E://test//imagePath//goodspic//
-quickuploadPath: E://test//quickMark//shopMark//
-couponuploadPath: E://test//quickMark//couponMark//
-customeruploadPath: E://test//quickMark//customerMark//
+nikehomedir: E://test//imagePath//
+quickhomedir: E://test//quickMark//
 image: 
     server: 
         hostaddress: http://localhost/static/
@@ -42,6 +39,7 @@ image:
         shopMark: shopMark/
         couponMark: couponMark/
         customerMark: customerMark/
+        realMark: realMark/
     quickmark:
         rows: 13
         cols: 41

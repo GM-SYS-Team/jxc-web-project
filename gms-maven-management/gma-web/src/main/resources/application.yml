@@ -9,9 +9,9 @@ spring:
         show-sql: true
     datasource: 
         name: db_jxc
-        url: jdbc:mysql://106.14.135.185:3306/gms?characterEncoding=UTF-8
+        url: jdbc:mysql://39.104.68.153:3306/gms?characterEncoding=UTF-8
         username: root
-        password: Ryonwhl1314?
+        password: Abcd1234**!
         # 使用druid数据源
         type: com.alibaba.druid.pool.DruidDataSource
         driver-class-name: com.mysql.jdbc.Driver
@@ -47,14 +47,16 @@ image:
         action: picture/upload
         quickMarkAction: quickMark/upload
         realQuickMarkAction: quick/mark/merge
+push:
+    shopUrl: http://116.62.143.222:8899/draw?shopId=
 mipush:
     appSecretKey:
         android: LaB9eoV5QtI7a0ledD3r4g==
-        iphone: BYHtWwdOqAaHmloUQ0eITQ==
-        ipad: dddd
+        iphone: bxWAjfJyPm9LBYphcZy4rQ==
+        ipad:
     packageName:
         android: com.meicci.gms
-        iphone: com.meicci.gms
+        iphone: com.paiwogou.guomasao
         ipad:
     defaultRetryNum: 3
     production: false

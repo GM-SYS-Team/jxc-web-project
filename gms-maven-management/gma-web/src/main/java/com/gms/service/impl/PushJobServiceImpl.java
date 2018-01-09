@@ -78,6 +78,7 @@ public class PushJobServiceImpl implements PushJobService {
 
     @Override
     public PushJob save(PushJob pushJob) {
+        pushJob.setUrl(miPushService.getPushShopUrl() + pushJob.getObjectId());
         if (pushJob.getId() == null) {
             pushJob.setCreateTime(new Timestamp(System.currentTimeMillis()));
             pushJob.setPushPlatform("XIAOMI");
@@ -94,6 +95,8 @@ public class PushJobServiceImpl implements PushJobService {
             storedPushJob.setContent(pushJob.getContent());
             storedPushJob.setUrl(pushJob.getUrl());
             storedPushJob.setPushTime(pushJob.getPushTime());
+            storedPushJob.setDevicePlatform(pushJob.getDevicePlatform());
+            storedPushJob.setObjectId(pushJob.getObjectId());
             pushJob = storedPushJob;
         }
         pushJob.setModifyTime(new Timestamp(System.currentTimeMillis()));

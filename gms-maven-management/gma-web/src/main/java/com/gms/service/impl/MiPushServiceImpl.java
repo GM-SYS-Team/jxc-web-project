@@ -50,6 +50,9 @@ public class MiPushServiceImpl implements PushService {
     @Value("${mipush.defaultRetryNum}")
     private Integer defaultRetryNum;
 
+    @Value("${push.shopUrl}")
+    private String pushShopUrl;
+
     //流速限制,控制消息是否需要进行平缓发送（如果开启平滑推送，则qps 默认为3000/s）。默认不支持。
     // 也可以直接通过extra字段自定义设置平滑推送的速度（如果自定义了平滑推送的extra字段，那么不再需要调用enableFlowControl()方法）。
     // key是flow_control，value代表平滑推送的速度。
@@ -58,6 +61,10 @@ public class MiPushServiceImpl implements PushService {
 
     private static Logger logger = LoggerFactory.getLogger(MiPushServiceImpl.class);
 
+
+    public String getPushShopUrl() {
+        return pushShopUrl;
+    }
 
     /**
      * 推送给全部设备
