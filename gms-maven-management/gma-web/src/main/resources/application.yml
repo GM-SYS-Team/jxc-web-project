@@ -57,4 +57,4 @@ mipush:
         iphone: com.paiwogou.guomasao
         ipad:
     defaultRetryNum: 3
-    production: true
+    production: false
