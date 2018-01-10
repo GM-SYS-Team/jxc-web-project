@@ -399,7 +399,9 @@ public class CouponController extends BaseAppController {
 	@NeedAuth
 	public Map<String, Object> receiveCoupon(Integer couponId, Integer shopId) throws Exception {
 		User user = getUser();
-		validateUser(user, User.CUSTOMER);
+		if (!User.CUSTOMER.equals(user.getUserType())) {
+			throw new MyException("请使用用户帐号登录领取优惠券	");
+		}
 		CouponCode couponCode = new CouponCode();
 		synchronized (this) {
 			Coupon coupon = couponService.findCouponById(couponId);
