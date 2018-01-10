@@ -547,8 +547,8 @@ public class CouponController extends BaseAppController {
 	@RequestMapping("/user")
 	@ResponseBody
 	public Map<String, Object> getCoupon(Integer shopId) throws Exception {
-		User user = getUser();
-		validateUser(user, User.CUSTOMER);
+//		User user = getUser();
+//		validateUser(user, User.CUSTOMER);
 		Date now = new Date();
 		List<Coupon> couponList = new ArrayList<Coupon>();
 		Coupon ParamCoupon = new Coupon();
