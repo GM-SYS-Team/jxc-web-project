@@ -18,6 +18,7 @@ public class CORSInterceptor extends HandlerInterceptorAdapter {
 		response.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
 		response.setHeader("Access-Control-Max-Age", "3600");
 		response.setHeader("Access-Control-Allow-Headers", "x-requested-with");
+		response.setHeader("Access-Control-Allow-Origin", request.getHeader("origin"));
 		if (request.getMethod().equalsIgnoreCase("options")) {
 			response.setStatus(200);
 			response.getWriter().println("OK");
