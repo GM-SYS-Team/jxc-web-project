@@ -39,7 +39,6 @@ import com.gms.util.StringUtil;
 
 @Controller
 @RequestMapping("/app/coupon")
-@NeedAuth
 public class CouponController extends BaseAppController {
 	@Autowired
 	private CouponService couponService;
@@ -67,6 +66,7 @@ public class CouponController extends BaseAppController {
 	 */
 	@RequestMapping("/save")
 	@ResponseBody
+	@NeedAuth
 	public Map<String, Object> save(HttpServletRequest request) throws ParseException, MyException {
 		User user = getUser();
 		validateUser(user, User.SHOPER);
@@ -167,6 +167,7 @@ public class CouponController extends BaseAppController {
 	 */
 	@RequestMapping("/modify")
 	@ResponseBody
+	@NeedAuth
 	public Map<String, Object> modify(HttpServletRequest request) throws ParseException, MyException {
 		User user = getUser();
 		validateUser(user, User.SHOPER);
@@ -176,7 +177,6 @@ public class CouponController extends BaseAppController {
 		Integer shopId = Integer.parseInt(request.getParameter("shopId"));
 		String couponName = request.getParameter("couponName");
 		Integer totalCount = Integer.parseInt(request.getParameter("totalCount"));
-		String couponInfo = request.getParameter("couponInfo");
 		Double maxAmount = Double.parseDouble(request.getParameter("maxAmount"));
 		Double minAmount = Double.parseDouble(request.getParameter("minAmount"));
 		String expiryDateStart = request.getParameter("expiryDateStart");
@@ -186,19 +186,19 @@ public class CouponController extends BaseAppController {
 		}
 		if (StringUtil.isEmpty(couponName)) {
 			return error("请设置优惠券名称");
-		}
+		}	
 		if (couponName.length() > 50) {
 			return error("优惠券名称长度不能超过50");
 		}
 		if (totalCount <= 0) {
 			return error("请设置优惠券数量");
 		}
-		if (StringUtil.isEmpty(couponInfo)) {
-			return error("请设置优惠券描述");
-		}
-		if (couponInfo.length() > 500) {
-			return error("优惠券描述的长度不能超过500");
-		}
+//		if (StringUtil.isEmpty(couponInfo)) {
+//			return error("请设置优惠券描述");
+//		}
+//		if (couponInfo.length() > 500) {
+//			return error("优惠券描述的长度不能超过500");
+//		}
 		if (maxAmount <= 0 || minAmount <= 0) {
 			return error("请设置优惠券金额");
 		}
@@ -257,6 +257,7 @@ public class CouponController extends BaseAppController {
 	 */
 	@RequestMapping("/delete")
 	@ResponseBody
+	@NeedAuth
 	public Map<String, Object> delete(Integer couponId, Integer shopId) throws Exception {
 		User user = getUser();
 		validateUser(user, User.SHOPER);
@@ -300,6 +301,7 @@ public class CouponController extends BaseAppController {
 	 */
 	@RequestMapping("/list")
 	@ResponseBody
+	@NeedAuth
 	public Map<String, Object> list(Integer state, Integer shopId,
 			@RequestParam(value = "page", required = false) Integer page,
 			@RequestParam(value = "rows", required = false) Integer rows) throws Exception {
@@ -337,6 +339,7 @@ public class CouponController extends BaseAppController {
 	 */
 	@RequestMapping("/shareCoupon")
 	@ResponseBody
+	@NeedAuth
 	public Map<String, Object> shareCoupon(Integer couponId, Integer shopId) throws Exception {
 		User user = getUser();
 		validateUser(user, User.SHOPER);
@@ -370,6 +373,7 @@ public class CouponController extends BaseAppController {
 	 */
 	@RequestMapping("/user/list")
 	@ResponseBody
+	@NeedAuth
 	public Map<String, Object> listUserCoupon(Integer state,
 			@RequestParam(value = "page", required = false) Integer page,
 			@RequestParam(value = "rows", required = false) Integer rows) throws Exception {
@@ -392,6 +396,7 @@ public class CouponController extends BaseAppController {
 	 */
 	@RequestMapping("/user/receive")
 	@ResponseBody
+	@NeedAuth
 	public Map<String, Object> receiveCoupon(Integer couponId, Integer shopId) throws Exception {
 		User user = getUser();
 		validateUser(user, User.CUSTOMER);
@@ -466,6 +471,7 @@ public class CouponController extends BaseAppController {
 	 */
 	@RequestMapping("/user/sale")
 	@ResponseBody
+	@NeedAuth
 	public Map<String, Object> saleCoupon(String id) throws Exception {
 		//去除前六位六个0
 		id = id.substring(6);
@@ -506,6 +512,7 @@ public class CouponController extends BaseAppController {
 	 */
 	@RequestMapping("/user/couponCodeState")
 	@ResponseBody
+	@NeedAuth
 	public Map<String, Object> couponCodeState(Integer couponCodeId, Integer ownerId) throws Exception {
 		User user = getUser();
 		validateUser(user, User.SHOPER);

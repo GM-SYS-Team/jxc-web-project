@@ -169,20 +169,20 @@ public class UserController extends BaseAppController {
     	if (StringUtil.isEmpty(user.getTrueName())) {
     		return error("联系人不能为空");
     	}
-    	if (user.getTrueName().length() > 5) {
+    	if (user.getTrueName().length() > 10) {
     		return error("联系人姓名太长");
     	}
     	if (StringUtil.isEmpty(user.getAddress())) {
     		return error("详细地址不能为空");
     	}
-    	if (user.getTrueName().length() > 500) {
+    	if (user.getAddress().length() > 500) {
     		return error("详细地址太长");
     	}
     	if (StringUtil.isEmpty(user.getDistrict())) {
-    		return error("省区不能为空");
+    		return error("店铺地址不能为空");
     	}
     	if (user.getDistrict().indexOf(",") == -1) {
-    		return error("省区参数不正确");
+    		return error("店铺地址不正确");
     	}
     	validateSmsCode(telePhone, smsCode);
     	user.setUserName(telePhone);
@@ -271,6 +271,43 @@ public class UserController extends BaseAppController {
 		}
 		return error();
     }
+    @ResponseBody
+    @RequestMapping("/beShoper")
+    @NeedAuth
+    public Map<String,Object> beShoper(User registerUser){
+    	User user = getUser();
+    	if (StringUtil.isEmpty(registerUser.getTrueName())) {
+    		return error("联系人不能为空");
+    	}
+    	if (registerUser.getTrueName().length() > 10) {
+    		return error("联系人姓名太长");
+    	}
+    	if (StringUtil.isEmpty(registerUser.getAddress())) {
+    		return error("详细地址不能为空");
+    	}
+    	if (registerUser.getAddress().length() > 500) {
+    		return error("详细地址太长");
+    	}
+    	if (StringUtil.isEmpty(registerUser.getDistrict())) {
+    		return error("店铺地址不能为空");
+    	}
+    	if (registerUser.getDistrict().indexOf(",") == -1) {
+    		return error("店铺地址不正确");
+    	}
+    	user.setUserType(User.SHOPER);
+    	String telePhone = user.getPhoneNum();
+    	User tmp = userService.findUserByTelephone(telePhone, User.SHOPER);
+    	if (tmp != null) {
+    		return error("你已拥有商家账号");
+    	}
+    	user.setTrueName(registerUser.getTrueName());
+    	user.setAddress(registerUser.getAddress());
+    	user.setDistrict(registerUser.getDistrict());
+    	user.setUserType(User.SHOPER);
+    	userService.save(user);
+    	return success(user, "注册成为商户成功");
+    }
+    
     
     
     public String validatePhoneNum(String telephone) throws MyException {
