@@ -1,7 +1,8 @@
 package com.gms.serverutil;
 import java.awt.AlphaComposite;
-import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Image;
+import java.awt.Transparency;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -46,14 +47,23 @@ public class QuickMarkMergeUtil {
     
     
     public static BufferedImage compressAndSave(MultipartFile file,int w,int h) throws IOException {
-    	BufferedImage image = ImageIO.read(file.getInputStream());
-    	//int imageWidth = image.getWidth();//获取源文件宽度
-    	//int imageHight = image.getHeight();//获取源文件高度
-        image.setRGB(w, h, BufferedImage.TYPE_INT_RGB);
-        Graphics gp = image.getGraphics();
-        gp.drawImage(image, 0, 0, w, h, null); // 绘制缩小后的图 
-        gp.dispose();
-        return image;
+    	BufferedImage imageFrom = ImageIO.read(file.getInputStream());
+    	@SuppressWarnings("static-access")
+		Image from = imageFrom.getScaledInstance(w, h, imageFrom.SCALE_AREA_AVERAGING);
+    	int imageWidth = imageFrom.getWidth();//获取源文件宽度
+    	int imageHight = imageFrom.getHeight();//获取源文件高度
+    	if(imageWidth==w && imageHight==h){
+    		 return imageFrom;
+    	}
+    	BufferedImage imageResult = new BufferedImage(w, h,BufferedImage.TYPE_INT_RGB );
+    	Graphics2D g2d = imageResult.createGraphics();  
+    	imageResult = g2d.getDeviceConfiguration().createCompatibleImage(w, h,  
+                Transparency.TRANSLUCENT);  
+        g2d.dispose();  
+        g2d = imageResult.createGraphics();
+        g2d.drawImage(from, 0, 0, null);  
+        g2d.dispose();
+        return imageResult;
     }
 
     /**
