@@ -12,6 +12,10 @@ public class ImageServerProperties
   private String couponMark;//优惠券地址
   private String customerMark;//客户领取卷二维码地址
   private String realMark;//合成的优惠券地址
+  private int imageWidth = 200;//图片宽度 默认200px
+  private int imageHight = 200;//图片高度 默认200px
+  private int imageDefaultMaxSize = 2;//图片默认不能大于2M
+  private boolean compressImage = false;//图片压缩默认不开启
 
   public String getCouponMark() {
 	return couponMark;
@@ -54,6 +58,30 @@ public String getRealMark() {
 }
 public void setRealMark(String realMark) {
 	this.realMark = realMark;
+}
+public int getImageWidth() {
+	return imageWidth;
+}
+public void setImageWidth(int imageWidth) {
+	this.imageWidth = imageWidth;
+}
+public int getImageHight() {
+	return imageHight;
+}
+public void setImageHight(int imageHight) {
+	this.imageHight = imageHight;
+}
+public int getImageDefaultMaxSize() {
+	return imageDefaultMaxSize;
+}
+public void setImageDefaultMaxSize(int imageDefaultMaxSize) {
+	this.imageDefaultMaxSize = imageDefaultMaxSize;
+}
+public boolean isCompressImage() {
+	return compressImage;
+}
+public void setCompressImage(boolean compressImage) {
+	this.compressImage = compressImage;
 }
 
 }

@@ -7,8 +7,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-import javax.imageio.ImageIO;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,7 +56,8 @@ public class FileUpController
 	if (pictureFile.isEmpty()) {
 		return ResultData.forbidden().putDataValue("messageInfo", "文件不能为空");
     }
-	if(pictureFile.getSize()>=5*1024*1024){
+	//文件不能大于2M
+	if(pictureFile.getSize()>=imageServerProperties.getImageDefaultMaxSize()*1024*1024){
 		return ResultData.forbidden().putDataValue("messageInfo", "文件太大，请重新选择");
 	}
 	String realImagePath = null;
@@ -86,7 +85,7 @@ public class FileUpController
       dest.getParentFile().mkdirs();*/
     try
     {
-      BufferedImage buffImg = QuickMarkMergeUtil.compressAndSave(pictureFile);
+      BufferedImage buffImg = QuickMarkMergeUtil.compressAndSave(pictureFile,imageServerProperties.getImageWidth(),imageServerProperties.getImageHight());
       QuickMarkMergeUtil.generateWaterFile(buffImg , realImagePath+fileName);
       ResultData resultData = ResultData.ok().putDataValue("imageName", fileName);
       resultData.putDataValue("url", imageServerProperties.getHostaddress()+realUrlPath+fileName);

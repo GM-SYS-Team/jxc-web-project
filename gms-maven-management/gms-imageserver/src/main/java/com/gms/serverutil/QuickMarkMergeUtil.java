@@ -45,11 +45,13 @@ public class QuickMarkMergeUtil {
     }
     
     
-    public static BufferedImage compressAndSave(MultipartFile file) throws IOException {
+    public static BufferedImage compressAndSave(MultipartFile file,int w,int h) throws IOException {
     	BufferedImage image = ImageIO.read(file.getInputStream());
-        image.setRGB(200, 200, BufferedImage.TYPE_INT_RGB);
+    	//int imageWidth = image.getWidth();//获取源文件宽度
+    	//int imageHight = image.getHeight();//获取源文件高度
+        image.setRGB(w, h, BufferedImage.TYPE_INT_RGB);
         Graphics gp = image.getGraphics();
-        gp.drawImage(image, 0, 0, 200, 200, null); // 绘制缩小后的图 
+        gp.drawImage(image, 0, 0, w, h, null); // 绘制缩小后的图 
         gp.dispose();
         return image;
     }
