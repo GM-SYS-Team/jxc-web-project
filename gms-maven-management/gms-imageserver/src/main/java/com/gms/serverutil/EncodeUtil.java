@@ -16,6 +16,8 @@ public class EncodeUtil {
 		util.set_module_size(modelSize);  //单元模块大小5(像素)
 		util.set_qz_size(qzsize);	  //空白区16像素
 		util.set_image_format(picType);//图像格式，注意必须带.号
+		util.set_dark_color(0x2A12E2);	//设置深色模块颜色(前景色), 0xBBGGRR
+		//util.set_light_color(0x00FF00); //设置浅色模块颜色(背景色), 0xBBGGRR
 		byte[] image = util.encode(encodeContent);//编码生成图像
 		return image;
 	} 

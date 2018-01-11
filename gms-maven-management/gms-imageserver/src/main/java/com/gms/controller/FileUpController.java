@@ -7,6 +7,8 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
+import javax.imageio.ImageIO;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,8 +56,11 @@ public class FileUpController
   @RequestMapping(value={"picture/upload"}, method={org.springframework.web.bind.annotation.RequestMethod.POST})
   public ResultData upload(@RequestParam("pictureFile") MultipartFile pictureFile,@RequestParam("picType") String picType){ 
 	if (pictureFile.isEmpty()) {
-      return ResultData.forbidden().putDataValue("messageInfo", "文件不能为空");
+		return ResultData.forbidden().putDataValue("messageInfo", "文件不能为空");
     }
+	if(pictureFile.getSize()>=5*1024*1024){
+		return ResultData.forbidden().putDataValue("messageInfo", "文件太大，请重新选择");
+	}
 	String realImagePath = null;
 	String realUrlPath = null;
 	if(picType.equals(Constant.HEAD_SHOT)){
@@ -76,12 +81,13 @@ public class FileUpController
     logger.info("上传的后缀名为：" + suffixName);
     //yyyyMMddhhmmss+32位uuid
     fileName = DateUtil.getCurrentTime()+ UUIDUtil.getUUIDKey() + suffixName;
-    File dest = new File(realImagePath + fileName);
+    /*File dest = new File(realImagePath + fileName);
     if (!dest.getParentFile().exists())
-      dest.getParentFile().mkdirs();
+      dest.getParentFile().mkdirs();*/
     try
     {
-      pictureFile.transferTo(dest);
+      BufferedImage buffImg = QuickMarkMergeUtil.compressAndSave(pictureFile);
+      QuickMarkMergeUtil.generateWaterFile(buffImg , realImagePath+fileName);
       ResultData resultData = ResultData.ok().putDataValue("imageName", fileName);
       resultData.putDataValue("url", imageServerProperties.getHostaddress()+realUrlPath+fileName);
       return resultData.putDataValue("messageInfo", "上传成功");

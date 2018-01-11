@@ -1,11 +1,14 @@
 package com.gms.serverutil;
 import java.awt.AlphaComposite;
+import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
+
+import org.springframework.web.multipart.MultipartFile;
 public class QuickMarkMergeUtil {
     /**
      * 
@@ -39,6 +42,16 @@ public class QuickMarkMergeUtil {
         g2d.drawImage(waterImg, x, y, waterImgWidth, waterImgHeight, null);
         g2d.dispose();// 释放图形上下文使用的系统资源
         return buffImg;
+    }
+    
+    
+    public static BufferedImage compressAndSave(MultipartFile file) throws IOException {
+    	BufferedImage image = ImageIO.read(file.getInputStream());
+        image.setRGB(200, 200, BufferedImage.TYPE_INT_RGB);
+        Graphics gp = image.getGraphics();
+        gp.drawImage(image, 0, 0, 200, 200, null); // 绘制缩小后的图 
+        gp.dispose();
+        return image;
     }
 
     /**
