@@ -12,6 +12,13 @@
 
 	var url;
 	
+	function formatShopStatus(val,row){
+		if(row.quickMark!=null && row.quickMark.indexOf('/')>=0){
+			return "<a target='view_window' style='text-decoration:none;color:red;' href="+ row.quickMark +">点击查看</a>";
+		}
+		return "";
+	}
+	
 	function deleteShop(){
 		var selectedRows=$("#dg").datagrid("getSelections");
 		if(selectedRows.length==0){
@@ -56,6 +63,19 @@
 		 $("#shopName").attr("readonly","readonly");
 		 url="/admin/shop/save?id="+row.id;
 	 }
+	 
+	 function openShopTransferDialog(){
+		var selectedRows=$("#dg").datagrid("getSelections");
+		 if(selectedRows.length!=1){
+			 $.messager.alert("系统提示","请选择一条要修改的数据！");
+			 return;
+		 }
+		 var row=selectedRows[0];
+		 $("#dlg2").dialog("open").dialog("setTitle","添加快递单号");
+		 $("#fm2").form("load",row);
+		 $("#shopTransferId").val(row.id);
+		 url="/admin/shop/edit/transfer/code";
+	 }
 	
 	
 	
@@ -81,6 +101,29 @@
 		 });
 		 $("#dlg-buttons a:eq(0)").linkbutton('enable');
 	 }
+	 
+	 function saveShopTransfer(){
+		 //置灰不可用
+		 $("#dlg-buttons2 a:eq(0)").linkbutton('disable');
+		 $("#fm2").form("submit",{
+			url:url,
+			onSubmit:function(){
+				return $(this).form("validate");
+			},
+			success:function(result){
+				var result=eval('('+result+')');
+				if(result.success){
+					$.messager.alert("系统提示","保存成功！");
+					resetValue();
+					$("#dlg2").dialog("close");
+					$("#dg").datagrid("reload");
+				}else{
+					$.messager.alert("系统提示",result.errorInfo);
+				}
+			}
+		 });
+		 $("#dlg-buttons2 a:eq(0)").linkbutton('enable');
+	 }
 	
 	function resetValue(){
 		 $("#shopName").val("");
@@ -91,6 +134,15 @@
 		 $("#phoneNum").val("");
 		 $("#contactName").val("");
 	 }
+	 
+	 function resetTransferDialogValue(){
+	 	 $("#transferCode").val("");
+		 $("#shopTransferId").val("");
+	 }
+	 function closeShopTransferDialog(){
+	 	 $("#dlg2").dialog("close");
+	 	 resetTransferDialogValue();
+	 }
 	
 	 function closeShopDialog(){
 		 $("#dlg").dialog("close");
@@ -100,7 +152,7 @@
 	 
 	 function searchShop(){
 		$("#dg").datagrid('load',{
-			"name":$("#s_name").val() 
+			"shopName":$("#s_name").val() 
 		});	
 	 }
 	 
@@ -129,6 +181,8 @@
    		<th field="contactNum" width="50" align="center">联系电话</th>
    		<th field="phoneNum" width="50" align="center">手机号码</th>
    		<th field="shopAddress" width="150" align="center">商铺地址</th>
+   		<th field="transferCode" width="80" align="center">快递单号</th>
+   		<th field="bb" width="50" align="center" formatter="formatShopStatus">二维码</th>
    </thead>
  </table>
  
@@ -136,6 +190,7 @@
  	<div>
  		
  		<a href="javascript:openShopModifyDialog()" class="easyui-linkbutton" iconCls="icon-edit" plain="true">修改</a>
+ 		<a href="javascript:openShopTransferDialog()" class="easyui-linkbutton" iconCls="icon-edit" plain="true">快递单号</a>
  		<!-- <a href="javascript:deleteShop()" class="easyui-linkbutton" iconCls="icon-remove" plain="true">删除</a> -->
  	</div> 
  	<div>
@@ -180,10 +235,27 @@
 	   	</table>
 	   </form>
  </div>
+ <div id="dlg2" class="easyui-dialog" style="width:500px;height:200px;padding: 10px 20px"
+   closed="true" buttons="#dlg-buttons2" data-options="onClose:function(){resetTransferDialogValue()}">
+   
+	   <form id="fm2" method="post">
+	   	<table cellspacing="8px">
+	   		<tr>
+	   			<td>商铺名称：</td>
+	   			<td><input type="text" id="transferCode" name="transferCode" class="easyui-validatebox"  required="true" style="width: 250px"/></td>
+	   		</tr>
+	   	</table>
+	   	<input type="text" id="shopTransferId" name="id" hidden="hidden"/>
+	   </form>
+ </div>
  
  <div id="dlg-buttons">
  	<a href="javascript:saveShop()" class="easyui-linkbutton" iconCls="icon-ok">保存</a>
  	<a href="javascript:closeShopDialog()" class="easyui-linkbutton" iconCls="icon-cancel">关闭</a>
+ </div>
+ <div id="dlg-buttons2">
+ 	<a href="javascript:saveShopTransfer()" class="easyui-linkbutton" iconCls="icon-ok" text-align="center">保存</a>
+ 	<a href="javascript:closeShopTransferDialog()" class="easyui-linkbutton" iconCls="icon-cancel" text-align="center">关闭</a>
  </div>
 </body>
 </html>

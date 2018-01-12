@@ -208,4 +208,5 @@ public class UserAdminController {
 		resultMap.put("success", true);
 		return resultMap;
 	}
+	
 }

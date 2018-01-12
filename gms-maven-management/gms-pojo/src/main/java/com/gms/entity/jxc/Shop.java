@@ -88,6 +88,12 @@ public class Shop {
     @Column(length=500)
     private String quickMark;
     
+    /**
+     * 快递运单号
+     */
+    @Column(length=20)
+    private String transferCode;
+    
     @Column(length=64)
 	private String uuid;
 
@@ -312,4 +318,13 @@ public class Shop {
 	public void setUuid(String uuid) {
 		this.uuid = uuid;
 	}
+
+	public String getTransferCode() {
+		return transferCode;
+	}
+
+	public void setTransferCode(String transferCode) {
+		this.transferCode = transferCode;
+	}
+	
 }

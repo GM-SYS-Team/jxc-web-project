@@ -18,7 +18,7 @@
 	
 	function formatShopStatus(val,row){
 		if(row.quickMark!=null && row.quickMark.indexOf('/')>=0){
-			return '已生成';
+			return "<a target='view_window' style='text-decoration:none;color:red' href="+ row.quickMark +">点击查看</a>";
 		}
 		return "<a href=\"javascript:createQuickMarkForShop("+row.id+")\"><img style='margin-top: 4px' src='/static/images/create.png' /></a>";
 	}
@@ -189,7 +189,7 @@
 	 
 	 function searchUser(){
 		$("#dg").datagrid('load',{
-			"user.userName":$("#s_userName").val() 
+			"userName":$("#s_userName").val() 
 		});	
 	}
 	 function saveShopForUser(){
@@ -278,7 +278,7 @@
 	 		<a href="javascript:openUserAddDialog()" class="easyui-linkbutton" iconCls="icon-add" plain="true">添加</a>
 	 		<a href="javascript:openUserModifyDialog()" class="easyui-linkbutton" iconCls="icon-edit" plain="true">修改</a>
 	 		<a href="javascript:deleteUser()" class="easyui-linkbutton" iconCls="icon-remove" plain="true">删除</a>
-	 		<a href="javascript:openShopForUserDialog()" class="easyui-linkbutton" iconCls="icon-remove" plain="true">增加商铺</a>
+	 		<a href="javascript:openShopForUserDialog()" class="easyui-linkbutton" iconCls="icon-add" plain="true">增加商铺</a>
 	 	</div> 
 	 	<div>
 	 		&nbsp;用户名：&nbsp;<input type="text" id="s_userName" size="20" onkeydown="if(event.keyCode==13) searchUser()"/>
@@ -413,7 +413,7 @@
 	   		<th field="contactNum" width="50" align="center">联系电话</th>
 	   		<th field="phoneNum" width="50" align="center">手机号码</th>
 	   		<th field="shopAddress" width="150" align="center">商铺地址</th>
-	   		<th field="bb" width="150" align="center" formatter="formatShopStatus">二维码状态</th>
+	   		<th field="bb" width="50" align="center" formatter="formatShopStatus">二维码状态</th>
 	   	</tr>
 	   </thead>
 	 </table>

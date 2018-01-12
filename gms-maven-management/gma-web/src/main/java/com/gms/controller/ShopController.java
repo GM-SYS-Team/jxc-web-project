@@ -237,4 +237,27 @@ public class ShopController extends BaseController {
 		
 		return resultMap;
 	}
+	
+	/**
+	 * 修改快递单号 
+	 * 
+	 * @param id
+	 * @param response
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping("/edit/transfer/code")
+	public Map<String, Object> editTransferCode(Shop shop) throws Exception {
+		Map<String, Object> resultMap = new HashMap<>();
+		try {
+			Shop editShop = shopService.findById(shop.getId());
+			editShop.setTransferCode(shop.getTransferCode());
+			shopService.save(editShop);
+			resultMap.put("success", true);
+		} catch (Exception e) {
+			resultMap.put("success", false);
+			resultMap.put("errorInfo", "系统异常，请联系系统管理员");
+		}
+		return resultMap;
+	}
 }
