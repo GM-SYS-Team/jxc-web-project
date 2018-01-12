@@ -51,7 +51,7 @@ public interface CouponRepository extends JpaRepository<Coupon, Integer>,JpaSpec
 	@Query(value="select * from t_coupon",nativeQuery=true)
 	public List<Coupon> findCouponAllAdmin();
 
-	@Query(value="select * from t_coupon where expiry_date_stop>?1 and id != ?2 and status = 1 limit 1", nativeQuery=true)
+	@Query(value="select * from t_coupon where expiry_date_stop>?1 and shop_id != ?2 and status = 1 limit 1", nativeQuery=true)
 	public Coupon findRandomCoupon(Date now, Integer id);
 	
 }
