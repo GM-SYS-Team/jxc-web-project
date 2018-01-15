@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -151,7 +152,7 @@ public class CouponController extends BaseAppController {
 				couponService.saveCouponGoods(couponGoods);
 				return success(coupon);
 			} else {
-				return error("服务器请假了，请稍后重试");
+				throw new MyException("服务器请假了，请稍后重试");
 			}
 		}
 		return error("服务器请假了，请稍后重试");
@@ -397,6 +398,7 @@ public class CouponController extends BaseAppController {
 	@RequestMapping("/user/receive")
 	@ResponseBody
 	@NeedAuth
+	@Transactional
 	public Map<String, Object> receiveCoupon(Integer couponId, Integer shopId) throws Exception {
 		User user = getUser();
 		if (!User.CUSTOMER.equals(user.getUserType())) {
@@ -457,11 +459,11 @@ public class CouponController extends BaseAppController {
 						}
 					}
 				} else {
-					return error("服务器请假了，请稍后重试");
+					throw new MyException("服务器请假了，请稍后重试");
 				}
 			}
 		}
-		return error("服务器请假了，请稍后重试");
+		throw new MyException("服务器请假了，请稍后重试");
 	}
 
 	/**
