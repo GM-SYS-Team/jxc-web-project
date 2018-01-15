@@ -140,7 +140,8 @@ public class ShopController extends BaseController {
 			shopService.save(shop);
 			resultMap.put("success", true);
 		}
-		if(currentShop.getId().intValue()==shop.getId().intValue()){
+		//save包含shop的新增和修改    如果修改的是当前登录商铺，修改后需要更新session中当前
+		if(shop.getId()!=null && currentShop!=null && currentShop.getId().intValue()==shop.getId().intValue()){
 			setCurrentShop(request, shop);
 		}
 		return resultMap;
