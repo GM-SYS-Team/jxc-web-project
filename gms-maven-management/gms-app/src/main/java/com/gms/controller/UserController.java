@@ -8,6 +8,7 @@ import javax.annotation.Resource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -239,8 +240,9 @@ public class UserController extends BaseAppController {
     //文件上传相关代码
     @ResponseBody
     @RequestMapping(value = "picture/upload")
+    @Transactional
     @NeedAuth
-    public Map<String,Object> upload(@RequestParam("pictureFile") MultipartFile pictureFile, String fileType) {
+    public Map<String,Object> upload(@RequestParam("pictureFile") MultipartFile pictureFile, String fileType) throws MyException {
 		//选择了图像文件才会上传，否则用老的发黄的旧照片
 		if(pictureFile!=null && StringUtil.isValid(pictureFile.getOriginalFilename())){
 			Map<String, String> paramMap = new HashMap<>();
@@ -265,11 +267,11 @@ public class UserController extends BaseAppController {
 					}
 					return success(pictureAddress);
 				}else{
-					return error();
+					throw new MyException("服务器请假了，请稍后重试");
 				}
 			}
 		}
-		return error();
+		throw new MyException("服务器请假了，请稍后重试");
     }
     @ResponseBody
     @RequestMapping("/beShoper")

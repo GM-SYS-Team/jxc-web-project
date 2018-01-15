@@ -1,13 +1,13 @@
 package com.gms.controller;
 
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -19,6 +19,7 @@ import com.gms.conf.ImageServerProperties;
 import com.gms.entity.jxc.Goods;
 import com.gms.entity.jxc.Shop;
 import com.gms.entity.jxc.User;
+import com.gms.exception.MyException;
 import com.gms.service.jxc.GoodsService;
 import com.gms.service.jxc.ShopService;
 import com.gms.util.Constant;
@@ -78,6 +79,7 @@ public class ShopController extends BaseAppController {
 	 */
 	@RequestMapping("/save")
 	@ResponseBody
+	@Transactional
 	public Map<String,Object> save(Shop shop)throws Exception{
 		User user = getUser();
 		if (StringUtil.isEmpty(shop.getShopName())) {
@@ -107,7 +109,7 @@ public class ShopController extends BaseAppController {
 				shop.setQuickMark(quickMarkImageName);
 				shopService.save(shop);
 			}else{
-				return error("服务器请假了，请稍后重试");
+				throw new MyException("服务器请假了，请稍后重试");
 			}
 		}
 		return success(shop);
