@@ -73,7 +73,7 @@ public class Coupon {
     private String quickMark;
 	
 	/**
-	 * 优惠券状态 默认为0， 1-发放优惠券
+	 * 优惠券状态 默认为0， 1-发放优惠券; 4-优惠券置失效
 	 */
 	@Column
 	private String status;
