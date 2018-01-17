@@ -26,7 +26,7 @@ public class DateUtil {
     private static String month = "MM";
     private static String year = "yyyy";
     private static String ymd = "yyyy-MM-dd";
-    private static String ymdhms = "yyyyMMddHHmmss";
+    public static String ymdhms = "yyyy-MM-dd HH:mm:ss";
     public static SimpleDateFormat ymdSDF = new SimpleDateFormat(ymd);
     public static SimpleDateFormat yyyyMMddHHmmss = new SimpleDateFormat(ymdhms);    
     public static SimpleDateFormat yearSDF = new SimpleDateFormat(year);    

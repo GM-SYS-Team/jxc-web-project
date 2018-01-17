@@ -15,6 +15,12 @@ canvas{z-index:-1;position:absolute;}
 <script src="/static/js/verifyCode.js"></script>
 <script src="/static/js/Particleground.js"></script>
 <script>
+	function checkWindow(){
+		if(window !=top){  
+		    parent.location.reload();
+		} 
+	}
+
 	$(document).ready(function() {
 	  //粒子背景特效
 	  $('body').particleground({
@@ -48,7 +54,7 @@ canvas{z-index:-1;position:absolute;}
 	
 </script>
 </head>
-<body>
+<body onload="checkWindow()">
 <dl class="admin_login">
  <dt>
   <strong>进销存管理系统</strong>

@@ -1,7 +1,10 @@
 package com.gms.conf;
 
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
+
+import javax.servlet.Filter;
 
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.spring.LifecycleBeanPostProcessor;
@@ -32,6 +35,8 @@ public class ShiroConfig {
      */
     @Bean
     public ShiroFilterFactoryBean shirFilter(SecurityManager securityManager) {
+    	/*Map<String,Filter> filterMap = new HashMap<String,Filter>();
+    	filterMap.put("authc", new SessionFilter());*/
         ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
 
         // 必须设置 SecurityManager
@@ -39,6 +44,7 @@ public class ShiroConfig {
 
         // 如果不设置默认会自动寻找Web工程根目录下的"/login.jsp"页面
         shiroFilterFactoryBean.setLoginUrl("/login.html");
+        //shiroFilterFactoryBean.setFilters(filterMap);
  
 
         // 拦截器.

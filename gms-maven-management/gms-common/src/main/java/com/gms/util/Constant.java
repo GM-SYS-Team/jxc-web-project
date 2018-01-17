@@ -34,6 +34,9 @@ public class Constant {
 	public static final String HEAD_SHOT = "HEAD_SHOT";
 	//商品图片
 	public static final String GOODS_PIC = "GOODS_PIC";
+	//客户端文件
+	public static final String CLIENT_IOS_APP = "ios";
+	public static final String CLIENT_ANDROID_APP = "android";
 	//优惠券没有被使用
 	public static final String COUPON_NOT_USED = "0";
 	

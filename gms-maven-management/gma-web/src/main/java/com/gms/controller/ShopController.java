@@ -261,4 +261,27 @@ public class ShopController extends BaseController {
 		}
 		return resultMap;
 	}
+	
+	
+	/**
+	 * 商铺总数
+	 * 
+	 * @param id
+	 * @param response
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping("/count")
+	public Map<String, Object> count() throws Exception {
+		Map<String, Object> resultMap = new HashMap<>();
+		try {
+			Long total = shopService.getCount(null);//不做任何过滤，获取全部
+			resultMap.put("total", total);
+			resultMap.put("success", true);
+		} catch (Exception e) {
+			resultMap.put("success", false);
+			resultMap.put("errorInfo", "系统异常，请联系系统管理员");
+		}
+		return resultMap;
+	}
 }

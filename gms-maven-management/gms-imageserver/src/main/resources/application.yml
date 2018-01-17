@@ -31,6 +31,7 @@ spring:
         maxOpenPreparedStatements: 20
 nikehomedir: E://test//imagePath//
 quickhomedir: E://test//quickMark//
+apphomedir: E://test//app//
 image: 
     server: 
         hostaddress: http://localhost/static/
@@ -40,6 +41,8 @@ image:
         couponMark: couponMark/
         customerMark: customerMark/
         realMark: realMark/
+        ios: ios/
+        android: android/
     quickmark:
         rows: 13
         cols: 41

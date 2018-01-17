@@ -15,6 +15,7 @@ function queryContent(){
 			$("#out_date_count").html(data.out_date_count);
 			
 			if(data.shop == null){
+				
 				$("#shop_info").hide();
 			}else{
 				$("#shop_info").show();

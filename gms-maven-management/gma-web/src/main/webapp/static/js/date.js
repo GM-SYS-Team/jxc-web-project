@@ -1,7 +1,7 @@
 
 function genTodayStr(){
 	var date = new Date();
-	var month=(date.getMonth()+1)<10?"0"+(date.getMonth()+1):(date.getMonth()+1);
+	var month=(date.getMonth()+1)<10?(date.getMonth()+1):(date.getMonth()+1);
 	return date.getFullYear()+"-"+formatZero(month)+"-"+formatZero(date.getDate());
 }
 
@@ -13,8 +13,9 @@ function genLastYearStr(){
 
 function genLastMonthDayStr(){
 	var date = new Date();
-	var month=(date.getMonth()+1-1)<10?"0"+(date.getMonth()+1-1):(date.getMonth()+1-1);
-	return date.getFullYear()+"-"+formatZero(month)+"-"+formatZero(date.getDate());
+	var year = date.getMonth()==0?(date.getFullYear()-1):date.getFullYear();
+	var month=date.getMonth()==0?12:(date.getMonth()+1);
+	return year+"-"+formatZero(month)+"-"+formatZero(date.getDate());
 }
 
 function genLastWeekDayStr(){

@@ -12,6 +12,8 @@ public class ImageServerProperties
   private String couponMark;//优惠券地址
   private String customerMark;//客户领取卷二维码地址
   private String realMark;//合成的优惠券地址
+  private String ios;//ios app路径
+  private String android;//app路径 app路径
   private int imageWidth = 200;//图片宽度 默认200px
   private int imageHight = 200;//图片高度 默认200px
   private int imageDefaultMaxSize = 2;//图片默认不能大于2M
@@ -82,6 +84,18 @@ public boolean isCompressImage() {
 }
 public void setCompressImage(boolean compressImage) {
 	this.compressImage = compressImage;
+}
+public String getIos() {
+	return ios;
+}
+public void setIos(String ios) {
+	this.ios = ios;
+}
+public String getAndroid() {
+	return android;
+}
+public void setAndroid(String android) {
+	this.android = android;
 }
 
 }
