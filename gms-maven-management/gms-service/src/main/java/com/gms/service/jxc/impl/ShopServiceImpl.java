@@ -81,6 +81,9 @@ public class ShopServiceImpl implements ShopService{
 			public Predicate toPredicate(Root<Shop> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
 				Predicate predicate=cb.conjunction();
 				if(Shop!=null){
+					if(StringUtil.isNotEmpty(Shop.getShopName())){
+						predicate.getExpressions().add(cb.like(root.get("shopName"), "%"+Shop.getShopName().trim()+"%"));
+					}
 					if(Shop.getUserId()!=null){
 						predicate.getExpressions().add(cb.equal(root.get("userId"), Shop.getUserId()));
 					}	
