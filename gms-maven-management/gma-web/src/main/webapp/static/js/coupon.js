@@ -267,7 +267,7 @@ function couponAjax(num,currentPage,page_size){
 		success : function(data) {
 			var html = "";
 			if(data.size>0){
-				if(num == 1){
+				if(num != 3){
 					$(".oper_th").show();
 				}else{
 					$(".oper_th").hide();
@@ -291,14 +291,14 @@ function couponAjax(num,currentPage,page_size){
 							   /*  +"<td>"+ item.couponCount +"</td>"*/
 							     +"<td>"+ new Date(item.expiryDateStart).format("yyyy-MM-dd hh:mm") +"</td>"
 							     +"<td>"+ new Date(item.expiryDateStop).format("yyyy-MM-dd hh:mm") +"</td>";
-					if(num == 1){
+					if(num != 3){
 						html += "<td>"
-								     +"<a href='javascript:ovid()' onclick='coupon_del(this,"+ item.id +")' class='btn btn-danger operation_btn'>删除</a>";
+								     +"<a href='javascript:ovid()' onclick='coupon_del(this,"+ item.id +")' class='btn btn-danger operation_btn' style='line-height: 0.5;'>失效</a>";
 						if(item.status !=1){
-							html += "&nbsp;&nbsp;&nbsp;&nbsp;<a href='javascript:ovid()' onclick='coupon_share(this,"+ item.id +")' class='btn bg-deep-blue operation_btn' id='share_btn'>共享</a>"
+							html += "&nbsp;&nbsp;&nbsp;&nbsp;<a href='javascript:ovid()' onclick='coupon_share(this,"+ item.id +")' class='btn bg-deep-blue operation_btn' style='line-height: 0.5;' id='share_btn'>共享</a>"
 						}
 						html +="</td>";
-					}
+					}	
 					html += "</tr>";
 				})
 				$("#coupon_tbody").html(html);
