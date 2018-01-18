@@ -140,7 +140,8 @@ public class ShopController extends BaseController {
 			shopService.save(shop);
 			resultMap.put("success", true);
 		}
-		if(currentShop.getId().intValue()==shop.getId().intValue()){
+		//save包含shop的新增和修改    如果修改的是当前登录商铺，修改后需要更新session中当前
+		if(shop.getId()!=null && currentShop!=null && currentShop.getId().intValue()==shop.getId().intValue()){
 			setCurrentShop(request, shop);
 		}
 		return resultMap;
@@ -253,6 +254,29 @@ public class ShopController extends BaseController {
 			Shop editShop = shopService.findById(shop.getId());
 			editShop.setTransferCode(shop.getTransferCode());
 			shopService.save(editShop);
+			resultMap.put("success", true);
+		} catch (Exception e) {
+			resultMap.put("success", false);
+			resultMap.put("errorInfo", "系统异常，请联系系统管理员");
+		}
+		return resultMap;
+	}
+	
+	
+	/**
+	 * 商铺总数
+	 * 
+	 * @param id
+	 * @param response
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping("/count")
+	public Map<String, Object> count() throws Exception {
+		Map<String, Object> resultMap = new HashMap<>();
+		try {
+			Long total = shopService.getCount(null);//不做任何过滤，获取全部
+			resultMap.put("total", total);
 			resultMap.put("success", true);
 		} catch (Exception e) {
 			resultMap.put("success", false);

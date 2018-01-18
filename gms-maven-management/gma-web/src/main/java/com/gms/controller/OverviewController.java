@@ -23,6 +23,8 @@ import com.gms.entity.jxc.User;
 import com.gms.service.jxc.CouponCodeService;
 import com.gms.service.jxc.CouponService;
 import com.gms.service.jxc.LogService;
+import com.gms.service.jxc.ShopService;
+import com.gms.service.jxc.UserService;
 import com.gms.util.DateUtil;
 
 @RestController
@@ -38,6 +40,12 @@ public class OverviewController extends BaseController {
 
 	@Autowired
 	private CouponCodeService couponCodeService;
+	
+	@Autowired
+	private ShopService shopService;
+	
+	@Autowired
+	private UserService userService;
 
 	@PostMapping("/map")
 	public Map<String, Object> getContent(HttpServletRequest request)
@@ -52,6 +60,12 @@ public class OverviewController extends BaseController {
 		int between_date_count = couponService.findCouponByStatus(2, shop)
 				.size();
 		int out_date_count = couponService.findCouponByStatus(3, shop).size();
+		
+		Long  total_shop = shopService.getCount(null);//不做任何过滤，获取全部
+		
+		User user = new User();
+		user.setUserType(User.SHOPER);//只统计商铺用户
+		Long total_user=userService.getCount(user);
 
 		/* 优惠券领取状况 */
 		Date today = new Date();
@@ -84,6 +98,9 @@ public class OverviewController extends BaseController {
 		resultMap.put("before_date_count", before_date_count + "张");
 		resultMap.put("between_date_count", between_date_count + "张");
 		resultMap.put("out_date_count", out_date_count + "张");
+		
+		resultMap.put("total_shop", total_shop);
+		resultMap.put("total_user", total_user);
 
 		resultMap.put("dateArr", dateArr);
 		resultMap.put("amountArr", amountArr);

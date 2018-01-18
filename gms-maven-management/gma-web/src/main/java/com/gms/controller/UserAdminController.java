@@ -102,7 +102,7 @@ public class UserAdminController {
 			if(user==null){user=new User();}
 			user.setCurrentLoginShopId(shopid);
 		}
-		List<User> userList=userService.list(user, page, rows, Direction.ASC, "id");
+		List<User> userList=userService.list(user, page, rows, Direction.DESC, "createTime");
 		for(User u:userList){
 			List<Role> roleList=roleService.findByUserId(u.getId());
 			StringBuffer sb=new StringBuffer();
@@ -205,6 +205,27 @@ public class UserAdminController {
 		Map<String, Object> resultMap = new HashMap<>();
 		userRoleService.deleteByUserId(id); // 删除用户角色关联信息
 		userService.delete(id);				
+		resultMap.put("success", true);
+		return resultMap;
+	}
+	
+	/**
+	 * 运营首页  注册商铺用户统计
+	 * @param id
+	 * @param response
+	 * @return
+	 * @throws Exception
+	 */
+	@ResponseBody
+	@RequestMapping("/count")
+	@RequiresPermissions(value = { "角色管理" })
+	public Map<String,Object> count()throws Exception{
+		logService.save(new Log("运营首页  注册商铺用户统计","运营首页  注册商铺用户统计"));  // 写入日志
+		Map<String, Object> resultMap = new HashMap<>();
+		User user = new User();
+		user.setUserType(User.SHOPER);//只统计商铺用户
+		Long total=userService.getCount(user);
+		resultMap.put("total", total);
 		resultMap.put("success", true);
 		return resultMap;
 	}

@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import com.gms.entity.jxc.User;
 import com.gms.dao.repository.UserRepository;
 import com.gms.service.jxc.UserService;
+import com.gms.util.DateUtil;
 import com.gms.util.StringUtil;
 
 /**
@@ -60,7 +61,14 @@ public class UserServiceImpl implements UserService {
 						predicate.getExpressions()
 								.add(cb.like(root.get("userName"), "%" + user.getUserName().trim() + "%"));
 					}
-					
+					if (StringUtil.isNotEmpty(user.getSearchBeginDate())) {
+						predicate.getExpressions()
+								.add(cb.greaterThanOrEqualTo(root.get("createTime"), DateUtil.stringToDate(user.getSearchBeginDate(), DateUtil.ymdhms)));
+					}
+					if (StringUtil.isNotEmpty(user.getSearchEndDate())) {
+						predicate.getExpressions()
+								.add(cb.lessThanOrEqualTo(root.get("createTime"), DateUtil.stringToDate(user.getSearchEndDate(), DateUtil.ymdhms)));
+					}
 					predicate.getExpressions().add(cb.notEqual(root.get("id"), 1)); // 管理员除外
 				}
 				return predicate;
@@ -80,6 +88,14 @@ public class UserServiceImpl implements UserService {
 					if (StringUtil.isNotEmpty(user.getUserName())) {
 						predicate.getExpressions()
 								.add(cb.like(root.get("userName"), "%" + user.getUserName().trim() + "%"));
+					}
+					if (StringUtil.isNotEmpty(user.getSearchBeginDate())) {
+						predicate.getExpressions()
+								.add(cb.greaterThanOrEqualTo(root.get("createTime"), DateUtil.stringToDate(user.getSearchBeginDate(), DateUtil.ymdhms)));
+					}
+					if (StringUtil.isNotEmpty(user.getSearchEndDate())) {
+						predicate.getExpressions()
+								.add(cb.lessThanOrEqualTo(root.get("createTime"), DateUtil.stringToDate(user.getSearchEndDate(), DateUtil.ymdhms)));
 					}
 					predicate.getExpressions().add(cb.notEqual(root.get("id"), 1)); // 管理员除外
 				}

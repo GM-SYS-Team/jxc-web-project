@@ -75,4 +75,5 @@ public interface ShopService {
 
 	
 	public List<Shop> findByUserId(Integer userId);
+	
 }

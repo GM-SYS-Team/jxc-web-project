@@ -35,6 +35,8 @@ public class FileUpController
   private String nikehomedir;
   @Value("${quickhomedir}")
   private String quickhomedir;
+  @Value("${apphomedir}")
+  private String apphomedir;
 /*  private String systemPath = System.getProperty("user.dir");*/
 
   @Autowired
@@ -56,8 +58,8 @@ public class FileUpController
 	if (pictureFile.isEmpty()) {
 		return ResultData.forbidden().putDataValue("messageInfo", "文件不能为空");
     }
-	//文件不能大于2M
-	if(pictureFile.getSize()>=imageServerProperties.getImageDefaultMaxSize()*1024*1024){
+	//图片文件不能大于2M
+	if(!picType.equals(Constant.CLIENT_ANDROID_APP) && !picType.equals(Constant.CLIENT_ANDROID_APP) && pictureFile.getSize()>=imageServerProperties.getImageDefaultMaxSize()*1024*1024){
 		return ResultData.forbidden().putDataValue("messageInfo", "文件太大，请重新选择");
 	}
 	String realImagePath = null;
@@ -70,6 +72,14 @@ public class FileUpController
 		//商品头像
 		realImagePath = nikehomedir + imageServerProperties.getGoodsPic();
 		realUrlPath = imageServerProperties.getGoodsPic();
+	}else if(picType.equals(Constant.CLIENT_ANDROID_APP)){
+		//客户端文件
+		realImagePath = apphomedir + imageServerProperties.getAndroid();
+		realUrlPath = imageServerProperties.getAndroid();
+	}else if(picType.equals(Constant.CLIENT_IOS_APP)){
+		//客户端文件
+		realImagePath = apphomedir + imageServerProperties.getIos();
+		realUrlPath = imageServerProperties.getIos();
 	}else {
 		return ResultData.forbidden().putDataValue("messageInfo", "图片类型格式不正确");
 	}
@@ -80,9 +90,20 @@ public class FileUpController
     logger.info("上传的后缀名为：" + suffixName);
     //yyyyMMddhhmmss+32位uuid
     fileName = DateUtil.getCurrentTime()+ UUIDUtil.getUUIDKey() + suffixName;
-    /*File dest = new File(realImagePath + fileName);
-    if (!dest.getParentFile().exists())
-      dest.getParentFile().mkdirs();*/
+    //app 文件直接处理，不需要压缩
+    if(picType.equals(Constant.CLIENT_IOS_APP) || picType.equals(Constant.CLIENT_ANDROID_APP)){
+    	File dest = new File(realImagePath + fileName);
+        if (!dest.getParentFile().exists())
+          dest.getParentFile().mkdirs();
+        try {
+			pictureFile.transferTo(dest);
+		} catch (Exception e) {
+			return ResultData.serverInternalError().putDataValue("messageInfo", "服务器请假了，请稍后再试");
+		}
+        ResultData resultData = ResultData.ok().putDataValue("imageName", fileName);
+        resultData.putDataValue("url", imageServerProperties.getHostaddress()+realUrlPath+fileName);
+        return resultData.putDataValue("messageInfo", "上传成功");
+    }
     try
     {
       BufferedImage buffImg = QuickMarkMergeUtil.compressAndSave(pictureFile,imageServerProperties.getImageWidth(),imageServerProperties.getImageHight());
@@ -270,6 +291,7 @@ public class FileUpController
   		result.putDataValue("url", imageServerProperties.getHostaddress()+imageServerProperties.getRealMark()+fileName);
   		return result.putDataValue("messageInfo", "合成文件成功");
 	}
+  	
   	
   /**
 	* @author zhoutianqi
