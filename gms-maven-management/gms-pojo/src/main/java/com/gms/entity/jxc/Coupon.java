@@ -75,7 +75,7 @@ public class Coupon {
 	/**
 	 * 优惠券状态 默认为0， 1-共享优惠券; 4-优惠券置失效
 	 */
-	@Column
+	@Column(nullable=false,columnDefinition="varchar(4) default '0'")
 	private String status;
 	
 	@OneToOne
