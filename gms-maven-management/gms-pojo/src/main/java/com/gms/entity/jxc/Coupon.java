@@ -87,6 +87,11 @@ public class Coupon {
 	 */
 	public final static String STATUS_SHARE = "1";
 	
+	/**
+	 * 表示优惠券失效
+	 */
+	public final static String STATUS_DEL = "4";
+	
 	public Integer getId() {
 		return id;
 	}
