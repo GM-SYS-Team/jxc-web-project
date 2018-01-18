@@ -9,15 +9,24 @@ function queryContent(){
 		data : {
 		},
 		success : function(data) {
-			$("#total_count").html(data.totalCount);
-			$("#before_date_count").html(data.before_date_count);
-			$("#between_date_count").html(data.between_date_count);
-			$("#out_date_count").html(data.out_date_count);
-			
 			if(data.shop == null){
+				$("#position1").html(data.total_user);
+				$("#position2").html(data.total_shop);
+				$("#position3").html(data.totalCount);
+				$("#position4").html(data.before_date_count);
+				
+				$("#div1 h3").html("用户总量");
+				$("#div2 h3").html("店铺总量");
+				$("#div3 h3").html("优惠券总量");
+				$("#div4 h3").html("优惠券未开始");
 				
 				$("#shop_info").hide();
 			}else{
+				$("#position1").html(data.totalCount);
+				$("#position2").html(data.before_date_count);
+				$("#position3").html(data.between_date_count);
+				$("#position4").html(data.out_date_count);
+				
 				$("#shop_info").show();
 				$(".shop_name").html(data.shop.shopName);
 				$(".shop_business").html(data.shop.business);
