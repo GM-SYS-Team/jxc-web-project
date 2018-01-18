@@ -23,6 +23,7 @@ import com.gms.entity.jxc.Log;
 import com.gms.entity.jxc.User;
 import com.gms.service.jxc.GoodsService;
 import com.gms.service.jxc.LogService;
+import com.gms.service.jxc.SaleListGoodsService;
 import com.gms.util.Constant;
 import com.gms.util.HttpsUtil;
 import com.gms.util.StringUtil;
@@ -44,6 +45,9 @@ public class GoodsAdminContrller extends BaseController{
 	
 	@Autowired
 	private ImageServerProperties imageServerProperties;
+	
+	@Autowired
+	private SaleListGoodsService saleListGoodsService;
 	
 	/**
 	 * 根据条件分页查询商品信息
@@ -168,6 +172,33 @@ public class GoodsAdminContrller extends BaseController{
 			goodsService.delete(id);							
 			resultMap.put("success", true);			
 		}
+		return resultMap;
+	}
+	
+	/**
+	 * 根据条件分页查询商品库存信息
+	 * @param goods
+	 * @param page
+	 * @param rows
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping("/listInventory")
+	public Map<String,Object> listInventory(Goods goods,@RequestParam(value="page",required=false)Integer page,@RequestParam(value="rows",required=false)Integer rows,
+			HttpServletRequest request)throws Exception{
+		User currentUser = getCurrentUser(request);
+		if(currentUser.getUserType().equals(Constant.SHOPTYPE)){
+			goods.setShopId(currentUser.getCurrentLoginShopId());
+		}
+		Map<String, Object> resultMap = new HashMap<>();
+		List<Goods> goodsList=goodsService.list(goods, page, rows, Direction.ASC, "id");
+		Long total=goodsService.getCount(goods);
+		for(Goods g:goodsList){
+			g.setSaleTotal(saleListGoodsService.getTotalByGoodsId(g.getId())); // 设置销量总数
+		}
+		resultMap.put("rows", goodsList);
+		resultMap.put("total", total);
+		logService.save(new Log(Log.SEARCH_ACTION,"查询商品库存信息")); // 写入日志
 		return resultMap;
 	}
 }

@@ -95,6 +95,13 @@ public class User {
 	@Column
 	private String imgUrl; //用户头像
 	
+	//临时字段，不会入表，查询时创建起始时间
+	@Transient
+	private String searchBeginDate;
+	//临时字段，不会入表，查询时创建end时间
+	@Transient
+	private String searchEndDate;
+	
 	public List<Shop> getShopList() {
 		return shopList;
 	}
@@ -260,6 +267,8 @@ public class User {
 		this.userType = user.getUserType();
 		this.setUserName(user.getUserName());
 		this.updateTime = user.getUpdateTime();
+		this.searchBeginDate = user.getSearchBeginDate();
+		this.searchEndDate = user.getSearchEndDate();
 	}
 
 	public String getUserName() {
@@ -268,5 +277,33 @@ public class User {
 
 	public void setUserName(String userName) {
 		this.userName = userName;
+	}
+
+	public String getSearchBeginDate() {
+		return searchBeginDate;
+	}
+
+	public void setSearchBeginDate(String searchBeginDate) {
+		this.searchBeginDate = searchBeginDate;
+	}
+
+	public String getSearchEndDate() {
+		return searchEndDate;
+	}
+
+	public void setSearchEndDate(String searchEndDate) {
+		this.searchEndDate = searchEndDate;
+	}
+
+	public static String getAdmin() {
+		return ADMIN;
+	}
+
+	public static String getShoper() {
+		return SHOPER;
+	}
+
+	public static String getCustomer() {
+		return CUSTOMER;
 	}
 }
