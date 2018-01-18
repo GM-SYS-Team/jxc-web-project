@@ -63,11 +63,11 @@ public class UserServiceImpl implements UserService {
 					}
 					if (StringUtil.isNotEmpty(user.getSearchBeginDate())) {
 						predicate.getExpressions()
-								.add(cb.greaterThanOrEqualTo(root.get("createTime"), DateUtil.stringToDate(user.getSearchBeginDate(), DateUtil.ymdhms)));
+								.add(cb.greaterThanOrEqualTo(root.get("createTime"), DateUtil.stringToDate(user.getSearchBeginDate(), DateUtil.ymdhms_)));
 					}
 					if (StringUtil.isNotEmpty(user.getSearchEndDate())) {
 						predicate.getExpressions()
-								.add(cb.lessThanOrEqualTo(root.get("createTime"), DateUtil.stringToDate(user.getSearchEndDate(), DateUtil.ymdhms)));
+								.add(cb.lessThanOrEqualTo(root.get("createTime"), DateUtil.stringToDate(user.getSearchEndDate(), DateUtil.ymdhms_)));
 					}
 					predicate.getExpressions().add(cb.notEqual(root.get("id"), 1)); // 管理员除外
 				}
@@ -91,11 +91,11 @@ public class UserServiceImpl implements UserService {
 					}
 					if (StringUtil.isNotEmpty(user.getSearchBeginDate())) {
 						predicate.getExpressions()
-								.add(cb.greaterThanOrEqualTo(root.get("createTime"), DateUtil.stringToDate(user.getSearchBeginDate(), DateUtil.ymdhms)));
+								.add(cb.greaterThanOrEqualTo(root.get("createTime"), DateUtil.stringToDate(user.getSearchBeginDate(), DateUtil.ymdhms_)));
 					}
 					if (StringUtil.isNotEmpty(user.getSearchEndDate())) {
 						predicate.getExpressions()
-								.add(cb.lessThanOrEqualTo(root.get("createTime"), DateUtil.stringToDate(user.getSearchEndDate(), DateUtil.ymdhms)));
+								.add(cb.lessThanOrEqualTo(root.get("createTime"), DateUtil.stringToDate(user.getSearchEndDate(), DateUtil.ymdhms_)));
 					}
 					predicate.getExpressions().add(cb.notEqual(root.get("id"), 1)); // 管理员除外
 				}

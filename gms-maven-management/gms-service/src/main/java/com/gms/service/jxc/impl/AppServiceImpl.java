@@ -51,11 +51,11 @@ public class AppServiceImpl implements AppService{
 					}	
 					if (StringUtil.isNotEmpty(app.getBtime())) {
 						predicate.getExpressions()
-								.add(cb.greaterThanOrEqualTo(root.get("createTime"), DateUtil.stringToDate(app.getBtime(), DateUtil.ymdhms)));
+								.add(cb.greaterThanOrEqualTo(root.get("createTime"), DateUtil.stringToDate(app.getBtime(), DateUtil.ymdhms_)));
 					}
 					if (StringUtil.isNotEmpty(app.getEtime())) {
 						predicate.getExpressions()
-								.add(cb.lessThanOrEqualTo(root.get("createTime"), DateUtil.stringToDate(app.getEtime(), DateUtil.ymdhms)));
+								.add(cb.lessThanOrEqualTo(root.get("createTime"), DateUtil.stringToDate(app.getEtime(), DateUtil.ymdhms_)));
 					}
 				}
 				
@@ -79,11 +79,11 @@ public class AppServiceImpl implements AppService{
 					}
 					if (StringUtil.isNotEmpty(app.getBtime())) {
 						predicate.getExpressions()
-								.add(cb.greaterThanOrEqualTo(root.get("createTime"), DateUtil.stringToDate(app.getBtime(), DateUtil.ymdhms)));
+								.add(cb.greaterThanOrEqualTo(root.get("createTime"), DateUtil.stringToDate(app.getBtime(), DateUtil.ymdhms_)));
 					}
 					if (StringUtil.isNotEmpty(app.getEtime())) {
 						predicate.getExpressions()
-								.add(cb.lessThanOrEqualTo(root.get("createTime"), DateUtil.stringToDate(app.getEtime(), DateUtil.ymdhms)));
+								.add(cb.lessThanOrEqualTo(root.get("createTime"), DateUtil.stringToDate(app.getEtime(), DateUtil.ymdhms_)));
 					}
 				}
 				return predicate;

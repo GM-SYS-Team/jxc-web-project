@@ -147,8 +147,11 @@ public class CouponServiceImpl implements CouponService {
 									cb.lessThan(root.get("expiryDateStop"),
 											currentDate));
 						}
+						predicate.getExpressions().add(
+								cb.notEqual(root.get("status"), 4));
 						return predicate;
 					}
+					
 				}, pageable);
 		return pageCoupon.getContent();
 	}
@@ -188,6 +191,8 @@ public class CouponServiceImpl implements CouponService {
 							.add(cb.lessThan(root.get("expiryDateStop"),
 									currentDate));
 				}
+				predicate.getExpressions().add(
+						cb.notEqual(root.get("status"), 4));
 				return predicate;
 			}
 		});

@@ -26,13 +26,14 @@ public class DateUtil {
     private static String month = "MM";
     private static String year = "yyyy";
     private static String ymd = "yyyy-MM-dd";
-    public static String ymdhms = "yyyy-MM-dd HH:mm:ss";
+    public static String ymdhms = "yyyyMMddHHmmss";
+    public static String ymdhms_ = "yyyy-MM-dd HH:mm:ss";
     public static SimpleDateFormat ymdSDF = new SimpleDateFormat(ymd);
     public static SimpleDateFormat yyyyMMddHHmmss = new SimpleDateFormat(ymdhms);    
     public static SimpleDateFormat yearSDF = new SimpleDateFormat(year);    
     public static SimpleDateFormat monthSDF = new SimpleDateFormat(month);    
     public static SimpleDateFormat daySDF = new SimpleDateFormat(day);
-    public static SimpleDateFormat yyyyMMddHHmm = new SimpleDateFormat("yyyy-MM-dd HH:mm");    
+    public static SimpleDateFormat yyyyMMddHHmm = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");    
     public static SimpleDateFormat yyyyMMdd = new SimpleDateFormat("yyyy-MM-dd");
     public static SimpleDateFormat yyyyMMdd_NOT_ = new SimpleDateFormat("yyyyMMdd");
     public static long DATEMM = 86400L;

@@ -16,7 +16,7 @@ public class ImageServerProperties
   private String android;//app路径 app路径
   private int imageWidth = 200;//图片宽度 默认200px
   private int imageHight = 200;//图片高度 默认200px
-  private int imageDefaultMaxSize = 2;//图片默认不能大于2M
+  private int imageDefaultMaxSize = 1;//图片默认不能大于1M
   private boolean compressImage = false;//图片压缩默认不开启
 
   public String getCouponMark() {

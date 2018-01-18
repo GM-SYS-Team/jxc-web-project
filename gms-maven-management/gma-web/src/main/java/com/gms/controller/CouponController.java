@@ -121,9 +121,9 @@ public class CouponController extends BaseController {
 	public Map<String, Object> delete(
 			@RequestParam(value = "id", required = true) Integer id,
 			HttpServletRequest request) throws Exception {
-		/* 当前登录的店铺 */
-		Shop shop = getCurrentShop(request);
-		couponService.deleteCoupon(id, shop.getId());
+		Coupon coupon = couponService.findCouponById(id);
+		coupon.setStatus(Coupon.STATUS_DEL);
+		couponService.save(coupon);
 		Map<String, Object> resultMap = new HashMap<>();
 		resultMap.put("success", true);
 		logService.save(new Log(Log.SEARCH_ACTION, "删除优惠券-->id:" + id)); // 写入日志

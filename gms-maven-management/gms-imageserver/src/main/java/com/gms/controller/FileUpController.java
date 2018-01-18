@@ -58,7 +58,7 @@ public class FileUpController
 	if (pictureFile.isEmpty()) {
 		return ResultData.forbidden().putDataValue("messageInfo", "文件不能为空");
     }
-	//图片文件不能大于2M
+	//图片文件不能大于1M
 	if(!picType.equals(Constant.CLIENT_ANDROID_APP) && !picType.equals(Constant.CLIENT_ANDROID_APP) && pictureFile.getSize()>=imageServerProperties.getImageDefaultMaxSize()*1024*1024){
 		return ResultData.forbidden().putDataValue("messageInfo", "文件太大，请重新选择");
 	}
@@ -106,14 +106,16 @@ public class FileUpController
     }
     try
     {
-      BufferedImage buffImg = QuickMarkMergeUtil.compressAndSave(pictureFile,imageServerProperties.getImageWidth(),imageServerProperties.getImageHight());
-      QuickMarkMergeUtil.generateWaterFile(buffImg , realImagePath+fileName);
-      ResultData resultData = ResultData.ok().putDataValue("imageName", fileName);
-      resultData.putDataValue("url", imageServerProperties.getHostaddress()+realUrlPath+fileName);
-      return resultData.putDataValue("messageInfo", "上传成功");
+      BufferedImage buffImg = QuickMarkMergeUtil.zipWidthHeightImageFile(pictureFile,imageServerProperties.getImageWidth(),imageServerProperties.getImageHight(),0.8f);
+      if(buffImg!=null){
+    	  QuickMarkMergeUtil.generateWaterFile(buffImg , realImagePath+fileName);
+          ResultData resultData = ResultData.ok().putDataValue("imageName", fileName);
+          resultData.putDataValue("url", imageServerProperties.getHostaddress()+realUrlPath+fileName);
+          return resultData.putDataValue("messageInfo", "上传成功");
+      }
     } catch (IllegalStateException e) {
       e.printStackTrace();
-    } catch (IOException e) {
+    } catch (Exception e) {
       e.printStackTrace();
     }
     return ResultData.serverInternalError().putDataValue("messageInfo", "服务器请假了，请稍后再试"); 
