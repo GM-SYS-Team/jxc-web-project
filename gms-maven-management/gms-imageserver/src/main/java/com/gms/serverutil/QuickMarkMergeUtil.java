@@ -165,7 +165,7 @@ public class QuickMarkMergeUtil {
 		    graphics.fillRect(0, 0, width, height);
 		    graphics.drawImage(srcFile.getScaledInstance(width, height, Image.SCALE_SMOOTH), 0, 0, null);
 		
-		    ImageIO.write(buffImg, subfix, new File(imgName));
+		    //ImageIO.write(buffImg, subfix, new File(imgName));
 		    return buffImg;
 	
 	    } catch (Exception e) {

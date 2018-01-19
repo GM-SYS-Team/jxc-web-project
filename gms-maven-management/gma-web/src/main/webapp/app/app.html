@@ -106,13 +106,13 @@
 		 $("#appName").val("");
 		 $("#appVersion").val("");
 		 $("#remarks").val("");
-		 $("#pictureFile").val("");
+		 $("#file").val("");
 	}
 	function resetValue2(){
 		 $("#appName2").val("");
 		 $("#appVersion2").val("");
 		 $("#remarks2").val("");
-		 $("#pictureFile2").val("");
+		 
 	}
 	function deleteApp(){
 		var selectedRows=$("#dg").datagrid("getSelections");
@@ -180,7 +180,7 @@
  <div id="dlg" class="easyui-dialog" style="width:500px;height:350px;padding: 10px 20px"
    closed="true" buttons="#dlg-buttons" data-options="onClose:function(){resetValue()}">
    
-	   <form id="fm" method="post">
+	   <form id="fm" method="post" enctype="multipart/form-data">
 	   	<table cellspacing="8px">
 	   		<tr>
 	   			<td>客户端名称：</td>
@@ -207,7 +207,7 @@
 	   		</tr>
 	   		<tr>
 	   			<td>选择文件：</td>
-	   			<td><input id="pictureFile" name="file"  style="width:250px" type="file" required="true"></td>
+	   			<td><input id="file" name="file"  style="width:250px" type="file" required="true"></td>
 	   		</tr>
 	   	</table>
 	   </form>

@@ -59,7 +59,7 @@ public class FileUpController
 		return ResultData.forbidden().putDataValue("messageInfo", "文件不能为空");
     }
 	//图片文件不能大于1M
-	if(!picType.equals(Constant.CLIENT_ANDROID_APP) && !picType.equals(Constant.CLIENT_ANDROID_APP) && pictureFile.getSize()>=imageServerProperties.getImageDefaultMaxSize()*1024*1024){
+	if(!picType.equals(Constant.CLIENT_ANDROID_APP) && !picType.equals(Constant.CLIENT_IOS_APP) && pictureFile.getSize()>=imageServerProperties.getImageDefaultMaxSize()*1024*1024){
 		return ResultData.forbidden().putDataValue("messageInfo", "文件太大，请重新选择");
 	}
 	String realImagePath = null;

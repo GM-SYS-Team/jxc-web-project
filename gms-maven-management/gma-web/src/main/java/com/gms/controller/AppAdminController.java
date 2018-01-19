@@ -48,7 +48,7 @@ public class AppAdminController extends BaseController{
 	
 	@PostMapping("/saveAndUpload")
 	@RequiresPermissions(value = { "角色管理" })
-	public Map<String, Object> saveAndUpload(App app,@RequestParam(value = "file", required = false) MultipartFile file,HttpServletRequest request) throws Exception {
+	public Map<String, Object> saveAndUpload(App app,MultipartFile file,HttpServletRequest request) throws Exception {
 		Map<String, Object> resultMap = new HashMap<>();
 		if(file==null){
 			resultMap.put("error", true);
