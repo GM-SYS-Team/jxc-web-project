@@ -11,12 +11,12 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -71,14 +71,16 @@ public class SaleListAdminController extends BaseController{
 	 * @throws Exception
 	 */
 	@RequestMapping("/list")
-	public Map<String,Object> list(SaleList saleList,HttpServletRequest request)throws Exception{
+	public Map<String,Object> list(SaleList saleList,HttpServletRequest request,@RequestParam(value="page",required=false)Integer page,@RequestParam(value="rows",required=false)Integer rows)throws Exception{
 		User currentUser = getCurrentUser(request);
 		if(currentUser.getUserType().equals(Constant.SHOPTYPE)){
 			saleList.setShopId(currentUser.getCurrentLoginShopId());
 		}
 		Map<String, Object> resultMap = new HashMap<>();
-		List<SaleList> saleListList=saleListService.list(saleList, Direction.DESC, "saleDate");
+		List<SaleList> saleListList=saleListService.list(saleList, page, rows, Direction.DESC, "saleDate");
+		Long count = saleListService.getCount(saleList);
 		resultMap.put("rows", saleListList);
+		resultMap.put("total", count);
 		return resultMap;
 	}
 	
@@ -108,13 +110,14 @@ public class SaleListAdminController extends BaseController{
 	 */
 	@RequestMapping("/listCount")
 	public Map<String,Object> listCount(SaleList saleList,SaleListGoods saleListGoods,
-			HttpServletRequest request)throws Exception{
+			HttpServletRequest request,@RequestParam(value="page",required=false)Integer page,@RequestParam(value="rows",required=false)Integer rows)throws Exception{
 		User currentUser = getCurrentUser(request);
 		if(currentUser.getUserType().equals(Constant.SHOPTYPE)){
 			saleList.setShopId(currentUser.getCurrentLoginShopId());
 		}
 		Map<String, Object> resultMap = new HashMap<>();
-		List<SaleList> saleListList=saleListService.list(saleList, Direction.DESC, "saleDate");
+		List<SaleList> saleListList=saleListService.list(saleList, page, rows, Direction.DESC, "saleDate");
+		Long count = saleListService.getCount(saleList);
 		for(SaleList pl:saleListList){
 			saleListGoods.setSaleList(pl);
 			List<SaleListGoods> plgList=saleListGoodsService.list(saleListGoods);
@@ -124,6 +127,7 @@ public class SaleListAdminController extends BaseController{
 			pl.setSaleListGoodsList(plgList);
 		}
 		resultMap.put("rows", saleListList);
+		resultMap.put("total", count);
 		return resultMap;
 	}
 	

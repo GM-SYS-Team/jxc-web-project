@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.data.domain.Sort.Direction;
 
+import com.gms.entity.jxc.Customer;
 import com.gms.entity.jxc.SaleList;
 import com.gms.entity.jxc.SaleListGoods;
 import com.gms.entity.jxc.Shop;
@@ -44,7 +45,14 @@ public interface SaleListService {
 	 * @param properties
 	 * @return
 	 */
-	public List<SaleList> list(SaleList saleList,Direction direction,String... properties);
+	public List<SaleList> list(SaleList saleList,Integer page,Integer pageSize,Direction direction,String... properties);
+	
+	/**
+	 * 获取总记录数
+	 * @param SaleList
+	 * @return
+	 */
+	public Long getCount(SaleList saleList);
 	
 	/**
 	 * 根据id删除销售单信息 包括销售单里的商品

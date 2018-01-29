@@ -9,6 +9,9 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.transaction.Transactional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.jpa.domain.Specification;
@@ -18,6 +21,7 @@ import com.gms.dao.repository.GoodsRepository;
 import com.gms.dao.repository.GoodsTypeRepository;
 import com.gms.dao.repository.SaleListGoodsRepository;
 import com.gms.dao.repository.SaleListRepository;
+import com.gms.entity.jxc.Customer;
 import com.gms.entity.jxc.Goods;
 import com.gms.entity.jxc.SaleList;
 import com.gms.entity.jxc.SaleListGoods;
@@ -68,9 +72,10 @@ public class SaleListServiceImpl implements SaleListService{
 	}
 
 	@Override
-	public List<SaleList> list(SaleList saleList, Direction direction,
+	public List<SaleList> list(SaleList saleList,Integer page,Integer pageSize, Direction direction,
 			String... properties) {
-		return saleListRepository.findAll(new Specification<SaleList>(){
+		Pageable pageable=new PageRequest(page-1, pageSize, direction,properties);
+		Page<SaleList> pageSaleList = saleListRepository.findAll(new Specification<SaleList>(){
 
 			@Override
 			public Predicate toPredicate(Root<SaleList> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
@@ -97,7 +102,41 @@ public class SaleListServiceImpl implements SaleListService{
 				}
 				return predicate;
 			}
-		  },new Sort(direction, properties));
+		  },pageable);
+		return pageSaleList.getContent();
+	}
+	
+	@Override
+	public Long getCount(SaleList saleList){
+		Long count=saleListRepository.count(new Specification<SaleList>() {
+
+			@Override
+			public Predicate toPredicate(Root<SaleList> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+				Predicate predicate=cb.conjunction();
+				if(saleList!=null){
+					if(saleList.getCustomer()!=null && saleList.getCustomer().getId()!=null){
+						predicate.getExpressions().add(cb.equal(root.get("customer").get("id"), saleList.getCustomer().getId()));
+					}
+					if(StringUtil.isNotEmpty(saleList.getSaleNumber())){
+						predicate.getExpressions().add(cb.like(root.get("saleNumber"), "%"+saleList.getSaleNumber().trim()+"%"));
+					}
+					if(saleList.getState()!=null){
+						predicate.getExpressions().add(cb.equal(root.get("state"), saleList.getState()));
+					}
+					if(saleList.getbSaleDate()!=null){
+						predicate.getExpressions().add(cb.greaterThanOrEqualTo(root.get("saleDate"), saleList.getbSaleDate()));
+					}
+					if(saleList.geteSaleDate()!=null){
+						predicate.getExpressions().add(cb.lessThanOrEqualTo(root.get("saleDate"), saleList.geteSaleDate()));
+					}
+					if(saleList.getShopId()!=null && saleList.getShopId().intValue()>0){//默认等于零
+						predicate.getExpressions().add(cb.equal(root.get("shopId"), saleList.getShopId()));
+					}
+				}
+				return predicate;
+			}
+		});
+		return count;
 	}
 
 	@Override

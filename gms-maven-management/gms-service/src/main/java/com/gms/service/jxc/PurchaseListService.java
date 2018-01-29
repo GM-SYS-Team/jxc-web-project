@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.data.domain.Sort.Direction;
 
+import com.gms.entity.jxc.Customer;
 import com.gms.entity.jxc.PurchaseList;
 import com.gms.entity.jxc.PurchaseListGoods;
 import com.gms.entity.jxc.Shop;
@@ -44,7 +45,14 @@ public interface PurchaseListService {
 	 * @param properties
 	 * @return
 	 */
-	public List<PurchaseList> list(PurchaseList purchaseList,Direction direction,String... properties);
+	public List<PurchaseList> list(PurchaseList purchaseList,Integer page,Integer pageSize,Direction direction,String... properties);
+	
+	/**
+	 * 获取总记录数
+	 * @param PurchaseList
+	 * @return
+	 */
+	public Long getCount(PurchaseList customer);
 	
 	/**
 	 * 根据id删除进货单信息 包括进货单里的商品

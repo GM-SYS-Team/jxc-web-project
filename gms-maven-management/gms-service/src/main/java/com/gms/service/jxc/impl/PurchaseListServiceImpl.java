@@ -9,7 +9,9 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.transaction.Transactional;
 
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -73,9 +75,10 @@ public class PurchaseListServiceImpl implements PurchaseListService{
 	}
 
 	@Override
-	public List<PurchaseList> list(PurchaseList purchaseList, Direction direction,
+	public List<PurchaseList> list(PurchaseList purchaseList,Integer page,Integer pageSize, Direction direction,
 			String... properties) {
-		return purchaseListRepository.findAll(new Specification<PurchaseList>(){
+		Pageable pageable=new PageRequest(page-1, pageSize, direction,properties);
+		Page<PurchaseList> pageList = purchaseListRepository.findAll(new Specification<PurchaseList>(){
 
 			@Override
 			public Predicate toPredicate(Root<PurchaseList> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
@@ -102,7 +105,40 @@ public class PurchaseListServiceImpl implements PurchaseListService{
 				}
 				return predicate;
 			}
-		  },new Sort(direction, properties));
+		  },pageable);
+		 return pageList.getContent();
+	}
+	
+	public Long getCount(PurchaseList purchaseList){
+		Long count=purchaseListRepository.count(new Specification<PurchaseList>() {
+
+			@Override
+			public Predicate toPredicate(Root<PurchaseList> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+				Predicate predicate=cb.conjunction();
+				if(purchaseList!=null){
+					if(purchaseList.getSupplier()!=null && purchaseList.getSupplier().getId()!=null){
+						predicate.getExpressions().add(cb.equal(root.get("supplier").get("id"), purchaseList.getSupplier().getId()));
+					}
+					if(StringUtil.isNotEmpty(purchaseList.getPurchaseNumber())){
+						predicate.getExpressions().add(cb.like(root.get("purchaseNumber"), "%"+purchaseList.getPurchaseNumber().trim()+"%"));
+					}
+					if(purchaseList.getState()!=null){
+						predicate.getExpressions().add(cb.equal(root.get("state"), purchaseList.getState()));
+					}
+					if(purchaseList.getbPurchaseDate()!=null){
+						predicate.getExpressions().add(cb.greaterThanOrEqualTo(root.get("purchaseDate"), purchaseList.getbPurchaseDate()));
+					}
+					if(purchaseList.getePurchaseDate()!=null){
+						predicate.getExpressions().add(cb.lessThanOrEqualTo(root.get("purchaseDate"), purchaseList.getePurchaseDate()));
+					}
+					if(purchaseList.getShopId()!=null && purchaseList.getShopId().intValue()>0){//默认等于零
+						predicate.getExpressions().add(cb.equal(root.get("shopId"), purchaseList.getShopId()));
+					}
+				}
+				return predicate;
+			}
+		});
+		return count;
 	}
 
 	@Override

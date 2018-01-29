@@ -11,17 +11,15 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.gms.entity.jxc.Log;
 import com.gms.entity.jxc.PurchaseList;
 import com.gms.entity.jxc.PurchaseListGoods;
@@ -33,6 +31,8 @@ import com.gms.service.jxc.UserService;
 import com.gms.util.Constant;
 import com.gms.util.DateUtil;
 import com.gms.util.StringUtil;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 /**
  * 进货单Controller类
@@ -71,14 +71,16 @@ public class PurchaseListAdminController extends BaseController{
 	 * @throws Exception
 	 */
 	@RequestMapping("/list")
-	public Map<String,Object> list(PurchaseList purchaseList,HttpServletRequest request)throws Exception{
+	public Map<String,Object> list(PurchaseList purchaseList,HttpServletRequest request,@RequestParam(value="page",required=false)Integer page,@RequestParam(value="rows",required=false)Integer rows)throws Exception{
 		User currentUser = getCurrentUser(request);
 		if(currentUser.getUserType().equals(Constant.SHOPTYPE)){
 			purchaseList.setShopId(currentUser.getCurrentLoginShopId());
 		}
 		Map<String, Object> resultMap = new HashMap<>();
-		List<PurchaseList> purchaseListList=purchaseListService.list(purchaseList, Direction.DESC, "purchaseDate");
+		List<PurchaseList> purchaseListList=purchaseListService.list(purchaseList, page, rows, Direction.DESC, "purchaseDate");
+		Long count = purchaseListService.getCount(purchaseList);
 		resultMap.put("rows", purchaseListList);
+		resultMap.put("total", count);
 		return resultMap;
 	}
 	
@@ -108,13 +110,14 @@ public class PurchaseListAdminController extends BaseController{
 	 */
 	@RequestMapping("/listCount")
 	public Map<String,Object> listCount(PurchaseList purchaseList,PurchaseListGoods purchaseListGoods,
-			HttpServletRequest request)throws Exception{
+			HttpServletRequest request,@RequestParam(value="page",required=false)Integer page,@RequestParam(value="rows",required=false)Integer rows)throws Exception{
 		User currentUser = getCurrentUser(request);
 		if(currentUser.getUserType().equals(Constant.SHOPTYPE)){
 			purchaseList.setShopId(currentUser.getCurrentLoginShopId());
 		}
 		Map<String, Object> resultMap = new HashMap<>();
-		List<PurchaseList> purchaseListList=purchaseListService.list(purchaseList, Direction.DESC, "purchaseDate");
+		List<PurchaseList> purchaseListList=purchaseListService.list(purchaseList, page, rows, Direction.DESC, "purchaseDate");
+		Long count = purchaseListService.getCount(purchaseList);
 		for(PurchaseList pl:purchaseListList){
 			purchaseListGoods.setPurchaseList(pl);
 			List<PurchaseListGoods> plgList=purchaseListGoodsService.list(purchaseListGoods);
@@ -124,6 +127,7 @@ public class PurchaseListAdminController extends BaseController{
 			pl.setPurchaseListGoodsList(plgList);
 		}
 		resultMap.put("rows", purchaseListList);
+		resultMap.put("total", count);
 		return resultMap;
 	}
 	
