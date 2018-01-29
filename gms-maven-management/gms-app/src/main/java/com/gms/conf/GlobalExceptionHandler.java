@@ -20,22 +20,15 @@ public class GlobalExceptionHandler {
 	@ResponseBody
 	public Map<String, Object> exceptionHandler(Exception e) throws Exception {
 		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("code", Constant.RET_CODE_ERROR);
-		map.put("msg", "系统异常，请稍后再试");
+		if (e.getClass().equals(MyException.class) || e.getClass().equals(IllegalArgumentException.class) || e.getClass().equals(NullPointerException.class)) {
+			map.put("code", Constant.RET_CODE_ERROR);
+			map.put("msg", e.getMessage());
+		}
+		else {
+			map.put("code", Constant.RET_CODE_ERROR);
+			map.put("msg", "系统异常，请稍后再试");
+		}
 		e.printStackTrace();
-		return map;
-	}
-	
-	
-	/**
-	 * 业务异常
-	 */
-	@ExceptionHandler({ MyException.class, IllegalArgumentException.class, NullPointerException.class })
-	@ResponseBody
-	public Map<String, Object> exceptionHandler(MyException e) throws Exception {
-		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("code", Constant.RET_CODE_ERROR);
-		map.put("msg", e.getMessage());
 		return map;
 	}
 }
