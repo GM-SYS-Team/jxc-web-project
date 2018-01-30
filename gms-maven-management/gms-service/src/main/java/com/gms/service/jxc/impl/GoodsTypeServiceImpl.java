@@ -45,4 +45,9 @@ public class GoodsTypeServiceImpl implements GoodsTypeService{
 		return goodsTypeRepository.findOne(id);
 	}
 
+	@Override
+	public List<GoodsType> getAllByShopId(Integer shopId) {
+		return goodsTypeRepository.findAllByShopId(shopId);
+	}
+
 }
