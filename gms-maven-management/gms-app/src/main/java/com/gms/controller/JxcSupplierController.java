@@ -161,16 +161,4 @@ public class JxcSupplierController extends BaseAppController {
 		return success();
 
 	}
-
-	/**
-	 * 判断用户类型
-	 * 
-	 * @param user
-	 * @throws MyException
-	 */
-	private void validateUser(User user, String userType) throws MyException {
-		if (!userType.equals(user.getUserType())) {
-			throw new MyException("非法请求");
-		}
-	}
 }

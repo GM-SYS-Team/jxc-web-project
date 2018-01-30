@@ -134,12 +134,9 @@ public class JxcGoodsController extends BaseAppController {
 			throw new MyException("图片地址错误");
 		}
 		
-		if (!checkGoodsTypeId(goodsTypeId, shopId)) {
+		if (!checkGoodsTypeId(goodsTypeId, shopId, goods)) {
 			throw new MyException("商品品类不存在");
 		}
-		GoodsType goodsType = new GoodsType();
-		goodsType.setId(goodsTypeId);
-		goods.setType(goodsType);
 		Shop shop = shopService.queryShopByShopIdAndUserId(shopId, user.getId());
 		if (shop == null) {
 			throw new MyException("店铺不存在");
@@ -148,10 +145,11 @@ public class JxcGoodsController extends BaseAppController {
 		return success(goods);
 	}
 
-	private boolean checkGoodsTypeId(Integer goodsTypeId, Integer shopId) {
+	private boolean checkGoodsTypeId(Integer goodsTypeId, Integer shopId, Goods goods) {
 		List<GoodsType> list = goodsTypeService.getAllByShopId(shopId);
 		for (GoodsType temp : list) {
 			if (temp.getId() == goodsTypeId) {
+				goods.setType(temp);
 				return true;
 			}
 		}

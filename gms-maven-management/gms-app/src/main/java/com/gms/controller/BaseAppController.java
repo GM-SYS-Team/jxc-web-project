@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
 import com.gms.entity.jxc.User;
+import com.gms.exception.MyException;
 import com.gms.util.CacheUtil;
 import com.gms.util.Constant;
 
@@ -133,6 +134,16 @@ public class BaseAppController {
 		return map;
 	}
 	
-	
+	/**
+	 * 判断用户类型
+	 * 
+	 * @param user
+	 * @throws MyException
+	 */
+	protected void validateUser(User user, String userType) throws MyException {
+		if (!userType.equals(user.getUserType())) {
+			throw new MyException("非法请求");
+		}
+	}
 	
 }

@@ -565,18 +565,6 @@ public class CouponController extends BaseAppController {
 		map.put("shareCoupon", randomCoupon);
 		return success(map);
 	}
-
-	/**
-	 * 判断用户类型
-	 * 
-	 * @param user
-	 * @throws MyException
-	 */
-	private void validateUser(User user, String userType) throws MyException {
-		if (!userType.equals(user.getUserType())) {
-			throw new MyException("非法请求");
-		}
-	}
 	
 	public static void main(String[] args) {
 		String id = "000000123";

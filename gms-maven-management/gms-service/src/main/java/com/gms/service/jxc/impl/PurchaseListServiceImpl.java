@@ -56,6 +56,7 @@ public class PurchaseListServiceImpl implements PurchaseListService{
 
 	@Transactional
 	public void save(PurchaseList purchaseList, List<PurchaseListGoods> purchaseListGoodsList) {
+		purchaseListRepository.save(purchaseList); // 保存进货单
 		// 保存每个进货单商品
 		for(PurchaseListGoods purchaseListGoods:purchaseListGoodsList){
 			purchaseListGoods.setType(goodsTypeRepository.findOne(purchaseListGoods.getTypeId())); // 设置类别
@@ -71,7 +72,6 @@ public class PurchaseListServiceImpl implements PurchaseListService{
 			goods.setState(2);
 			goodsRepository.save(goods);
 		}
-		purchaseListRepository.save(purchaseList); // 保存进货单
 	}
 
 	@Override
