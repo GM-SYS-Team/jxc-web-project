@@ -24,4 +24,6 @@ public interface GoodsTypeRepository extends JpaRepository<GoodsType, Integer>,J
 	public List<GoodsType> findByParentId(int parentId);
 	@Query(value="select * from t_goodstype where p_id=?1 and shop_id=?2",nativeQuery=true)
 	public List<GoodsType> findByParentIdAndShopId(int parentId,Integer shopId);
+	@Query(value="select * from t_goodstype where shop_id=?1 order by p_id",nativeQuery=true)
+	public List<GoodsType> findAllByShopId(Integer shopId);
 }

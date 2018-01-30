@@ -37,4 +37,11 @@ public interface GoodsTypeService {
 	 * @param id
 	 */
 	public void delete(Integer id);
+
+	/**
+	 * 根据店铺id查询商品品类
+	 * @param shopId
+	 * @return
+	 */
+	public List<GoodsType> getAllByShopId(Integer shopId);
 }
