@@ -49,7 +49,7 @@ public class DrawImageController {
 		// 写随机数
 		String random = drawRandomNum((Graphics2D) g);
 		// 将随机汉字存在session中
-		request.getSession().setAttribute("checkcode", random);
+		request.getSession().setAttribute("checkcode", random.toUpperCase());
 		// 将图形写给浏览器
 		response.setContentType("image/jpeg");
 		// 发头控制浏览器不要缓存
