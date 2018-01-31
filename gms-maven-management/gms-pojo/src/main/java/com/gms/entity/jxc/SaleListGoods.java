@@ -22,10 +22,12 @@ public class SaleListGoods {
 	@GeneratedValue
 	private Integer id; // 编号
 	
-	@ManyToOne
+	/*@ManyToOne
 	@JoinColumn(name="saleListId")
 	private SaleList saleList; // 销售单
-
+*/
+	@Transient
+	private SaleList saleList; // 销售单
 	@Column(length=50)
 	private String code; // 商品编码
 	
