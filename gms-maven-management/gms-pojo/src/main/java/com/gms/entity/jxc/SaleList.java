@@ -53,7 +53,7 @@ public class SaleList {
 	private float amountPaid; // 实付金额
 	
 	private Integer state; // 交易状态 1 已付  2 未付
-	
+
 	@OneToMany(cascade = {CascadeType.ALL},fetch=FetchType.LAZY)
 	@JoinColumn(name="saleListId")
 	private List<SaleListGoods> saleListGoodsList; // 销售单商品集合
