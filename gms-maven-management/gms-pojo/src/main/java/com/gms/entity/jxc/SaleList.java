@@ -3,12 +3,15 @@ package com.gms.entity.jxc;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -51,8 +54,9 @@ public class SaleList {
 	
 	private Integer state; // 交易状态 1 已付  2 未付
 	
-	@Transient
-	private List<SaleListGoods> saleListGoodsList=null; // 销售单商品集合
+	@OneToMany(cascade = {CascadeType.ALL},fetch=FetchType.LAZY)
+	@JoinColumn(name="saleListId")
+	private List<SaleListGoods> saleListGoodsList; // 销售单商品集合
 	
 	@ManyToOne
 	@JoinColumn(name="userId")
