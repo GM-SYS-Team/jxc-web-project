@@ -54,7 +54,7 @@ public class SaleList {
 	
 	private Integer state; // 交易状态 1 已付  2 未付
 
-	@OneToMany(cascade = {CascadeType.ALL},fetch=FetchType.LAZY)
+	@OneToMany
 	@JoinColumn(name="saleListId")
 	private List<SaleListGoods> saleListGoodsList; // 销售单商品集合
 	

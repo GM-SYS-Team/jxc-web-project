@@ -57,6 +57,7 @@ public class SaleListServiceImpl implements SaleListService{
 
 	@Transactional
 	public void save(SaleList saleList, List<SaleListGoods> saleListGoodsList) {
+		saleListRepository.save(saleList); // 保存销售单
 		// 保存每个销售单商品
 		for(SaleListGoods saleListGoods:saleListGoodsList){
 			saleListGoods.setType(goodsTypeRepository.findOne(saleListGoods.getTypeId())); // 设置类别
@@ -68,7 +69,6 @@ public class SaleListServiceImpl implements SaleListService{
 			goods.setState(2);
 			goodsRepository.save(goods);
 		}
-		saleListRepository.save(saleList); // 保存销售单
 	}
 
 	@Override

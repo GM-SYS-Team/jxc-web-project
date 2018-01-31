@@ -2,12 +2,15 @@ package com.gms.entity.jxc;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
  * 销售单商品实体
@@ -22,12 +25,11 @@ public class SaleListGoods {
 	@GeneratedValue
 	private Integer id; // 编号
 	
-	/*@ManyToOne
+	@JsonIgnore
+	@ManyToOne(fetch=FetchType.LAZY, optional=true)
 	@JoinColumn(name="saleListId")
 	private SaleList saleList; // 销售单
-*/
-	@Transient
-	private SaleList saleList; // 销售单
+
 	@Column(length=50)
 	private String code; // 商品编码
 	
