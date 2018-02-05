@@ -5,8 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort.Direction;
@@ -91,7 +89,35 @@ public class JxcGoodsController extends BaseAppController {
 	}
 
 	
-	
+	/**
+	 * 查询单个商品详情
+	 * 
+	 * @param shopId
+	 * @param goodsId
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping("/detail")
+	@ResponseBody
+	public Map<String, Object> detail(Integer goodsId, Integer shopId) throws Exception {
+		if (shopId == 0 || shopId <= 0) {
+			throw new MyException("非法请求");
+		}
+		if (goodsId == 0 || goodsId <= 0) {
+			throw new MyException("非法请求");
+		}
+		User user = getUser();
+		Shop shop = shopService.queryShopByShopIdAndUserId(shopId, user.getId());
+		if (shop == null) {
+			throw new MyException("店铺不存在");
+		}
+		Goods goods = goodsService.findById(goodsId);
+		if (goods.getShopId() != shopId) {
+			throw new MyException("商品不存在");
+		}
+		return success(goods);
+	}
+
 	
 	/**
 	 * 添加商品
