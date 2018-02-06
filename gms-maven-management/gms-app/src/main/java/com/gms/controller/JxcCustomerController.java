@@ -38,13 +38,14 @@ public class JxcCustomerController extends BaseAppController {
 	 * @param shopId
 	 * @param page
 	 * @param rows
+	 * @param name
 	 * @return
 	 * @throws Exception
 	 */
 	@RequestMapping("/list")
 	@ResponseBody
 	public Map<String, Object> list(@RequestParam(value = "page", required = false) Integer page,
-			@RequestParam(value = "rows", required = false) Integer rows, Integer shopId) throws Exception {
+			@RequestParam(value = "rows", required = false) Integer rows, Integer shopId, String name) throws Exception {
 		Preconditions.checkNotNull(shopId, "店铺ID不能为空");
 		if (shopId <= 0) {
 			throw new MyException("非法请求");
@@ -56,6 +57,9 @@ public class JxcCustomerController extends BaseAppController {
 			throw new MyException("店铺不存在");
 		}
 		Customer customer = new Customer();
+		if(StringUtils.isNotBlank(name)) {
+			customer.setName(name);
+		}
 		customer.setShopId(shopId);
 		Long total = customerService.getCount(customer);
 		if (page == null) {
@@ -68,7 +72,7 @@ public class JxcCustomerController extends BaseAppController {
 		resultMap.put("total", total);
 		return success(resultMap);
 	}
-
+	
 	/**
 	 * 新增客户信息
 	 * 

@@ -38,13 +38,14 @@ public class JxcSupplierController extends BaseAppController {
 	 * @param shopId
 	 * @param page
 	 * @param rows
+	 * @param name
 	 * @return
 	 * @throws Exception
 	 */
 	@RequestMapping("/list")
 	@ResponseBody
 	public Map<String, Object> list(@RequestParam(value = "page", required = false) Integer page,
-			@RequestParam(value = "rows", required = false) Integer rows, Integer shopId) throws Exception {
+			@RequestParam(value = "rows", required = false) Integer rows, Integer shopId, String name) throws Exception {
 		Preconditions.checkNotNull(shopId, "店铺ID不能为空");
 		if (shopId <= 0) {
 			throw new MyException("非法请求");
@@ -57,6 +58,9 @@ public class JxcSupplierController extends BaseAppController {
 		}
 		Supplier supplier = new Supplier();
 		supplier.setShopId(shopId);
+		if(StringUtils.isNotBlank(name)) {
+			supplier.setName(name);
+		}
 		Long total = supplierService.getCount(supplier);
 		if (page == null) {
 			page = 1;
