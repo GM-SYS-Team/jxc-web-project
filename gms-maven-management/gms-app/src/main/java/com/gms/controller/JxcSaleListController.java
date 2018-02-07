@@ -61,6 +61,8 @@ public class JxcSaleListController extends BaseAppController {
 	@ResponseBody
 	public Map<String, Object> list(@RequestParam(value = "page", required = false) Integer page,
 			@RequestParam(value = "rows", required = false) Integer rows, Integer shopId) throws Exception {
+		Preconditions.checkNotNull(shopId, "店铺ID不能为空");
+		Preconditions.checkArgument(shopId > 0, "店铺ID错误"); 
 		User user = getUser();
 		validateUser(user, User.SHOPER);
 		Shop shop = shopService.queryShopByShopIdAndUserId(shopId, user.getId());
@@ -124,7 +126,10 @@ public class JxcSaleListController extends BaseAppController {
 	public Map<String, Object> sale(Integer shopId, String data, Integer customerId) throws Exception {
 		User user = getUser();
 		validateUser(user, User.SHOPER);
-		Preconditions.checkArgument(customerId > 0, "请选择购买用户"); 
+		Preconditions.checkNotNull(shopId, "店铺ID不能为空");
+		Preconditions.checkArgument(shopId > 0, "店铺ID错误"); 
+		Preconditions.checkNotNull(customerId, "客户ID不能为空");
+		Preconditions.checkArgument(customerId > 0, "请选择购买客户"); 
 		Shop shop = shopService.queryShopByShopIdAndUserId(shopId, user.getId());
 		if (shop == null) {
 			throw new MyException("店铺不存在");
