@@ -140,6 +140,9 @@ public class JxcSaleListController extends BaseAppController {
 			throw new MyException("参数错误");
 		}
 		Customer customer = customerService.findById(customerId);
+		if (customer == null) {
+			throw new MyException("客户不存在");
+		}
 		if (customer.getShopId() != shopId) {
 			throw new MyException("客户不存在");
 		}

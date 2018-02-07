@@ -129,7 +129,7 @@ public class JxcGoodsController extends BaseAppController {
 	 * @param sellingPrice 商品销售价 Float
 	 * @param minNum 库存下限 Integer
 	 * @param inventoryQuantity 库存数量 Integer
-	 * @param goodsType 商品品类 Integer 取/ListType接口下的id字段的值
+	 * @param goodsTypeId 商品品类 Integer 取/ListType接口下的id字段的值
 	 * @param pictureAddress 图片地址 String
 	 * @param shopId 店铺Id Integer
 	 * @return
