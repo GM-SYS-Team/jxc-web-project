@@ -61,7 +61,7 @@ public class GoodsController extends BaseAppController {
 		Goods goods = new Goods();
 		goods.setShopId(shopId);
 		Map<String, Object> resultMap = new HashMap<>();
-		List<Goods> goodsList=goodsService.list(goods, page, rows, Direction.ASC, "id");
+		List<Goods> goodsList=goodsService.list(goods, page, rows, Direction.DESC, "id");
 		Long total=goodsService.getCount(goods);
 		resultMap.put("rows", goodsList);
 		resultMap.put("total", total);

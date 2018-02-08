@@ -77,9 +77,13 @@ public class JxcPurchaseController extends BaseAppController {
 		if (supplier == null || shopId != supplier.getShopId()) {
 			throw new MyException("供应商不存在");
 		}
-		Goods goods = goodsService.findById(goodsId);
+		Goods goods = null;
+		goods = goodsService.findById(goodsId);
 		if (goods == null || shopId != goods.getShopId()) {
 			throw new MyException("商品不存在");
+		}
+		if (goods.getInventoryQuantity() - num < goods.getMinNum()) {
+			throw new MyException("购买数量超出商品库存");
 		}
 		//生成进货单号
 		String purchaseNumber = genPurchaseNumber();
