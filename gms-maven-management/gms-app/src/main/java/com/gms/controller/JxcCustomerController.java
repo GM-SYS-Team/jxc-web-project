@@ -19,6 +19,7 @@ import com.gms.entity.jxc.User;
 import com.gms.exception.MyException;
 import com.gms.service.jxc.CustomerService;
 import com.gms.service.jxc.ShopService;
+import com.gms.util.PhoneUtil;
 import com.google.common.base.Preconditions;
 
 @Controller
@@ -86,8 +87,7 @@ public class JxcCustomerController extends BaseAppController {
 		Preconditions.checkArgument(customer.getName().length() < 50, "客户名称长度不能超过50");
 		Preconditions.checkArgument(StringUtils.isNotBlank(customer.getContact()), "联系人不能为空");
 		Preconditions.checkArgument(customer.getContact().length() < 50, "联系人长度不能超过50");
-		Preconditions.checkArgument(StringUtils.isNotBlank(customer.getNumber()), "联系电话不能为空");
-		Preconditions.checkArgument(customer.getNumber().length() < 50, "联系电话长度不能超过50");
+		validatePhoneNum(customer.getNumber());
 		Preconditions.checkArgument(StringUtils.isNotBlank(customer.getAddress()), "联系地址不能为空");
 		Preconditions.checkArgument(customer.getAddress().length() < 300, "联系地址长度不能超过300");
 		Preconditions.checkNotNull(customer.getShopId(), "店铺ID不能为空");
@@ -115,8 +115,7 @@ public class JxcCustomerController extends BaseAppController {
 		Preconditions.checkArgument(customer.getName().length() < 50, "客户名称长度不能超过50");
 		Preconditions.checkArgument(StringUtils.isNotBlank(customer.getContact()), "联系人不能为空");
 		Preconditions.checkArgument(customer.getContact().length() < 50, "联系人长度不能超过50");
-		Preconditions.checkArgument(StringUtils.isNotBlank(customer.getNumber()), "联系电话不能为空");
-		Preconditions.checkArgument(customer.getNumber().length() < 50, "联系电话长度不能超过50");
+		validatePhoneNum(customer.getNumber());
 		Preconditions.checkArgument(StringUtils.isNotBlank(customer.getAddress()), "联系地址不能为空");
 		Preconditions.checkArgument(customer.getAddress().length() < 300, "联系地址长度不能超过300");
 		Preconditions.checkNotNull(customer.getShopId(), "店铺ID不能为空");
@@ -164,4 +163,15 @@ public class JxcCustomerController extends BaseAppController {
 		return success();
 
 	}
+	
+	  public String validatePhoneNum(String telephone) throws MyException {
+	    	if (StringUtils.isEmpty(telephone)) {
+	    		throw new MyException("手机号不能为空");
+	    	}
+	    	telephone = telephone.replaceAll(" ", "");
+	    	if (!PhoneUtil.isPhoneNum(telephone)) {
+	    		throw new MyException("手机号码不正确");
+	    	}
+	    	return telephone;
+		}
 }
