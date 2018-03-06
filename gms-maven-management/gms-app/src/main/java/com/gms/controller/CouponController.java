@@ -183,16 +183,16 @@ public class CouponController extends BaseAppController {
 		String expiryDateStart = request.getParameter("expiryDateStart");
 		String expiryDateStop = request.getParameter("expiryDateStop");
 		if (shopId == null || shopId <= 0) {
-			return error("非法请求");
+			throw new MyException("非法请求");
 		}
 		if (StringUtil.isEmpty(couponName)) {
-			return error("请设置优惠券名称");
+			throw new MyException("请设置优惠券名称");
 		}	
 		if (couponName.length() > 50) {
-			return error("优惠券名称长度不能超过50");
+			throw new MyException("优惠券名称长度不能超过50");
 		}
 		if (totalCount <= 0) {
-			return error("请设置优惠券数量");
+			throw new MyException("请设置优惠券数量");
 		}
 //		if (StringUtil.isEmpty(couponInfo)) {
 //			return error("请设置优惠券描述");
@@ -201,19 +201,19 @@ public class CouponController extends BaseAppController {
 //			return error("优惠券描述的长度不能超过500");
 //		}
 		if (maxAmount <= 0 || minAmount <= 0) {
-			return error("请设置优惠券金额");
+			throw new MyException("请设置优惠券金额");
 		}
 		if (goodsId == null || goodsId <= 0) {
-			return error("请选择商品");
+			throw new MyException("请选择商品");
 		}
 		if (minAmount > maxAmount) {
-			return error("优惠券最大金额不得低于优惠券最小金额");
+			throw new MyException("优惠券最大金额不得低于优惠券最小金额");
 		}
 		if (StringUtil.isEmpty(expiryDateStart)) {
-			return error("优惠券开始时间不能为空");
+			throw new MyException("优惠券开始时间不能为空");
 		}
 		if (StringUtil.isEmpty(expiryDateStop)) {
-			return error("优惠券结束时间不能为空");
+			throw new MyException("优惠券结束时间不能为空");
 		}
 		Date startTime = null;
 		Date endTime = null;
@@ -222,19 +222,25 @@ public class CouponController extends BaseAppController {
 			startTime = sdf.parse(expiryDateStart);
 			endTime = sdf.parse(expiryDateStop);
 		} catch (Exception e) {
-			return error("优惠券开始时间和结束时间参数错误");
+			throw new MyException("优惠券开始时间和结束时间参数错误");
 		}
-
+		Date now = new Date();
+		if (endTime.before(now)) {
+			throw new MyException("结束时间不可小于当前时间");
+		}
+		if (startTime.after(endTime)) {
+			throw new MyException("开始时间不可晚于结束时间");
+		}
 		Shop shop = shopService.queryShopByShopIdAndUserId(shopId, user.getId());
 		if (shop == null) {
-			return error("店铺不存在");
+			throw new MyException("店铺不存在");
 		}
 		Coupon coupon = couponService.findCouponById(couponId);
 		if (coupon == null) {
-			return error("优惠券不存在");
+			throw new MyException("优惠券不存在");
 		}
 		if (coupon.getShopId() != shopId) {
-			return error("优惠券不存在");
+			throw new MyException("优惠券不存在");
 		}
 		coupon.setCouponName(couponName);
 		coupon.setTotalCount(totalCount);
