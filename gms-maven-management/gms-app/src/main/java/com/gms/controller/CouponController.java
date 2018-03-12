@@ -572,6 +572,28 @@ public class CouponController extends BaseAppController {
 		return success(map);
 	}
 	
+	
+
+	/**
+	 * 查询用户可以领取的优惠券
+	 * 
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping("/tuijian")
+	@ResponseBody
+	@NeedAuth
+	public Map<String, Object> tuijian() throws Exception {
+		User user = getUser();
+		validateUser(user, User.CUSTOMER);
+		Date now = new Date();
+		/* 当前登录的店铺 */
+		List<Coupon> randomCouponList = couponService.findRandomCouponList(now);
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("couponList", randomCouponList);
+		return success(map);
+	}
+	
 	public static void main(String[] args) {
 		String id = "000000123";
 		id = id.substring(6);

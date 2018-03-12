@@ -104,6 +104,13 @@ public interface CouponService {
 	 * @return
 	 */
 	public Coupon findRandomCoupon(Date now, Integer id);
+
+	/**
+	 * 随机获取一批可用优惠券
+	 * @param now
+	 * @return
+	 */
+	public List<Coupon> findRandomCouponList(Date now);
 	
 
 }
