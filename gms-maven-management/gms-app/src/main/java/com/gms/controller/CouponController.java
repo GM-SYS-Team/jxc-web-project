@@ -589,6 +589,10 @@ public class CouponController extends BaseAppController {
 		Date now = new Date();
 		/* 当前登录的店铺 */
 		List<Coupon> randomCouponList = couponService.findRandomCouponList(now);
+		for (Coupon coupon : randomCouponList) {
+			Goods goods = goodsService.findById(coupon.getCouponGoods().getGoodId());
+			coupon.setGoodsPic(goods.getPictureAddress());
+		}
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("couponList", randomCouponList);
 		return success(map);

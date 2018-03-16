@@ -44,6 +44,8 @@ public class Coupon {
 	 */
 	@Column(length = 45)
 	private String couponCount;
+	
+	private String goodsPic;
 
 	/**
 	 * 有效开始时间
@@ -209,5 +211,13 @@ public class Coupon {
 
 	public void setQuickMark(String quickMark) {
 		this.quickMark = quickMark;
+	}
+
+	public String getGoodsPic() {
+		return goodsPic;
+	}
+
+	public void setGoodsPic(String goodsPic) {
+		this.goodsPic = goodsPic;
 	}
 }
