@@ -121,6 +121,17 @@ public class CouponController extends BaseAppController {
 		} catch (Exception e) {
 			return error("优惠券开始时间和结束时间参数错误");
 		}
+		
+		Date now = new Date();
+		if (now.after(coupon.getExpiryDateStart())) {
+			throw new MyException("优惠券开始时间不能小于当前时间");
+		}
+		if (now.after(coupon.getExpiryDateStop())) {
+			throw new MyException("优惠券结束时间不能小于当前时间");
+		}
+		if (coupon.getExpiryDateStop().before(coupon.getExpiryDateStart())) {
+			throw new MyException("优惠券开始时间不能大于结束时间");
+		}
 		Shop shop = shopService.queryShopByShopIdAndUserId(shopId, user.getId());
 		if (shop == null) {
 			return error("店铺不存在");
